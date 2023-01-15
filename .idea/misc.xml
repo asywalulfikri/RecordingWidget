@@ -6,6 +6,9 @@
         <entry key="../../../../../../layout/custom_preview.xml" value="0.17572463768115942" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.15579710144927536" />
         <entry key="app/src/main/res/layout/content_main.xml" value="0.259375" />
+        <entry key="app/src/main/res/layout/fragment_first.xml" value="0.259375" />
+        <entry key="app/src/main/res/layout/fragment_second.xml" value="0.259375" />
+        <entry key="soundrecorder/src/main/res/drawable/ic_record.xml" value="0.194" />
         <entry key="soundrecorder/src/main/res/layout/activity_listing.xml" value="0.11770833333333333" />
         <entry key="soundrecorder/src/main/res/layout/activity_player.xml" value="0.259375" />
         <entry key="soundrecorder/src/main/res/layout/bottom_sheet.xml" value="0.259375" />

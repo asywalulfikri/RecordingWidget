@@ -6,6 +6,7 @@ import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.media.MediaRecorder
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -64,10 +65,14 @@ internal class VoiceRecorderFragmentHorizontal : Fragment(), BottomSheet.OnClick
         handler = Handler(Looper.myLooper()!!)
 
         binding.recordBtn.setOnClickListener {
-            when {
-                onPause -> resumeRecording()
-                recording -> pauseRecording()
-                else -> startRecording()
+            if(Build.VERSION.SDK_INT> Build.VERSION_CODES.N){
+                when {
+                    onPause -> resumeRecording()
+                    recording -> pauseRecording()
+                    else -> startRecording()
+                }
+            }else{
+                setToast("Your device not support to record audio")
             }
         }
 
@@ -89,6 +94,10 @@ internal class VoiceRecorderFragmentHorizontal : Fragment(), BottomSheet.OnClick
     }
 
 
+    private fun setToast(message : String){
+        Toast.makeText(activity,message,Toast.LENGTH_SHORT).show()
+    }
+
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         permissionToRecordAccepted = if (requestCode == REQUEST_RECORD_AUDIO_PERMISSION) {
@@ -101,13 +110,9 @@ internal class VoiceRecorderFragmentHorizontal : Fragment(), BottomSheet.OnClick
 
     @SuppressLint("SimpleDateFormat")
     private fun startRecording(){
-       /* if(!permissionToRecordAccepted){
-            ActivityCompat.requestPermissions(activity as Activity, permissions, REQUEST_RECORD_AUDIO_PERMISSION)
-            return
-        }
-*/
         binding.listBtn.visibility = View.GONE
         binding.doneBtn.visibility = View.VISIBLE
+        binding.recordText.visibility = View.GONE
         binding.deleteBtn.isClickable = true
         binding.deleteBtn.setImageResource(R.drawable.ic_delete_enabled)
 
@@ -164,9 +169,13 @@ internal class VoiceRecorderFragmentHorizontal : Fragment(), BottomSheet.OnClick
     }
 
     private fun pauseRecording(){
+        binding.recordText.visibility = View.VISIBLE
+        binding.recordText.text = "Continue"
         onPause = true
         recorder?.apply {
-            pause()
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                pause()
+            }
         }
         binding.recordBtn.setImageResource(R.drawable.ic_record)
         timer.pause()
@@ -176,8 +185,11 @@ internal class VoiceRecorderFragmentHorizontal : Fragment(), BottomSheet.OnClick
     private fun resumeRecording(){
         onPause = false
         recorder?.apply {
-            resume()
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                resume()
+            }
         }
+        binding.recordText.visibility = View.GONE
         binding.recordBtn.setImageResource(R.drawable.ic_pause)
         animatePlayerView()
         timer.start()

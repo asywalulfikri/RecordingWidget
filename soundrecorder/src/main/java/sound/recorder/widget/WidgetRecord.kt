@@ -7,15 +7,18 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.LinearLayout
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import sound.recorder.widget.databinding.LayoutEmptyBinding
 
-class WidgetRecordHorizontal : LinearLayout {
+class WidgetRecord : LinearLayout {
 
     private var fragmentManagers: FragmentManager? =null
-    private val imkasFragment = VoiceRecorderFragmentHorizontal()
+    private val widgetHorizontal = VoiceRecorderFragmentHorizontal()
+    private val widgetVertical = VoiceRecorderFragmentVertical()
     private var isAdd = false
+    private lateinit var widget : Fragment
     private var binding: LayoutEmptyBinding
 
 
@@ -30,7 +33,12 @@ class WidgetRecordHorizontal : LinearLayout {
         addView(binding.root)
     }
 
-    fun loadData(){
+    fun loadData(isHorizontal : Boolean){
+        if(isHorizontal){
+            widget = widgetHorizontal
+        }else{
+            widget = widgetVertical
+        }
         if(isAdd){
             removeAllViews()
             resetView()
@@ -42,14 +50,14 @@ class WidgetRecordHorizontal : LinearLayout {
     @SuppressLint("InflateParams")
     private fun setupViewsAgain(){
         isAdd = true
-        fragmentManagers?.beginTransaction()?.replace(binding.imcash.id, imkasFragment)?.commit()
+        fragmentManagers?.beginTransaction()?.replace(binding.imcash.id, widget)?.commit()
         addView(binding.root)
     }
 
     @SuppressLint("InflateParams")
     private fun setupViews(){
-        fragmentManagers?.beginTransaction()?.replace(binding.imcash.id, imkasFragment)?.commit()
-        if(!imkasFragment.isAdded){
+        fragmentManagers?.beginTransaction()?.replace(binding.imcash.id, widget)?.commit()
+        if(!widget.isAdded){
             addView(binding.imcash)
             isAdd = true
         }else{
@@ -61,10 +69,10 @@ class WidgetRecordHorizontal : LinearLayout {
     @SuppressLint("InflateParams")
     private fun resetView(){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            fragmentManagers?.beginTransaction()?.detach(imkasFragment)?.commitNow();
-            fragmentManagers?.beginTransaction()?.attach(imkasFragment)?.commitNow();
+            fragmentManagers?.beginTransaction()?.detach(widget)?.commitNow();
+            fragmentManagers?.beginTransaction()?.attach(widget)?.commitNow();
         } else {
-            fragmentManagers?.beginTransaction()?.detach(imkasFragment)?.attach(imkasFragment)?.commit();
+            fragmentManagers?.beginTransaction()?.detach(widget)?.attach(widget)?.commit();
         }
         addView(binding.imcash)
     }

@@ -3,14 +3,14 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="50dp"
-    android:layout_height="match_parent"
+    android:layout_width="60dp"
+    android:layout_height="wrap_content"
     app:cardCornerRadius="25dp">
 
     <LinearLayout
-        android:background="#8F8F8F"
+        android:background="#656565"
         android:id="@+id/linearLayout"
-        android:layout_width="50dp"
+        android:layout_width="60dp"
         android:layout_height="match_parent"
         android:padding="5dp"
         android:orientation="vertical"
@@ -22,18 +22,36 @@
         <ImageButton
             android:id="@+id/deleteBtn"
             android:clickable="false"
+            android:layout_marginTop="6dp"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:background="@drawable/ic_circle_selectable"
             android:src="@drawable/ic_delete_disabled"/>
 
-        <ImageButton
-            android:id="@+id/recordBtn"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
-            android:background="@drawable/ic_record"/>
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <ImageButton
+                android:id="@+id/recordBtn"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/ic_record" />
+
+            <TextView
+                android:id="@+id/recordText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:background="@drawable/ic_record"
+                android:text="Continue"
+                android:textColor="#FFFFFF"
+                android:textSize="9sp"
+                tools:ignore="HardcodedText,SmallSp" />
+
+        </RelativeLayout>
 
         <ImageButton
             android:id="@+id/listBtn"
@@ -56,13 +74,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="10sp"
+            android:textColor="#FFFFFF"
             android:text="00:00.0"/>
 
 
         <sound.recorder.widget.RecorderWaveformView
             android:layout_marginTop="10dp"
             android:id="@+id/playerView"
-            android:rotation="-95"
+            android:rotation="-90"
             android:layout_marginBottom="20dp"
             android:layout_width="match_parent"
             android:layout_height="50dp" />

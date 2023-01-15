@@ -6,6 +6,7 @@ import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.media.MediaRecorder
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -64,10 +65,14 @@ internal class VoiceRecorderFragmentVertical : Fragment(), BottomSheet.OnClickLi
         handler = Handler(Looper.myLooper()!!)
 
         binding.recordBtn.setOnClickListener {
-            when {
-                onPause -> resumeRecording()
-                recording -> pauseRecording()
-                else -> startRecording()
+            if(Build.VERSION.SDK_INT> Build.VERSION_CODES.N){
+                when {
+                    onPause -> resumeRecording()
+                    recording -> pauseRecording()
+                    else -> startRecording()
+                }
+            }else{
+                setToast("Your device not support to record audio")
             }
         }
 
@@ -82,10 +87,13 @@ internal class VoiceRecorderFragmentVertical : Fragment(), BottomSheet.OnClickLi
 
         binding.deleteBtn.setOnClickListener {
             stopRecording()
-
             File(dirPath+fileName).delete()
         }
         binding.deleteBtn.isClickable = false
+    }
+
+    private fun setToast(message : String){
+        Toast.makeText(activity,message,Toast.LENGTH_SHORT).show()
     }
 
 
@@ -101,13 +109,9 @@ internal class VoiceRecorderFragmentVertical : Fragment(), BottomSheet.OnClickLi
 
     @SuppressLint("SimpleDateFormat")
     private fun startRecording(){
-       /* if(!permissionToRecordAccepted){
-            ActivityCompat.requestPermissions(activity as Activity, permissions, REQUEST_RECORD_AUDIO_PERMISSION)
-            return
-        }
-*/
         binding.listBtn.visibility = View.GONE
         binding.doneBtn.visibility = View.VISIBLE
+        binding.recordText.visibility = View.GONE
         binding.deleteBtn.isClickable = true
         binding.deleteBtn.setImageResource(R.drawable.ic_delete_enabled)
 
@@ -164,19 +168,27 @@ internal class VoiceRecorderFragmentVertical : Fragment(), BottomSheet.OnClickLi
     }
 
     private fun pauseRecording(){
+        binding.recordText.visibility = View.VISIBLE
+        binding.recordText.text = "Continue"
         onPause = true
         recorder?.apply {
-            pause()
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                pause()
+            }
         }
         binding.recordBtn.setImageResource(R.drawable.ic_record)
         timer.pause()
 
     }
 
+
     private fun resumeRecording(){
+        binding.recordText.visibility = View.GONE
         onPause = false
         recorder?.apply {
-            resume()
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                resume()
+            }
         }
         binding.recordBtn.setImageResource(R.drawable.ic_pause)
         animatePlayerView()

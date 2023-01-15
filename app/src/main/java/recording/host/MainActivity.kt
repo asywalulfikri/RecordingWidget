@@ -5,13 +5,12 @@ import androidx.appcompat.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
 import recording.host.databinding.ActivityMainBinding
-import sound.recorder.widget.WidgetRecordHorizontal
-import sound.recorder.widget.WidgetRecordVertical
+import sound.recorder.widget.WidgetRecord
 
 class MainActivity : AppCompatActivity() {
 
-    private var widgetVoiceHorizontal : WidgetRecordHorizontal? =null
-    private var widgetVoiceVertical : WidgetRecordVertical? =null
+    private var widgetVoiceHorizontal : WidgetRecord? =null
+    private var widgetVoiceVertical : WidgetRecord? =null
 
     private lateinit var binding: ActivityMainBinding
 
@@ -23,11 +22,11 @@ class MainActivity : AppCompatActivity() {
 
         setSupportActionBar(binding.toolbar)
 
-        widgetVoiceHorizontal = WidgetRecordHorizontal(this)
-        widgetVoiceHorizontal?.loadData()
+        widgetVoiceHorizontal = WidgetRecord(this)
+        widgetVoiceHorizontal?.loadData(false)
 
-        widgetVoiceVertical = WidgetRecordVertical(this)
-        widgetVoiceVertical?.loadData()
+       /* widgetVoiceVertical = WidgetRecordVertical(this)
+        widgetVoiceVertical?.loadData()*/
 
 
     }
