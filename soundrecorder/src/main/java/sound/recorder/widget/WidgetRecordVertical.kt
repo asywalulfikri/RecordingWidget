@@ -7,18 +7,15 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.LinearLayout
 import android.widget.Toast
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import sound.recorder.widget.databinding.LayoutEmptyBinding
 
-class WidgetRecord : LinearLayout {
+class WidgetRecordVertical : LinearLayout {
 
     private var fragmentManagers: FragmentManager? =null
-    private val widgetHorizontal = VoiceRecorderFragmentHorizontal()
-    private val widgetVertical = VoiceRecorderFragmentVertical()
     private var isAdd = false
-    private lateinit var widget : Fragment
+    private var widget = VoiceRecorderFragmentVertical()
     private var binding: LayoutEmptyBinding
 
 
@@ -33,12 +30,7 @@ class WidgetRecord : LinearLayout {
         addView(binding.root)
     }
 
-    fun loadData(isHorizontal : Boolean){
-        if(isHorizontal){
-            widget = widgetHorizontal
-        }else{
-            widget = widgetVertical
-        }
+    fun loadData(){
         if(isAdd){
             removeAllViews()
             resetView()

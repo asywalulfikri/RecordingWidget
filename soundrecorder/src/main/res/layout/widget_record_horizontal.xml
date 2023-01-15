@@ -27,7 +27,6 @@
             android:background="@drawable/ic_circle_selectable"
             android:src="@drawable/ic_delete_disabled"/>
 
-
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
@@ -78,15 +77,12 @@
             android:textColor="#FFFFFF"
             android:text="00:00.0"/>
 
-
         <sound.recorder.widget.RecorderWaveformView
             android:layout_marginStart="10dp"
             android:id="@+id/playerView"
             android:layout_width="match_parent"
             android:layout_height="50dp" />
 
-
     </LinearLayout>
-
 
 </androidx.cardview.widget.CardView>
