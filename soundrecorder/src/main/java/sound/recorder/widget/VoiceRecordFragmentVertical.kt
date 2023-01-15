@@ -228,6 +228,8 @@ internal class VoiceRecorderFragmentVertical : Fragment(), BottomSheet.OnClickLi
 
     override fun onCancelClicked() {
         Toast.makeText(activity, "Audio record deleted", Toast.LENGTH_SHORT).show()
+        binding.recordText.text = "Record"
+        binding.recordText.visibility = View.VISIBLE
         stopRecording()
     }
 
@@ -244,6 +246,9 @@ internal class VoiceRecorderFragmentVertical : Fragment(), BottomSheet.OnClickLi
         GlobalScope.launch {
             db.audioRecordDAO().insert(AudioRecord(filename, filePath, Date().time, duration))
         }
+
+        binding.recordText.visibility = View.VISIBLE
+        binding.recordText.text = "Record"
 
     }
 
