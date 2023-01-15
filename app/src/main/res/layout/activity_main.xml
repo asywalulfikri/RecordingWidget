@@ -30,7 +30,16 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <sound.recorder.widget.WidgetRecordHorizontal
+
+    <LinearLayout
+        android:layout_marginTop="10dp"
+        android:layout_below="@+id/appBar"
+        android:orientation="vertical"
+        android:background="#aaaa"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <sound.recorder.widget.RecordWidgetH
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
             android:layout_marginStart="10dp"
@@ -38,14 +47,35 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
+    </LinearLayout>
 
-        <sound.recorder.widget.WidgetRecordVertical
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="10dp"
+
+        <LinearLayout
+            android:layout_marginTop="20dp"
+            android:layout_below="@+id/appBar"
+            android:orientation="vertical"
+            android:background="#000000"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content">
+
+            <sound.recorder.widget.RecordWidgetV
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+
+        <!--  <sound.recorder.widget.WidgetRecordVertical
+              android:layout_marginTop="10dp"
+              android:layout_marginBottom="10dp"
+              android:layout_marginStart="10dp"
+              android:layout_marginEnd="10dp"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content" />-->
 
     </LinearLayout>
 </RelativeLayout>

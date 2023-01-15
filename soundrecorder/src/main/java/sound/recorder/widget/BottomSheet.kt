@@ -1,6 +1,8 @@
 package sound.recorder.widget
 
 import android.content.Context
+import android.content.res.Configuration
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,6 +10,7 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
+import androidx.fragment.app.FragmentActivity
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.textfield.TextInputEditText
 import java.io.File
@@ -41,12 +44,15 @@ internal class BottomSheet: BottomSheetDialogFragment {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        var view = inflater.inflate(R.layout.bottom_sheet, container)
-        var editText = view.findViewById<TextInputEditText>(R.id.filenameInput)
+        val view = inflater.inflate(R.layout.bottom_sheet, container)
+        val editText = view.findViewById<TextInputEditText>(R.id.filenameInput)
 
 
         dialog?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
 
+        if(isDarkTheme()){
+            editText.setTextColor(Color.parseColor("#000000"))
+        }
 
         // set edittext to filename
         filename = filename.split(".mp3")[0]
@@ -62,7 +68,7 @@ internal class BottomSheet: BottomSheetDialogFragment {
             // update filename if need
             val updatedFilename = editText.text.toString()
             if(updatedFilename != filename){
-                var newFile = File("$dirPath$updatedFilename.mp3")
+                val newFile = File("$dirPath$updatedFilename.mp3")
                 File(dirPath+filename).renameTo(newFile)
             }
 
@@ -92,6 +98,13 @@ internal class BottomSheet: BottomSheetDialogFragment {
         return view
 
     }
+
+    private fun isDarkTheme(): Boolean {
+        return activity?.resources?.configuration?.uiMode!! and
+                Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
+    }
+
+
 
     private fun showKeyboard(view: View) {
         if (view.requestFocus()) {

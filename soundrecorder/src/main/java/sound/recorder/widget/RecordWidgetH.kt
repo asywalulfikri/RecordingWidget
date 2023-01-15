@@ -9,24 +9,24 @@ import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
-import sound.recorder.widget.databinding.LayoutEmptyBinding
+import sound.recorder.widget.databinding.LayoutEmptyHorizontalBinding
 
-class WidgetRecordVertical : LinearLayout {
+class RecordWidgetH : LinearLayout {
 
     private var fragmentManagers: FragmentManager? =null
+    private val imkasFragment = VoiceRecorderFragmentHorizontal()
     private var isAdd = false
-    private var widget = VoiceRecorderFragmentVertical()
-    private var binding: LayoutEmptyBinding
+    private var binding: LayoutEmptyHorizontalBinding
 
 
     constructor(_context: Context) : super(_context) {
         fragmentManagers = (_context as FragmentActivity).supportFragmentManager
-        binding = LayoutEmptyBinding.inflate(LayoutInflater.from(_context))
+        binding = LayoutEmptyHorizontalBinding.inflate(LayoutInflater.from(context))
     }
 
     constructor(_context: Context, attributeSet: AttributeSet?) : super(_context, attributeSet) {
         fragmentManagers = (_context as FragmentActivity).supportFragmentManager
-        binding = LayoutEmptyBinding.inflate(LayoutInflater.from(_context))
+        binding = LayoutEmptyHorizontalBinding.inflate(LayoutInflater.from(context))
         addView(binding.root)
     }
 
@@ -42,15 +42,18 @@ class WidgetRecordVertical : LinearLayout {
     @SuppressLint("InflateParams")
     private fun setupViewsAgain(){
         isAdd = true
-        fragmentManagers?.beginTransaction()?.replace(binding.imcash.id, widget)?.commit()
+       /* fragmentTransaction = fragmentManagers?.beginTransaction()
+        binding.imcash.id.let { fragmentTransaction?.add(it, imkasFragment) }
+        fragmentTransaction?.commit()*/
+        fragmentManagers?.beginTransaction()?.replace(binding.recordWidgetHorizontal.id, imkasFragment)?.commit()
         addView(binding.root)
     }
 
     @SuppressLint("InflateParams")
     private fun setupViews(){
-        fragmentManagers?.beginTransaction()?.replace(binding.imcash.id, widget)?.commit()
-        if(!widget.isAdded){
-            addView(binding.imcash)
+        fragmentManagers?.beginTransaction()?.replace(binding.recordWidgetHorizontal.id, imkasFragment)?.commit()
+        if(!imkasFragment.isAdded){
+            addView(binding.recordWidgetHorizontal)
             isAdd = true
         }else{
             removeAllViews()
@@ -61,12 +64,12 @@ class WidgetRecordVertical : LinearLayout {
     @SuppressLint("InflateParams")
     private fun resetView(){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            fragmentManagers?.beginTransaction()?.detach(widget)?.commitNow();
-            fragmentManagers?.beginTransaction()?.attach(widget)?.commitNow();
+            fragmentManagers?.beginTransaction()?.detach(imkasFragment)?.commitNow();
+            fragmentManagers?.beginTransaction()?.attach(imkasFragment)?.commitNow();
         } else {
-            fragmentManagers?.beginTransaction()?.detach(widget)?.attach(widget)?.commit();
+            fragmentManagers?.beginTransaction()?.detach(imkasFragment)?.attach(imkasFragment)?.commit();
         }
-        addView(binding.imcash)
+        addView(binding.recordWidgetHorizontal)
     }
 
     fun setToast(message : String){

@@ -25,6 +25,7 @@
             android:layout_marginTop="6dp"
             android:layout_width="40dp"
             android:layout_height="40dp"
+            android:contentDescription="@string/app_names"
             android:background="@drawable/ic_circle_selectable"
             android:src="@drawable/ic_delete_disabled"/>
 
@@ -38,7 +39,9 @@
                 android:layout_height="50dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
-                android:background="@drawable/ic_record" />
+                android:background="@drawable/ic_record"
+                android:contentDescription="@string/app_names"
+                tools:ignore="DuplicateSpeakableTextCheck" />
 
             <TextView
                 android:id="@+id/recordText"
@@ -55,10 +58,11 @@
 
         <ImageButton
             android:id="@+id/listBtn"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
             android:background="@drawable/ic_circle_selectable"
-            android:src="@drawable/ic_menu"/>
+            android:contentDescription="@string/appbar_scrolling_view_behavior"
+            android:src="@drawable/ic_menu" />
 
         <ImageButton
             android:id="@+id/doneBtn"

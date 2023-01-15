@@ -87,16 +87,15 @@ internal class VoiceRecorderFragmentHorizontal : Fragment(), BottomSheet.OnClick
 
         binding.deleteBtn.setOnClickListener {
             stopRecording()
-
             File(dirPath+fileName).delete()
         }
         binding.deleteBtn.isClickable = false
     }
 
-
     private fun setToast(message : String){
         Toast.makeText(activity,message,Toast.LENGTH_SHORT).show()
     }
+
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
@@ -105,7 +104,6 @@ internal class VoiceRecorderFragmentHorizontal : Fragment(), BottomSheet.OnClick
         } else {
             false
         }
-        //if (!permissionToRecordAccepted) finish()
     }
 
     @SuppressLint("SimpleDateFormat")
@@ -182,14 +180,15 @@ internal class VoiceRecorderFragmentHorizontal : Fragment(), BottomSheet.OnClick
 
     }
 
+
     private fun resumeRecording(){
+        binding.recordText.visibility = View.GONE
         onPause = false
         recorder?.apply {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 resume()
             }
         }
-        binding.recordText.visibility = View.GONE
         binding.recordBtn.setImageResource(R.drawable.ic_pause)
         animatePlayerView()
         timer.start()
