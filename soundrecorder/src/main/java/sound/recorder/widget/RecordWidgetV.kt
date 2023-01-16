@@ -1,6 +1,5 @@
 package sound.recorder.widget
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Build
 import android.util.AttributeSet
@@ -39,14 +38,13 @@ class RecordWidgetV : LinearLayout {
         }
     }
 
-    @SuppressLint("InflateParams")
     private fun setupViewsAgain(){
         isAdd = true
         fragmentManagers?.beginTransaction()?.replace(binding.recordWidgetVertical.id, imkasFragment)?.commit()
         addView(binding.root)
     }
 
-    @SuppressLint("InflateParams")
+
     private fun setupViews(){
         fragmentManagers?.beginTransaction()?.replace(binding.recordWidgetVertical.id, imkasFragment)?.commit()
         if(!imkasFragment.isAdded){
@@ -58,7 +56,6 @@ class RecordWidgetV : LinearLayout {
 
     }
 
-    @SuppressLint("InflateParams")
     private fun resetView(){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             fragmentManagers?.beginTransaction()?.detach(imkasFragment)?.commitNow();

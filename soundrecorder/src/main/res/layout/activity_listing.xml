@@ -55,21 +55,24 @@
 
             </com.google.android.material.appbar.MaterialToolbar>
         </com.google.android.material.appbar.CollapsingToolbarLayout>
-            <com.google.android.material.textfield.TextInputLayout
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:hintEnabled="false"
+            style="@style/EditTextSearch">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/searchInput"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:hintEnabled="false"
-                style="@style/EditTextSearch">
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/searchInput"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:imeOptions="actionSearch"
-                    android:textColor="@color/colorText"
-                    android:hint="Search audio record"
-                    android:textColorHint="@color/colorGrayDark"
-                    android:inputType="text" />
-            </com.google.android.material.textfield.TextInputLayout>
+                android:imeOptions="actionSearch"
+                android:textColor="@color/colorText"
+                android:hint="Search audio record"
+                android:textColorHint="@color/colorGrayDark"
+                android:inputType="text" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.core.widget.NestedScrollView
