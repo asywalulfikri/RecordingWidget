@@ -18,15 +18,15 @@ import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.room.Room
-import sound.recorder.widget.db.AppDatabase
-import sound.recorder.widget.db.AudioRecord
-import sound.recorder.widget.tools.Timer
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import sound.recorder.widget.databinding.WidgetRecordHorizontalBinding
+import sound.recorder.widget.db.AppDatabase
+import sound.recorder.widget.db.AudioRecord
+import sound.recorder.widget.tools.Timer
 import java.io.File
 import java.io.IOException
-import java.lang.Exception
 import java.text.SimpleDateFormat
 import java.util.*
 

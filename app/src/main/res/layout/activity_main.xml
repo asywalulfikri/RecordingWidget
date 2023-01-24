@@ -25,37 +25,16 @@
 
     <LinearLayout
         android:layout_below="@+id/appBar"
-        android:orientation="vertical"
+        android:orientation="horizontal"
         android:id="@+id/widgetVoice"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
 
-    <LinearLayout
-        android:layout_marginTop="10dp"
-        android:layout_below="@+id/appBar"
-        android:orientation="vertical"
-        android:background="#aaaa"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <sound.recorder.widget.RecordWidgetH
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="10dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-    </LinearLayout>
-
-
         <LinearLayout
             android:layout_marginTop="20dp"
-            android:layout_below="@+id/appBar"
             android:orientation="vertical"
-            android:background="#000000"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content">
 
             <sound.recorder.widget.RecordWidgetV
@@ -67,6 +46,25 @@
                 android:layout_height="wrap_content" />
 
         </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_marginTop="10dp"
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <sound.recorder.widget.RecordWidgetH
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+
 
 
         <!--  <sound.recorder.widget.WidgetRecordVertical
