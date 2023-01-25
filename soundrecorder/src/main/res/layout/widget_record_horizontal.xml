@@ -59,8 +59,8 @@
 
         <ImageButton
             android:id="@+id/listBtn"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:background="@drawable/ic_circle_selectable"
             android:contentDescription="@string/app_names"
             android:src="@drawable/ic_menu" />

@@ -83,7 +83,9 @@ internal class PlayerActivity : AppCompatActivity() {
                 1.5f -> playbackSpeed += 0.5f
                 2.0f -> playbackSpeed = 0.5f
             }
-            mediaPlayer.playbackParams = PlaybackParams().setSpeed(playbackSpeed)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                mediaPlayer.playbackParams = PlaybackParams().setSpeed(playbackSpeed)
+            }
             binding.chip.text = "x $playbackSpeed"
         }
     }

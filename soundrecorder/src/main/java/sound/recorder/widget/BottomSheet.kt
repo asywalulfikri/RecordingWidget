@@ -58,7 +58,7 @@ internal class BottomSheet: BottomSheetDialogFragment {
         filename = filename.split(".mp3")[0]
         editText.setText(filename)
 
-        showKeyboard(editText)
+       // showKeyboard(editText)
 
         // deal with OK button
         view.findViewById<Button>(R.id.okBtn).setOnClickListener {
