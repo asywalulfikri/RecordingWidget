@@ -340,6 +340,7 @@ internal class VoiceRecorderFragmentHorizontal : Fragment(), BottomSheet.OnClick
             db.audioRecordDAO().insert(AudioRecord(filename, filePath, Date().time, duration))
         }
 
+        Toast.makeText(activity,"Successfully saved the recording",Toast.LENGTH_LONG).show()
         binding.recordText.visibility = View.VISIBLE
         binding.recordText.text = "Record"
 
