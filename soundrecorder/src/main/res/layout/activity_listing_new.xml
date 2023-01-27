@@ -99,6 +99,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="5dp"
+        android:clickable="true"
         android:gravity="center"
         app:behavior_hideable="true"
         app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
@@ -109,15 +110,21 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
+            android:layout_marginEnd="10dp"
             android:orientation="vertical">
-            <ImageView
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btnRename"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="#FFFFFF"
+                android:padding="10dp"
                 android:clickable="false"
+                android:text="Rename"
+                android:drawableStart="@drawable/ic_edit_disabled"
                 app:srcCompat="@drawable/ic_edit_disabled"/>
             <TextView
                 android:id="@+id/tvRename"
+                android:visibility="gone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/colorDisabled"
@@ -127,22 +134,28 @@
         <LinearLayout
             android:id="@+id/llDelete"
             android:layout_weight="1"
+            android:clickable="true"
+            android:layout_marginStart="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:orientation="vertical">
-            <ImageView
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btnDelete"
                 android:clickable="false"
-                android:layout_width="wrap_content"
+                android:background="#FFFFFF"
+                android:text="Delete"
+                android:padding="10dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:srcCompat="@drawable/ic_delete_disabled2"/>
+                android:drawableStart="@drawable/ic_delete_disabled2"/>
             <TextView
                 android:id="@+id/tvDelete"
+                android:visibility="gone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/colorDisabled"
-                android:text="Delete"/>
+                android:text=""/>
         </LinearLayout>
     </LinearLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
