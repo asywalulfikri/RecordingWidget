@@ -11,26 +11,28 @@ import android.view.View
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.room.Room
+import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import sound.recorder.widget.databinding.ActivityListingBinding
+import sound.recorder.widget.databinding.ActivityListingNewBinding
 import sound.recorder.widget.db.AppDatabase
 import sound.recorder.widget.db.AudioRecord
 
 
-internal class ListingActivity : AppCompatActivity(), Adapter.OnItemClickListener {
+internal class ListingActivityNew : AppCompatActivity(), Adapter.OnItemClickListener {
     private lateinit var adapter : Adapter
     private lateinit var audioRecords : List<AudioRecord>
     private lateinit var db : AppDatabase
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<LinearLayout>
     private var allSelected = false
     private var nbSelected = 0
-    private lateinit var binding: ActivityListingBinding
+    private lateinit var binding: ActivityListingNewBinding
     private val colorDisabled = "#CFCFCF"
     private val colorText = "#2B2B2B"
 
@@ -38,7 +40,7 @@ internal class ListingActivity : AppCompatActivity(), Adapter.OnItemClickListene
     @SuppressLint("NotifyDataSetChanged")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityListingBinding.inflate(layoutInflater)
+        binding = ActivityListingNewBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         setSupportActionBar(binding.toolbar)
@@ -49,6 +51,7 @@ internal class ListingActivity : AppCompatActivity(), Adapter.OnItemClickListene
             setResult(RESULT_OK,intent)
             finish()
         }
+
 
         bottomSheetBehavior = BottomSheetBehavior.from(binding.bottomSheet)
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
@@ -119,6 +122,19 @@ internal class ListingActivity : AppCompatActivity(), Adapter.OnItemClickListene
             Toast.makeText(this, "rename clicked", Toast.LENGTH_SHORT).show()
         }
 
+        lockAppBarClosed()
+
+    }
+
+
+    private fun lockAppBarClosed() {
+        binding.appBarLayout.setExpanded(false, true)
+        val layoutParams = binding.appBarLayout.layoutParams as CoordinatorLayout.LayoutParams
+        (layoutParams.behavior as CustomAppBarLayoutBehavior?)?.setScrollBehavior(false)
+        val params = binding.collapsingToolbarLayout.layoutParams as AppBarLayout.LayoutParams
+        params.scrollFlags = 0
+        params.scrollFlags = AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL
+       // params.scrollFlags = AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL or AppBarLayout.LayoutParams.SCROLL_FLAG_EXIT_UNTIL_COLLAPSED
     }
 
     private fun closeEditor(){

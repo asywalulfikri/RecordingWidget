@@ -94,7 +94,7 @@ internal class VoiceRecorderFragmentHorizontal : Fragment(), BottomSheet.OnClick
         }
 
         binding.listBtn.setOnClickListener {
-            startActivity(Intent(activity, ListingActivity::class.java))
+            startActivity(Intent(activity, ListingActivityNew::class.java))
         }
 
         binding.deleteBtn.setOnClickListener {
@@ -230,11 +230,11 @@ internal class VoiceRecorderFragmentHorizontal : Fragment(), BottomSheet.OnClick
             setOutputFile(dirPath+fileName)
             try {
                 prepare()
+                start()
             } catch (e: IOException) {
                 Log.e(LOG_TAG, "prepare() failed")
             }
 
-            start()
         }
 
         binding.recordBtn.setImageResource(R.drawable.ic_pause)
