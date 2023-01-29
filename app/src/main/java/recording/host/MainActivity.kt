@@ -1,12 +1,15 @@
 package recording.host
 
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
+import androidx.appcompat.app.AppCompatActivity
+import com.google.android.gms.ads.MobileAds
 import recording.host.databinding.ActivityMainBinding
 import sound.recorder.widget.RecordWidgetH
 import sound.recorder.widget.RecordWidgetV
+import sound.recorder.widget.RecordingSDK
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -18,6 +21,10 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        MobileAds.initialize(this)
+
+        RecordingSDK.initSdk(this,"","ca-app-pub-3940256099942544/6300978111","ca-app-pub-3940256099942544/1033173712").run()
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)

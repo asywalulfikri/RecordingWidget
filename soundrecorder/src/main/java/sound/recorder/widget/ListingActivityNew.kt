@@ -12,7 +12,6 @@ import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.coordinatorlayout.widget.CoordinatorLayout
-import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.room.Room
 import com.google.android.material.appbar.AppBarLayout
@@ -20,9 +19,11 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import sound.recorder.widget.adapter.Adapter
 import sound.recorder.widget.databinding.ActivityListingNewBinding
 import sound.recorder.widget.db.AppDatabase
 import sound.recorder.widget.db.AudioRecord
+import sound.recorder.widget.ui.PlayerActivity
 
 
 internal class ListingActivityNew : AppCompatActivity(), Adapter.OnItemClickListener {

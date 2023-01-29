@@ -9,7 +9,10 @@ internal data class AudioRecord (
     var filename: String,
     var filePath: String,
     var date: Long,
-    var duration: String){
+    var duration: String)
+
+
+{
 
     @PrimaryKey(autoGenerate = true)
     var id: Int = 0

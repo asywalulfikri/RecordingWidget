@@ -3,17 +3,16 @@ package sound.recorder.widget
 import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
-import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.media.MediaPlayer
 import android.media.MediaRecorder
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.provider.Settings
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -22,30 +21,28 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.core.text.HtmlCompat
-import androidx.fragment.app.Fragment
 import androidx.room.Room
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.MultiplePermissionsReport
 import com.karumi.dexter.PermissionToken
 import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import sound.recorder.widget.base.BaseFragment
+import sound.recorder.widget.databinding.WidgetRecordVerticalBinding
 import sound.recorder.widget.db.AppDatabase
 import sound.recorder.widget.db.AudioRecord
 import sound.recorder.widget.tools.Timer
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import sound.recorder.widget.databinding.WidgetRecordVerticalBinding
 import java.io.File
 import java.io.IOException
-import java.lang.Exception
 import java.text.SimpleDateFormat
 import java.util.*
 
 private const val LOG_TAG = "AudioRecordTest"
 private const val REQUEST_RECORD_AUDIO_PERMISSION = 200
 
-internal class VoiceRecorderFragmentVertical : Fragment(), BottomSheet.OnClickListener, Timer.OnTimerUpdateListener {
+internal class VoiceRecorderFragmentVertical : BaseFragment(), BottomSheet.OnClickListener,BottomSheetListSong.OnClickListener, Timer.OnTimerUpdateListener {
 
     private lateinit var fileName: String
     private lateinit var dirPath: String
@@ -62,6 +59,8 @@ internal class VoiceRecorderFragmentVertical : Fragment(), BottomSheet.OnClickLi
     // Requesting permission to RECORD_AUDIO
     private var permissionToRecordAccepted = false
     private var permissions: Array<String> = arrayOf(Manifest.permission.RECORD_AUDIO)
+    var mp :  MediaPlayer? =null
+    var showBtnStop = false
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = WidgetRecordVerticalBinding.inflate(inflater, container, false)
@@ -73,6 +72,8 @@ internal class VoiceRecorderFragmentVertical : Fragment(), BottomSheet.OnClickLi
 
         // Record to the external cache directory for visibility
         ActivityCompat.requestPermissions(activity as Activity, permissions, REQUEST_RECORD_AUDIO_PERMISSION)
+        mp = MediaPlayer()
+        setupAds()
 
         handler = Handler(Looper.myLooper()!!)
 
@@ -101,13 +102,17 @@ internal class VoiceRecorderFragmentVertical : Fragment(), BottomSheet.OnClickLi
             stopRecording()
             File(dirPath+fileName).delete()
         }
+
+        binding.songBtn.setOnClickListener {
+            startPermissionSong()
+        }
         binding.deleteBtn.isClickable = false
     }
 
-    private fun setToast(message : String){
-        Toast.makeText(activity,message,Toast.LENGTH_SHORT).show()
+    private fun showBottomSheetSong(){
+        val bottomSheet = BottomSheetListSong(showBtnStop,this)
+        bottomSheet.show(requireActivity().supportFragmentManager, LOG_TAG)
     }
-
 
     private fun startPermission(){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -123,23 +128,18 @@ internal class VoiceRecorderFragmentVertical : Fragment(), BottomSheet.OnClickLi
 
     }
 
-    @SuppressLint("NewApi")
-    fun showSettingsDialog(context: Context?) {
-        val builder = AlertDialog.Builder(context)
-        builder.setCancelable(true)
-        builder.setTitle("Permission")
-        builder.setMessage(HtmlCompat.fromHtml("You need allow Permission Record Audio", HtmlCompat.FROM_HTML_MODE_LEGACY))
-        builder.setPositiveButton("Setting") { dialog, _ ->
-            dialog.cancel()
-            openSettings(context)
+    private fun startPermissionSong(){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (ContextCompat.checkSelfPermission(activity as Context, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                // Pass any permission you want while launching
+                requestPermissionSong.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
+            }else{
+                showBottomSheetSong()
+            }
+        }else{
+            showBottomSheetSong()
         }
-        builder.show()
-    }
 
-    private fun openSettings(activity: Context?) {
-        val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
-        intent.data = Uri.fromParts("package", activity?.packageName.toString(), null)
-        activity?.startActivity(intent)
     }
 
     private val requestPermission =
@@ -147,6 +147,17 @@ internal class VoiceRecorderFragmentVertical : Fragment(), BottomSheet.OnClickLi
             // do something
             if(isGranted){
                 startRecording()
+            }else{
+                showAllowPermission()
+            }
+        }
+
+
+    private val requestPermissionSong =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
+            // do something
+            if(isGranted){
+                showBottomSheetSong()
             }else{
                 showAllowPermission()
             }
@@ -204,6 +215,7 @@ internal class VoiceRecorderFragmentVertical : Fragment(), BottomSheet.OnClickLi
         binding.listBtn.visibility = View.GONE
         binding.doneBtn.visibility = View.VISIBLE
         binding.recordText.visibility = View.GONE
+        binding.deleteBtn.visibility = View.VISIBLE
         binding.deleteBtn.isClickable = true
         binding.deleteBtn.setImageResource(R.drawable.ic_delete_enabled)
 
@@ -302,6 +314,7 @@ internal class VoiceRecorderFragmentVertical : Fragment(), BottomSheet.OnClickLi
         binding.listBtn.visibility = View.VISIBLE
         binding.doneBtn.visibility = View.GONE
         binding.deleteBtn.isClickable = false
+        binding.deleteBtn.visibility = View.GONE
         binding.deleteBtn.setImageResource(R.drawable.ic_delete_disabled)
 
         binding.playerView.reset()
@@ -343,8 +356,48 @@ internal class VoiceRecorderFragmentVertical : Fragment(), BottomSheet.OnClickLi
         Toast.makeText(activity,"Successfully saved the recording",Toast.LENGTH_LONG).show()
         binding.recordText.visibility = View.VISIBLE
         binding.recordText.text = "Record"
+        showInterstitial()
 
     }
+
+    override fun onPlaySong(filePath: String) {
+        if (mp != null) {
+            releaseMediaPlayer()
+        }
+        mp = MediaPlayer.create(activity, Uri.parse(filePath))
+        if (mp != null) {
+            showBtnStop = true
+            mp?.start()
+        }
+    }
+
+
+    override fun onPause() {
+        super.onPause()
+        if (mp != null) {
+            mp?.release()
+            showBtnStop = false
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        if (mp != null) {
+            mp?.release()
+            showBtnStop = false
+        }
+    }
+
+    override fun onStopSong() {
+        releaseMediaPlayer()
+    }
+
+    private fun releaseMediaPlayer() {
+        mp?.release()
+        mp = null
+        showBtnStop = false
+    }
+
 
     override fun onTimerUpdate(duration: String) {
         activity?.runOnUiThread{

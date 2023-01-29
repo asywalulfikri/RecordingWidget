@@ -1,4 +1,4 @@
-package sound.recorder.widget
+package sound.recorder.widget.adapter
 
 import android.util.Log
 import android.view.LayoutInflater
@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.CheckBox
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import sound.recorder.widget.R
 import sound.recorder.widget.db.AudioRecord
 import java.text.SimpleDateFormat
 import java.util.*
@@ -56,7 +57,7 @@ internal class Adapter(private var audioRecords: List<AudioRecord>,
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         if(position != RecyclerView.NO_POSITION){
-            var audioRecord = audioRecords[position]
+            val audioRecord = audioRecords[position]
             holder.filename.text = audioRecord.filename
             val sdf = SimpleDateFormat("dd/MM/yy")
             val netDate = Date(audioRecord.date)

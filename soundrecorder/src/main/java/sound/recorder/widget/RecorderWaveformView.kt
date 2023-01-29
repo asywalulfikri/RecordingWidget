@@ -1,9 +1,11 @@
 package sound.recorder.widget
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.*
 import android.util.AttributeSet
 import android.view.View
+import kotlin.math.min
 
 internal class RecorderWaveformView: View {
 
@@ -30,6 +32,7 @@ internal class RecorderWaveformView: View {
         init(attrs)
     }
 
+    @SuppressLint("NewApi")
     constructor(
         context: Context?,
         attrs: AttributeSet?,
@@ -63,18 +66,18 @@ internal class RecorderWaveformView: View {
 
     fun updateAmps(amp: Int){
 
-        var norm  = Math.min(amp/7, maxAmp) // 100*abs(Math.log10(1.0*amp/(sqrt(amp*1.0)+1)))
+        val norm  = min(amp/7, maxAmp) // 100*abs(Math.log10(1.0*amp/(sqrt(amp*1.0)+1)))
         amplitudes.add(norm)
-        var amps = amplitudes.takeLast(maxSpikes)
+        val amps = amplitudes.takeLast(maxSpikes)
 
         spikes.clear()
 
         for(i in amps.indices){
             val delta = maxAmp.toFloat()
             val top = delta - amps[i]
-            var bottom = top + amps[i] as Int
-            var rectUp = RectF(sw-i*(w+d), top, sw-i*(w+d) - w, bottom)
-            var rectDown = RectF(sw-i*(w+d), delta-2, sw-i*(w+d) - w, delta+amps[i])
+            val bottom = top + amps[i] as Int
+            val rectUp = RectF(sw-i*(w+d), top, sw-i*(w+d) - w, bottom)
+            val rectDown = RectF(sw-i*(w+d), delta-2, sw-i*(w+d) - w, delta+amps[i])
             spikes.add(rectUp)
             spikes.add(rectDown)
         }

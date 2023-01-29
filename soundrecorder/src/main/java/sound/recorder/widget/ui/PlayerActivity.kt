@@ -1,4 +1,4 @@
-package sound.recorder.widget
+package sound.recorder.widget.ui
 
 import android.media.MediaPlayer
 import android.media.PlaybackParams
@@ -10,6 +10,7 @@ import android.os.Looper
 import android.util.Log
 import android.widget.SeekBar
 import androidx.core.content.res.ResourcesCompat
+import sound.recorder.widget.R
 import sound.recorder.widget.databinding.ActivityPlayerBinding
 
 internal class PlayerActivity : AppCompatActivity() {
@@ -93,7 +94,8 @@ internal class PlayerActivity : AppCompatActivity() {
     private fun playPausePlayer(){
         if(!mediaPlayer.isPlaying){
             mediaPlayer.start()
-            binding.btnPlay.background = ResourcesCompat.getDrawable(resources, R.drawable.ic_pause_circle, theme)
+            binding.btnPlay.background = ResourcesCompat.getDrawable(resources,
+                R.drawable.ic_pause_circle, theme)
 
             runnable = Runnable {
                 val progress = mediaPlayer.currentPosition
@@ -108,14 +110,16 @@ internal class PlayerActivity : AppCompatActivity() {
             handler.postDelayed(runnable, delay)
         }else{
             mediaPlayer.pause()
-            binding.btnPlay.background = ResourcesCompat.getDrawable(resources, R.drawable.ic_play_circle, theme)
+            binding.btnPlay.background = ResourcesCompat.getDrawable(resources,
+                R.drawable.ic_play_circle, theme)
 
             handler.removeCallbacks(runnable)
         }
     }
 
     private fun stopPlayer(){
-        binding.btnPlay.background = ResourcesCompat.getDrawable(resources, R.drawable.ic_play_circle, theme)
+        binding.btnPlay.background = ResourcesCompat.getDrawable(resources,
+            R.drawable.ic_play_circle, theme)
         handler.removeCallbacks(runnable)
     }
 

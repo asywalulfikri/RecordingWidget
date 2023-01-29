@@ -18,9 +18,11 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import sound.recorder.widget.adapter.Adapter
 import sound.recorder.widget.databinding.ActivityListingBinding
 import sound.recorder.widget.db.AppDatabase
 import sound.recorder.widget.db.AudioRecord
+import sound.recorder.widget.ui.PlayerActivity
 
 
 internal class ListingActivity : AppCompatActivity(), Adapter.OnItemClickListener {
@@ -104,7 +106,8 @@ internal class ListingActivity : AppCompatActivity(), Adapter.OnItemClickListene
             audioRecords = audioRecords.filter { !it.isChecked }
 
             GlobalScope.launch {
-                db.audioRecordDAO().delete(toDelete)
+                //db.audioRecordDAO().delete(toDelete)
+                db.audioRecordDAO().deleteAll()
                 if(audioRecords.isEmpty()){
                     fetchAll()
                 }else{
