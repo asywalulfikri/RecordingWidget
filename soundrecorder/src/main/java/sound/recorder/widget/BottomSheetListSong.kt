@@ -55,14 +55,8 @@ internal class BottomSheetListSong: BottomSheetDialogFragment {
 
         //initiate view
         val listView = view.findViewById<ListView>(R.id.listView)
-        val ivClose  = view.findViewById<ImageView>(R.id.ivClose)
         val btnStop  = view.findViewById<Button>(R.id.stop)
 
-
-
-        ivClose.setOnClickListener {
-            dismiss()
-        }
 
         if(showBtnStop){
             btnStop.visibility = View.VISIBLE
