@@ -2,7 +2,6 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/layout_song"
     android:layout_height="match_parent"
     android:paddingLeft="8dp"
@@ -15,17 +14,16 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <ImageButton
+        <ImageView
             android:id="@+id/ivClose"
             android:layout_margin="5dp"
             android:layout_gravity="right"
-            android:clickable="false"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:contentDescription="@string/app_names"
             android:background="@drawable/ic_circle_selectable"
             android:src="@drawable/ic_delete_disabled"
-            tools:ignore="RtlHardcoded" />
+            tools:ignore="RtlHardcoded"
+            android:contentDescription="close" />
 
         <ListView
             android:layout_marginTop="5dp"
