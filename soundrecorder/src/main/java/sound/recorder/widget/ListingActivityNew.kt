@@ -162,7 +162,10 @@ internal class ListingActivityNew : AppCompatActivity(), Adapter.OnItemClickList
     private fun fetchAll(){
         GlobalScope.launch {
             audioRecords = db.audioRecordDAO().getAll()
-            adapter.setData(audioRecords)
+            runOnUiThread{
+                adapter.setData(audioRecords)
+            }
+           // adapter.setData(audioRecords)
         }
     }
 
