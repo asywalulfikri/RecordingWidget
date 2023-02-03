@@ -340,7 +340,7 @@ internal class VoiceRecorderFragmentHorizontal : BaseFragment(), BottomSheet.OnC
         stopRecording()
     }
 
-    override fun onOkClicked(filePath: String, filename: String) {
+    override fun onOkClicked(filePath: String, filename: String,isChange : Boolean) {
         // add audio record info to database
         val db = Room.databaseBuilder(
             activity as Activity,
@@ -349,6 +349,12 @@ internal class VoiceRecorderFragmentHorizontal : BaseFragment(), BottomSheet.OnC
 
         val duration = timer.format().split(".")[0]
         stopRecording()
+
+
+        if(isChange){
+            val newFile = File("$dirPath$filename.mp3")
+            File(dirPath+fileName).renameTo(newFile)
+        }
 
         GlobalScope.launch {
             db.audioRecordDAO().insert(AudioRecord(filename, filePath, Date().time, duration))

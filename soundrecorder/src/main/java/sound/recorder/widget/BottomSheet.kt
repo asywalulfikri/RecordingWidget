@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.res.Configuration
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -25,7 +26,7 @@ internal class BottomSheet: BottomSheetDialogFragment {
         // These methods are the different events and
         // need to pass relevant arguments related to the event triggered
         fun onCancelClicked()
-        fun onOkClicked(filePath: String, filename: String)
+        fun onOkClicked(filePath: String, filename: String, isChange : Boolean)
     }
 
     // Step 2 - This variable represents the listener passed in by the owning object
@@ -34,6 +35,7 @@ internal class BottomSheet: BottomSheetDialogFragment {
 
     private lateinit var filename: String
     private lateinit var dirPath: String
+    private var isChange = false
 
     constructor(dirPath: String, filename : String, listener: OnClickListener){
         this.dirPath = dirPath
@@ -68,8 +70,11 @@ internal class BottomSheet: BottomSheetDialogFragment {
             // update filename if need
             val updatedFilename = editText.text.toString()
             if(updatedFilename != filename){
-                val newFile = File("$dirPath$updatedFilename.mp3")
+                isChange = true
+               /* val newFile = File("$dirPath$updatedFilename.mp3")
                 File(dirPath+filename).renameTo(newFile)
+                Log.d("namaya",dirPath+filename)
+                Log.d("namayaTO",dirPath+updatedFilename)*/
             }
 
             // add entry to db
@@ -78,7 +83,7 @@ internal class BottomSheet: BottomSheetDialogFragment {
             dismiss()
 
             // fire ok callback
-            listener.onOkClicked("$dirPath$updatedFilename.mp3", updatedFilename)
+            listener.onOkClicked("$dirPath$updatedFilename.mp3", updatedFilename,isChange)
         }
 
         // deal with cancel button
