@@ -31,10 +31,10 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import sound.recorder.widget.base.BaseFragment
 import sound.recorder.widget.databinding.WidgetRecordHorizontalBinding
-import sound.recorder.widget.databinding.WidgetRecordVerticalBinding
 import sound.recorder.widget.db.AppDatabase
 import sound.recorder.widget.db.AudioRecord
 import sound.recorder.widget.tools.Timer
+import sound.recorder.widget.ui.ListingActivityNew
 import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat

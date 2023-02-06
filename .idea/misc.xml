@@ -8,7 +8,10 @@
         <entry key="app/src/main/res/layout/content_main.xml" value="0.259375" />
         <entry key="app/src/main/res/layout/fragment_first.xml" value="0.259375" />
         <entry key="app/src/main/res/layout/fragment_second.xml" value="0.259375" />
+        <entry key="soundrecorder/src/main/res/drawable/ic_baseline_notifications_active_24.xml" value="0.194" />
         <entry key="soundrecorder/src/main/res/drawable/ic_close.xml" value="0.194" />
+        <entry key="soundrecorder/src/main/res/drawable/ic_done.xml" value="0.194" />
+        <entry key="soundrecorder/src/main/res/drawable/ic_forward.xml" value="0.194" />
         <entry key="soundrecorder/src/main/res/drawable/ic_record.xml" value="0.194" />
         <entry key="soundrecorder/src/main/res/drawable/my_song.xml" value="0.194" />
         <entry key="soundrecorder/src/main/res/layout/activity_listing.xml" value="0.11770833333333333" />

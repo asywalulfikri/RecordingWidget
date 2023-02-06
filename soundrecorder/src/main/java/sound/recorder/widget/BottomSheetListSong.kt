@@ -75,49 +75,6 @@ internal class BottomSheetListSong: BottomSheetDialogFragment {
 
         getAllMediaMp3Files(listView,btnStop)
 
-
-        // set edittext to filename
-        //  editText.setText(filename)
-
-        // showKeyboard(editText)
-
-        // deal with OK button
-        /* view.findViewById<Button>(R.id.okBtn).setOnClickListener {
-            // hide keyboard
-            hideKeyboard(view)
-
-            // update filename if need
-            val updatedFilename = editText.text.toString()
-            if(updatedFilename != filename){
-                val newFile = File("$dirPath$updatedFilename.mp3")
-                File(dirPath+filename).renameTo(newFile)
-            }
-
-            // add entry to db
-
-            // dismiss dialog
-            dismiss()
-
-            // fire ok callback
-            listener.onOkClicked("$dirPath$updatedFilename.mp3", updatedFilename)
-        }
-
-        // deal with cancel button
-        view.findViewById<Button>(R.id.cancelBtn).setOnClickListener {
-            // hide keyboard
-            hideKeyboard(view)
-            // delete file from storage
-            File(dirPath+filename).delete()
-
-            // dismiss dialog
-            dismiss()
-
-            // fire cancel callback
-            listener.onCancelClicked()
-        }
-*/
-
-
         return view
 
     }
@@ -153,8 +110,23 @@ internal class BottomSheetListSong: BottomSheetDialogFragment {
             val location = cursor.getColumnIndex(MediaStore.Audio.Media.DATA)
 
             do {
-                val songTitle: String = cursor.getString(title)
-                val songLocation : String = cursor.getString(location)
+                var songTitle = ""
+                var songLocation = ""
+                if(title==null){
+                    //don't execute anything
+                }else{
+                    if(cursor.getString(title)!=null){
+                        songTitle = cursor.getString(title)
+                    }
+                }
+
+                if(location==null){
+                    //don't execute anything
+                }else{
+                    if(cursor.getString(location)!=null){
+                        songLocation = cursor.getString(location)
+                    }
+                }
 
                 // Adding Media File Names to ListElementsArrayList.
                 listLocationSong?.add(songLocation)

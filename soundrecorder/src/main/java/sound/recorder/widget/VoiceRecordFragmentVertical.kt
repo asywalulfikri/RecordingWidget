@@ -34,6 +34,7 @@ import sound.recorder.widget.databinding.WidgetRecordVerticalBinding
 import sound.recorder.widget.db.AppDatabase
 import sound.recorder.widget.db.AudioRecord
 import sound.recorder.widget.tools.Timer
+import sound.recorder.widget.ui.ListingActivityNew
 import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat
@@ -246,6 +247,7 @@ internal class VoiceRecorderFragmentVertical : BaseFragment(), BottomSheet.OnCli
                 start()
             } catch (e: IOException) {
                 Log.e(LOG_TAG, "prepare() failed")
+                setToast(e.message.toString())
             }
 
         }
@@ -320,7 +322,9 @@ internal class VoiceRecorderFragmentVertical : BaseFragment(), BottomSheet.OnCli
         binding.playerView.reset()
         try {
             timer.stop()
-        }catch (e: Exception){}
+        }catch (e: Exception){
+            setToast(e.message.toString())
+        }
 
         binding.timerView.text = "00:00.00"
     }

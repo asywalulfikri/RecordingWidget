@@ -3,7 +3,6 @@ package sound.recorder.widget.ui
 import android.media.MediaPlayer
 import android.media.PlaybackParams
 import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -11,9 +10,11 @@ import android.util.Log
 import android.widget.SeekBar
 import androidx.core.content.res.ResourcesCompat
 import sound.recorder.widget.R
+import sound.recorder.widget.base.BaseActivity
 import sound.recorder.widget.databinding.ActivityPlayerBinding
+import java.io.File
 
-internal class PlayerActivity : AppCompatActivity() {
+internal class PlayerActivity : BaseActivity() {
 
     private val delay = 100L
     private lateinit var runnable : Runnable
@@ -36,59 +37,66 @@ internal class PlayerActivity : AppCompatActivity() {
         val filePath = intent.getStringExtra("filepath")
         val filename = intent.getStringExtra("filename")
 
-        binding.tvFilename.text = filename
 
-        mediaPlayer = MediaPlayer()
-        mediaPlayer.apply {
-            setDataSource(filePath)
-            prepare()
-        }
-        binding.seekBar.max = mediaPlayer.duration
+        if(filePath!=null||filePath!=""){
+            binding.tvFilename.text = filename
 
-        handler = Handler(Looper.getMainLooper())
-        playPausePlayer()
+            mediaPlayer = MediaPlayer()
+            mediaPlayer.apply {
+                setDataSource(filePath)
+                prepare()
+            }
+            binding.seekBar.max = mediaPlayer.duration
 
-        mediaPlayer.setOnCompletionListener {
-            stopPlayer()
-        }
-
-        binding.btnPlay.setOnClickListener {
+            handler = Handler(Looper.getMainLooper())
             playPausePlayer()
-        }
 
-        binding.btnForward.setOnClickListener {
-            mediaPlayer.seekTo(mediaPlayer.currentPosition + 1000)
-            binding.seekBar.progress += 1000
-        }
-
-        binding.btnBackward.setOnClickListener {
-            mediaPlayer.seekTo(mediaPlayer.currentPosition - 1000)
-            binding.seekBar.progress -= 1000
-
-        }
-
-        binding.seekBar.setOnSeekBarChangeListener(object: SeekBar.OnSeekBarChangeListener{
-            override fun onProgressChanged(p0: SeekBar?, p1: Int, p2: Boolean) {
-                if(p2) mediaPlayer.seekTo(p1)
+            mediaPlayer.setOnCompletionListener {
+                stopPlayer()
             }
-            override fun onStartTrackingTouch(p0: SeekBar?) {}
 
-            override fun onStopTrackingTouch(p0: SeekBar?) {}
-
-        })
-
-        binding.chip.setOnClickListener {
-            when(playbackSpeed){
-                0.5f -> playbackSpeed += 0.5f
-                1.0f -> playbackSpeed += 0.5f
-                1.5f -> playbackSpeed += 0.5f
-                2.0f -> playbackSpeed = 0.5f
+            binding.btnPlay.setOnClickListener {
+                playPausePlayer()
             }
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                mediaPlayer.playbackParams = PlaybackParams().setSpeed(playbackSpeed)
+
+            binding.btnForward.setOnClickListener {
+                mediaPlayer.seekTo(mediaPlayer.currentPosition + 1000)
+                binding.seekBar.progress += 1000
             }
-            binding.chip.text = "x $playbackSpeed"
+
+            binding.btnBackward.setOnClickListener {
+                mediaPlayer.seekTo(mediaPlayer.currentPosition - 1000)
+                binding.seekBar.progress -= 1000
+
+            }
+
+            binding.seekBar.setOnSeekBarChangeListener(object: SeekBar.OnSeekBarChangeListener{
+                override fun onProgressChanged(p0: SeekBar?, p1: Int, p2: Boolean) {
+                    if(p2) mediaPlayer.seekTo(p1)
+                }
+                override fun onStartTrackingTouch(p0: SeekBar?) {}
+
+                override fun onStopTrackingTouch(p0: SeekBar?) {}
+
+            })
+
+            binding.chip.setOnClickListener {
+                when(playbackSpeed){
+                    0.5f -> playbackSpeed += 0.5f
+                    1.0f -> playbackSpeed += 0.5f
+                    1.5f -> playbackSpeed += 0.5f
+                    2.0f -> playbackSpeed = 0.5f
+                }
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    mediaPlayer.playbackParams = PlaybackParams().setSpeed(playbackSpeed)
+                }
+                binding.chip.text = "x $playbackSpeed"
+            }
+        }else{
+            setToast("Audio not found")
+            finish()
         }
+
     }
 
     private fun playPausePlayer(){

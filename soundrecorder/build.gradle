@@ -61,4 +61,13 @@ dependencies {
     kapt 'androidx.room:room-compiler:2.5.0'
     implementation 'androidx.room:room-ktx:2.5.0'
 
+    implementation platform('com.google.firebase:firebase-bom:31.2.0')
+
+    // Add the dependencies for the Firebase Cloud Messaging and Analytics libraries
+    // When using the BoM, you don't specify versions in Firebase library dependencies
+    implementation 'com.google.firebase:firebase-messaging'
+    implementation 'com.google.firebase:firebase-analytics'
+
+    implementation 'androidx.work:work-runtime-ktx:2.8.0-rc01'
+
 }

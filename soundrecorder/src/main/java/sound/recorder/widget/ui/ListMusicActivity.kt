@@ -1,4 +1,4 @@
-package sound.recorder.widget
+package sound.recorder.widget.ui
 
 import android.annotation.SuppressLint
 import android.content.Intent
@@ -16,17 +16,18 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.room.Room
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.bottomsheet.BottomSheetBehavior
-import kotlinx.coroutines.DelicateCoroutinesApi
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
+import sound.recorder.widget.CustomAppBarLayoutBehavior
 import sound.recorder.widget.adapter.Adapter
+import sound.recorder.widget.base.BaseActivity
 import sound.recorder.widget.databinding.ActivityListingNewBinding
 import sound.recorder.widget.db.AppDatabase
 import sound.recorder.widget.db.AudioRecord
-import sound.recorder.widget.ui.PlayerActivity
+import java.io.File
+import java.lang.Runnable
 
 
-internal class ListingActivityNew : AppCompatActivity(), Adapter.OnItemClickListener {
+internal class ListingActivityNew : BaseActivity(), Adapter.OnItemClickListener {
     private lateinit var adapter : Adapter
     private lateinit var audioRecords : List<AudioRecord>
     private lateinit var db : AppDatabase
@@ -158,15 +159,22 @@ internal class ListingActivityNew : AppCompatActivity(), Adapter.OnItemClickList
         finish()
     }
 
-    @OptIn(DelicateCoroutinesApi::class)
     private fun fetchAll(){
-        GlobalScope.launch {
+       /* GlobalScope.launch {
             audioRecords = db.audioRecordDAO().getAll()
             runOnUiThread{
                 adapter.setData(audioRecords)
             }
            // adapter.setData(audioRecords)
+        }*/
+
+        MainScope().launch {
+            withContext(Dispatchers.Default) {
+                audioRecords = db.audioRecordDAO().getAll()
+            }
+            adapter.setData(audioRecords)
         }
+
     }
 
     @OptIn(DelicateCoroutinesApi::class)
@@ -226,11 +234,19 @@ internal class ListingActivityNew : AppCompatActivity(), Adapter.OnItemClickList
             updateBottomSheet()
 
         }else{
-            intent.putExtra("filepath", audioRecord.filePath)
-            intent.putExtra("filename", audioRecord.filename)
-            startActivity(intent)
+            if(isExist(audioRecord.filePath)){
+                intent.putExtra("filepath", audioRecord.filePath)
+                intent.putExtra("filename", audioRecord.filename)
+                startActivity(intent)
+            }else{
+                setToast("Audio Not Found")
+            }
         }
 
+    }
+
+    private fun isExist(path : String): Boolean {
+        return File(path).exists()
     }
 
     override fun onItemLongClick(position: Int) {

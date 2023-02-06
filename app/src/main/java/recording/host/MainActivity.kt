@@ -9,9 +9,10 @@ import recording.host.databinding.ActivityMainBinding
 import sound.recorder.widget.RecordWidgetH
 import sound.recorder.widget.RecordWidgetV
 import sound.recorder.widget.RecordingSDK
+import sound.recorder.widget.base.BaseActivity
 
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : BaseActivity() {
 
 
     private var recordWidgetH : RecordWidgetH? =null
@@ -36,6 +37,8 @@ class MainActivity : AppCompatActivity() {
 
         recordWidgetV = RecordWidgetV(this)
         recordWidgetV?.loadData()
+
+        getFirebaseToken()
 
     }
 
