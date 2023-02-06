@@ -10,6 +10,7 @@ import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
+import sound.recorder.widget.R
 
 class FirebaseMessageReceiver : FirebaseMessagingService() {
     private val channelId = "default_notification_channel_id"
@@ -43,6 +44,7 @@ class FirebaseMessageReceiver : FirebaseMessagingService() {
         val builder = NotificationCompat.Builder(applicationContext, channelId)
             .setAutoCancel(true)
             .setContentText(message)
+            .setSmallIcon(R.drawable.ic_baseline_notifications_active_24)
             .setContentTitle(title)
             .setVibrate(
                 longArrayOf(
