@@ -14,7 +14,7 @@ import sound.recorder.widget.databinding.LayoutEmptyHorizontalBinding
 class RecordWidgetH : LinearLayout {
 
     private var fragmentManagers: FragmentManager? =null
-    private val imkasFragment = VoiceRecorderFragmentHorizontal()
+    private val imkasFragment = VoiceRecorderFragmentWidgetHorizontal()
     private var isAdd = false
     private var binding: LayoutEmptyHorizontalBinding
 

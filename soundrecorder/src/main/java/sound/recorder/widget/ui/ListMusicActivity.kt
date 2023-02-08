@@ -10,7 +10,6 @@ import android.util.Log
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.room.Room
@@ -19,7 +18,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import kotlinx.coroutines.*
 import sound.recorder.widget.CustomAppBarLayoutBehavior
 import sound.recorder.widget.adapter.Adapter
-import sound.recorder.widget.base.BaseActivity
+import sound.recorder.widget.base.BaseActivityWidget
 import sound.recorder.widget.databinding.ActivityListingNewBinding
 import sound.recorder.widget.db.AppDatabase
 import sound.recorder.widget.db.AudioRecord
@@ -27,7 +26,7 @@ import java.io.File
 import java.lang.Runnable
 
 
-internal class ListingActivityNew : BaseActivity(), Adapter.OnItemClickListener {
+internal class ListingActivityWidgetNew : BaseActivityWidget(), Adapter.OnItemClickListener {
     private lateinit var adapter : Adapter
     private lateinit var audioRecords : List<AudioRecord>
     private lateinit var db : AppDatabase
@@ -222,7 +221,7 @@ internal class ListingActivityNew : BaseActivity(), Adapter.OnItemClickListener 
     }
 
     override fun onItemClick(position: Int) {
-        val intent = Intent(this, PlayerActivity::class.java)
+        val intent = Intent(this, PlayerActivityWidget::class.java)
         val audioRecord = audioRecords[position]
 
         if(adapter.isEditMode()){

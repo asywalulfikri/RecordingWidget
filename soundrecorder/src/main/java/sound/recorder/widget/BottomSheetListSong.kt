@@ -2,10 +2,12 @@ package sound.recorder.widget
 
 import android.content.ContentResolver
 import android.content.Context
+import android.content.SharedPreferences
 import android.content.res.Configuration
 import android.media.MediaPlayer
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,17 +18,29 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior.STATE_EXPANDE
 import com.google.android.material.bottomsheet.BottomSheetBehavior.STATE_HIDDEN
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.google.gson.Gson
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
+import sound.recorder.widget.databinding.BottomSheetSongBinding
+import sound.recorder.widget.model.Song
+import sound.recorder.widget.util.DataSession
 
 
-internal class BottomSheetListSong: BottomSheetDialogFragment {
+internal class BottomSheetListSong: BottomSheetDialogFragment,SharedPreferences.OnSharedPreferenceChangeListener {
 
 
-    //Load SOng
+    //Load Song
     private var contentResolver: ContentResolver? = null
     var listTitleSong: ArrayList<String>? = null
-    var listLocationSong: ArrayList<String>? = null
+    private var listLocationSong: ArrayList<String>? = null
     var adapter: ArrayAdapter<String>? = null
     var showBtnStop = false
+
 
 
     // Step 1 - This interface defines the type of messages I want to communicate to my owner
@@ -36,9 +50,12 @@ internal class BottomSheetListSong: BottomSheetDialogFragment {
     }
 
     // Step 2 - This variable represents the listener passed in by the owning object
-    // The listener must implement the events interface and passes messages up to the parent.
-    private lateinit var listener: OnClickListener
+    // The listener must implement the events int?erface and passes messages up to the parent.
+    private var listener: OnClickListener
     private var mp : MediaPlayer? =null
+    private lateinit var binding : BottomSheetSongBinding
+    private var sharedPreferences : SharedPreferences? =null
+    private var lisSong = ArrayList<Song>()
 
     constructor(showBtnStop : Boolean,listener: OnClickListener) {
         this.listener = listener
@@ -47,40 +64,42 @@ internal class BottomSheetListSong: BottomSheetDialogFragment {
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater.inflate(R.layout.bottom_sheet_song, container)
-
+        binding = BottomSheetSongBinding.inflate(layoutInflater)
         (dialog as? BottomSheetDialog)?.behavior?.state = STATE_EXPANDED
         dialog?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
 
-
-        //initiate view
-        val listView = view.findViewById<ListView>(R.id.listView)
-        val btnStop  = view.findViewById<Button>(R.id.stop)
-
+        sharedPreferences = DataSession(activity as Context).getShared()
+        sharedPreferences?.registerOnSharedPreferenceChangeListener(this)
 
         if(showBtnStop){
-            btnStop.visibility = View.VISIBLE
+            binding.btnStop.visibility = View.VISIBLE
         }else{
-            btnStop.visibility = View.GONE
+            binding.btnStop.visibility = View.GONE
         }
 
-        btnStop.setOnClickListener {
+        binding.btnStop.setOnClickListener {
             listener.onStopSong()
-            btnStop.visibility = View.GONE
+            binding.btnStop.visibility = View.GONE
         }
 
 
         listTitleSong = ArrayList()
         listLocationSong = ArrayList()
 
-        getAllMediaMp3Files(listView,btnStop)
+        if(!RecordingSDK.isHaveSong(activity as Context)){
+            getAllMediaMp3Files(lisSong)
+        }
 
-        return view
+        return binding.root
 
     }
 
     private fun setToast(message : String){
-        Toast.makeText(activity,message,Toast.LENGTH_SHORT).show()
+        Toast.makeText(activity, "$message.",Toast.LENGTH_SHORT).show()
+    }
+
+    private fun setLog(message : String){
+        Log.d("value",Gson().toJson(message))
     }
 
 
@@ -91,7 +110,8 @@ internal class BottomSheetListSong: BottomSheetDialogFragment {
     }
 
 
-    private fun getAllMediaMp3Files(listView: ListView, btnStop : Button) {
+    private fun getAllMediaMp3Files(songList : ArrayList<Song>) {
+        setLog(songList.size.toString())
         contentResolver = context?.contentResolver
         val uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
         val cursor = contentResolver?.query(
@@ -109,46 +129,79 @@ internal class BottomSheetListSong: BottomSheetDialogFragment {
             val title    = cursor.getColumnIndex(MediaStore.Audio.Media.TITLE)
             val location = cursor.getColumnIndex(MediaStore.Audio.Media.DATA)
 
-            do {
-                var songTitle = ""
-                var songLocation = ""
-                if(title==null){
-                    //don't execute anything
-                }else{
-                    if(cursor.getString(title)!=null){
-                        songTitle = cursor.getString(title)
+
+            MainScope().launch {
+
+                var songTitle1 = ""
+                var songLocation1 = ""
+
+                withContext(Dispatchers.Default) {
+
+                    //Process Background 2
+                    for (i in songList.indices) {
+                        songTitle1 = songList[i].title.toString()
+                        songLocation1  = songList[i].pathRaw.toString()
+                        listLocationSong?.add(songLocation1)
+                        listTitleSong?.add(songTitle1)
                     }
                 }
 
-                if(location==null){
-                    //don't execute anything
-                }else{
-                    if(cursor.getString(location)!=null){
-                        songLocation = cursor.getString(location)
+                //Result Process Background 2
+
+                MainScope().launch {
+
+                    //Background Process 1
+                    withContext(Dispatchers.Default) {
+
+                        do {
+                            var songTitle = ""
+                            var songLocation = ""
+                            if(title==null){
+                                //don't execute anything
+                            }else{
+                                if(cursor.getString(title)!=null){
+                                    songTitle = cursor.getString(title)
+                                }
+                            }
+
+                            if(location==null){
+                                //don't execute anything
+                            }else{
+                                if(cursor.getString(location)!=null){
+                                    songLocation = cursor.getString(location)
+                                }
+                            }
+
+                            listLocationSong?.add(songLocation)
+                            listTitleSong?.add(songTitle)
+
+                        } while (cursor.moveToNext())
                     }
+                   updateView()
                 }
 
-                // Adding Media File Names to ListElementsArrayList.
-                listLocationSong?.add(songLocation)
-                listTitleSong?.add(songTitle)
-            } while (cursor.moveToNext())
+            }
+
         }
 
-        // converting arraylist to array
+    }
+
+
+    private fun updateView(){
         val listSong: Array<String> = listTitleSong!!.toTypedArray()
         adapter =
             ArrayAdapter(activity as Context, android.R.layout.simple_list_item_1, listSong)
-        listView.adapter = adapter
-        listView.onItemClickListener =
+        binding.listView.adapter = adapter
+        adapter?.notifyDataSetChanged()
+        binding.listView.onItemClickListener =
             AdapterView.OnItemClickListener { adapterView: AdapterView<*>?, view: View?, i: Int, l: Long ->
                 //dismiss()
                 (dialog as? BottomSheetDialog)?.behavior?.state = STATE_HIDDEN
                 listener.onPlaySong(listLocationSong?.get(i).toString())
-                btnStop.visibility = View.VISIBLE
+                binding.btnStop.visibility = View.VISIBLE
 
             }
     }
-
 
 
     private fun isDarkTheme(): Boolean {
@@ -170,4 +223,36 @@ internal class BottomSheetListSong: BottomSheetDialogFragment {
         imm?.hideSoftInputFromWindow(view.windowToken, 0)
     }
 
+
+    override fun onStart() {
+        super.onStart()
+        EventBus.getDefault().register(this)
+    }
+
+    override fun onStop() {
+        EventBus.getDefault().unregister(this)
+        super.onStop()
+    }
+
+    @Subscribe(sticky = true, threadMode = ThreadMode.ASYNC)
+    fun onMessageEvent(songListResponse: ArrayList<Song>?) {
+        Log.d("valueData3",Gson().toJson(songListResponse))
+        songListResponse?.let { getAllMediaMp3Files(it) }
+    }
+
+
+    override fun onResume() {
+        super.onResume()
+        sharedPreferences?.registerOnSharedPreferenceChangeListener(this)
+    }
+
+
+    override fun onPause() {
+        super.onPause()
+        sharedPreferences?.unregisterOnSharedPreferenceChangeListener(this)
+    }
+
+    override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
+        setLog(key.toString())
+    }
 }

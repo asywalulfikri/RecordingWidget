@@ -14,11 +14,11 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name=".ui.PlayerActivity"
+        <activity android:name=".ui.PlayerActivityWidget"
             android:screenOrientation="landscape"/>
         <activity android:name=".ListingActivity"
             android:screenOrientation="landscape"/>
-        <activity android:name=".ui.ListingActivityNew"
+        <activity android:name=".ui.ListingActivityWidgetNew"
             android:screenOrientation="landscape"/>
 
 

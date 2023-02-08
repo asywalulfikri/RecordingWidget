@@ -22,7 +22,7 @@ import sound.recorder.widget.adapter.Adapter
 import sound.recorder.widget.databinding.ActivityListingBinding
 import sound.recorder.widget.db.AppDatabase
 import sound.recorder.widget.db.AudioRecord
-import sound.recorder.widget.ui.PlayerActivity
+import sound.recorder.widget.ui.PlayerActivityWidget
 
 
 internal class ListingActivity : AppCompatActivity(), Adapter.OnItemClickListener {
@@ -197,7 +197,7 @@ internal class ListingActivity : AppCompatActivity(), Adapter.OnItemClickListene
     }
 
     override fun onItemClick(position: Int) {
-        val intent = Intent(this, PlayerActivity::class.java)
+        val intent = Intent(this, PlayerActivityWidget::class.java)
         val audioRecord = audioRecords[position]
 
         if(adapter.isEditMode()){
