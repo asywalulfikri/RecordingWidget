@@ -1,4 +1,4 @@
-package sound.recorder.widget
+package sound.recorder.widget.ui.activity
 
 import android.annotation.SuppressLint
 import android.content.Intent
@@ -18,11 +18,11 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import sound.recorder.widget.R
 import sound.recorder.widget.adapter.Adapter
 import sound.recorder.widget.databinding.ActivityListingBinding
 import sound.recorder.widget.db.AppDatabase
 import sound.recorder.widget.db.AudioRecord
-import sound.recorder.widget.ui.PlayerActivityWidget
 
 
 internal class ListingActivity : AppCompatActivity(), Adapter.OnItemClickListener {
@@ -166,30 +166,36 @@ internal class ListingActivity : AppCompatActivity(), Adapter.OnItemClickListene
         when(nbSelected){
             0 -> {
                 binding.btnRename.isClickable = false
-                binding.btnRename.background = ResourcesCompat.getDrawable(resources, R.drawable.ic_edit_disabled, theme)
+                binding.btnRename.background = ResourcesCompat.getDrawable(resources,
+                    R.drawable.ic_edit_disabled, theme)
                 binding.tvRename.setTextColor(Color.parseColor(colorDisabled))
                 binding.btnDelete.isClickable = false
-                binding.btnDelete.background = ResourcesCompat.getDrawable(resources, R.drawable.ic_delete_disabled2, theme)
+                binding.btnDelete.background = ResourcesCompat.getDrawable(resources,
+                    R.drawable.ic_delete_disabled2, theme)
                 binding.tvDelete.setTextColor(Color.parseColor(colorDisabled))
 
             }
             1 -> {
                 binding.btnRename.isClickable = true
-                binding.btnRename.background = ResourcesCompat.getDrawable(resources, R.drawable.ic_edit, theme)
+                binding.btnRename.background = ResourcesCompat.getDrawable(resources,
+                    R.drawable.ic_edit, theme)
                 binding.tvRename.setTextColor(Color.parseColor(colorText))
 
                 binding.btnDelete.isClickable = true
-                binding.btnDelete.background = ResourcesCompat.getDrawable(resources, R.drawable.ic_delete, theme)
+                binding.btnDelete.background = ResourcesCompat.getDrawable(resources,
+                    R.drawable.ic_delete, theme)
                 binding.tvDelete.setTextColor(Color.parseColor(colorText))
 
             }
             else -> {
                 binding.btnRename.isClickable = false
-                binding.btnRename.background = ResourcesCompat.getDrawable(resources, R.drawable.ic_edit_disabled, theme)
+                binding.btnRename.background = ResourcesCompat.getDrawable(resources,
+                    R.drawable.ic_edit_disabled, theme)
                 binding.tvRename.setTextColor(Color.parseColor(colorDisabled))
 
                 binding. btnDelete.isClickable = true
-                binding.btnDelete.background = ResourcesCompat.getDrawable(resources, R.drawable.ic_delete, theme)
+                binding.btnDelete.background = ResourcesCompat.getDrawable(resources,
+                    R.drawable.ic_delete, theme)
                 binding.tvDelete.setTextColor(Color.parseColor(colorText))
 
             }

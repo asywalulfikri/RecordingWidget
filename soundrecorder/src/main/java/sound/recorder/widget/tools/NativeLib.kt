@@ -1,4 +1,4 @@
-package sound.recorder.widget
+package sound.recorder.widget.tools
 
 class NativeLib {
 

@@ -1,4 +1,4 @@
-package sound.recorder.widget.ui
+package sound.recorder.widget.ui.activity
 
 import android.media.MediaPlayer
 import android.media.PlaybackParams

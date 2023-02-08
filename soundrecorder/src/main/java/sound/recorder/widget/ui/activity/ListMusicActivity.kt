@@ -22,6 +22,7 @@ import sound.recorder.widget.base.BaseActivityWidget
 import sound.recorder.widget.databinding.ActivityListingNewBinding
 import sound.recorder.widget.db.AppDatabase
 import sound.recorder.widget.db.AudioRecord
+import sound.recorder.widget.ui.activity.PlayerActivityWidget
 import java.io.File
 import java.lang.Runnable
 

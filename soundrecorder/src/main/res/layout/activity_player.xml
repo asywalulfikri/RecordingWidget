@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.PlayerActivityWidget">
+    tools:context=".ui.activity.PlayerActivityWidget">
 
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbar"
@@ -22,7 +22,7 @@
             android:text=""/>
     </com.google.android.material.appbar.MaterialToolbar>
 
-    <sound.recorder.widget.PlayerWaveformView
+    <sound.recorder.widget.tools.PlayerWaveformView
         android:id="@+id/playerView"
         android:layout_width="656px"
         android:layout_height="640px"

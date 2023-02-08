@@ -1,4 +1,4 @@
-package sound.recorder.widget
+package sound.recorder.widget.tools
 
 import android.content.Context
 import android.graphics.*

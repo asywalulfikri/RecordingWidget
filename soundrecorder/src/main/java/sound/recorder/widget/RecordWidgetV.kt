@@ -9,6 +9,7 @@ import android.widget.Toast
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import sound.recorder.widget.databinding.LayoutEmptyVerticalBinding
+import sound.recorder.widget.ui.fragment.VoiceRecorderFragmentWidgetVertical
 
 class RecordWidgetV : LinearLayout {
 

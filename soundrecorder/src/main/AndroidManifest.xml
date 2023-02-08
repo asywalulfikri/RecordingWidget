@@ -14,9 +14,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name=".ui.PlayerActivityWidget"
+        <activity android:name=".ui.activity.PlayerActivityWidget"
             android:screenOrientation="landscape"/>
-        <activity android:name=".ListingActivity"
+        <activity android:name=".ui.activity.ListingActivity"
             android:screenOrientation="landscape"/>
         <activity android:name=".ui.ListingActivityWidgetNew"
             android:screenOrientation="landscape"/>

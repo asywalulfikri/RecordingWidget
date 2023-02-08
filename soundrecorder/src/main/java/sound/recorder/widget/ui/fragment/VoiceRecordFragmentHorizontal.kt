@@ -1,4 +1,4 @@
-package sound.recorder.widget
+package sound.recorder.widget.ui.fragment
 
 import android.Manifest
 import android.annotation.SuppressLint
@@ -29,12 +29,15 @@ import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import sound.recorder.widget.R
 import sound.recorder.widget.base.BaseFragmentWidget
-import sound.recorder.widget.databinding.WidgetRecordVerticalBinding
+import sound.recorder.widget.databinding.WidgetRecordHorizontalBinding
 import sound.recorder.widget.db.AppDatabase
 import sound.recorder.widget.db.AudioRecord
 import sound.recorder.widget.tools.Timer
 import sound.recorder.widget.ui.ListingActivityWidgetNew
+import sound.recorder.widget.ui.bottomSheet.BottomSheet
+import sound.recorder.widget.ui.bottomSheet.BottomSheetListSong
 import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat
@@ -43,7 +46,8 @@ import java.util.*
 private const val LOG_TAG = "AudioRecordTest"
 private const val REQUEST_RECORD_AUDIO_PERMISSION = 200
 
-internal class VoiceRecorderFragmentWidgetVertical : BaseFragmentWidget(), BottomSheet.OnClickListener,BottomSheetListSong.OnClickListener, Timer.OnTimerUpdateListener {
+internal class VoiceRecorderFragmentWidgetHorizontal : BaseFragmentWidget(), BottomSheet.OnClickListener,
+    BottomSheetListSong.OnClickListener, Timer.OnTimerUpdateListener {
 
     private lateinit var fileName: String
     private lateinit var dirPath: String
@@ -54,7 +58,7 @@ internal class VoiceRecorderFragmentWidgetVertical : BaseFragmentWidget(), Botto
     private lateinit var timer: Timer
 
     private lateinit var handler: Handler
-    private var _binding: WidgetRecordVerticalBinding? = null
+    private var _binding: WidgetRecordHorizontalBinding? = null
     private val binding get() = _binding!!
 
     // Requesting permission to RECORD_AUDIO
@@ -64,7 +68,7 @@ internal class VoiceRecorderFragmentWidgetVertical : BaseFragmentWidget(), Botto
     var showBtnStop = false
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        _binding = WidgetRecordVerticalBinding.inflate(inflater, container, false)
+        _binding = WidgetRecordHorizontalBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -247,7 +251,6 @@ internal class VoiceRecorderFragmentWidgetVertical : BaseFragmentWidget(), Botto
                 start()
             } catch (e: IOException) {
                 Log.e(LOG_TAG, "prepare() failed")
-                setToast(e.message.toString())
             }
 
         }
@@ -322,9 +325,7 @@ internal class VoiceRecorderFragmentWidgetVertical : BaseFragmentWidget(), Botto
         binding.playerView.reset()
         try {
             timer.stop()
-        }catch (e: Exception){
-            setToast(e.message.toString())
-        }
+        }catch (e: Exception){}
 
         binding.timerView.text = "00:00.00"
     }
@@ -352,6 +353,7 @@ internal class VoiceRecorderFragmentWidgetVertical : BaseFragmentWidget(), Botto
 
         val duration = timer.format().split(".")[0]
         stopRecording()
+
 
         if(isChange){
             val newFile = File("$dirPath$filename.mp3")
@@ -414,5 +416,4 @@ internal class VoiceRecorderFragmentWidgetVertical : BaseFragmentWidget(), Botto
                 binding.timerView.text = duration
         }
     }
-
 }
