@@ -67,6 +67,7 @@ internal class BottomSheetListSong: BottomSheetDialogFragment,SharedPreferences.
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = BottomSheetSongBinding.inflate(layoutInflater)
         (dialog as? BottomSheetDialog)?.behavior?.state = STATE_EXPANDED
+        (dialog as? BottomSheetDialog)?.behavior?.isDraggable = false
         dialog?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
 
         sharedPreferences = DataSession(activity as Context).getShared()
@@ -81,6 +82,10 @@ internal class BottomSheetListSong: BottomSheetDialogFragment,SharedPreferences.
         binding.btnStop.setOnClickListener {
             listener.onStopSong()
             binding.btnStop.visibility = View.GONE
+        }
+
+        binding.btnCLose.setOnClickListener {
+            dismiss()
         }
 
 

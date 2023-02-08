@@ -69,6 +69,10 @@ class MainActivityWidget : BaseActivityWidget() {
         recordWidgetV = RecordWidgetV(this)
         recordWidgetV?.loadData()
 
+        binding.btnKlik.setOnClickListener {
+            RecordingSDK.showDialogColorPicker(this,"background")
+        }
+
         getFirebaseToken()
 
     }

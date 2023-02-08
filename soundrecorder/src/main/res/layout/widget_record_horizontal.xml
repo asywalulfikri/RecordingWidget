@@ -4,8 +4,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
-    android:layout_marginEnd="40dp"
-    android:layout_marginStart="40dp"
     android:layout_height="wrap_content"
     app:cardCornerRadius="30dp">
 
@@ -21,10 +19,28 @@
         app:layout_constraintStart_toStartOf="parent">
 
         <RelativeLayout
+            android:visibility="gone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
 
-            <ImageButton
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/colorBtn"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:background="@drawable/ic_note"
+                android:contentDescription="@string/app_names"
+                tools:ignore="DuplicateSpeakableTextCheck" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_marginStart="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <androidx.appcompat.widget.AppCompatImageButton
                 android:id="@+id/songBtn"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
@@ -44,7 +60,7 @@
 
         </RelativeLayout>
 
-        <ImageButton
+        <androidx.appcompat.widget.AppCompatImageButton
             android:visibility="gone"
             android:layout_marginStart="6dp"
             android:id="@+id/deleteBtn"
@@ -59,7 +75,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
 
-            <ImageButton
+            <androidx.appcompat.widget.AppCompatImageButton
                 android:id="@+id/recordBtn"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
@@ -76,7 +92,6 @@
                 android:layout_centerInParent="true"
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="10dp"
-                android:background="@drawable/ic_record"
                 android:text="Record"
                 android:textColor="#FFFFFF"
                 android:textSize="9sp"
@@ -84,7 +99,7 @@
 
         </RelativeLayout>
 
-        <ImageButton
+        <androidx.appcompat.widget.AppCompatImageButton
             android:id="@+id/listBtn"
             android:layout_width="40dp"
             android:layout_height="40dp"
@@ -92,7 +107,7 @@
             android:contentDescription="@string/app_names"
             android:src="@drawable/ic_menu" />
 
-        <ImageButton
+        <androidx.appcompat.widget.AppCompatImageButton
             android:id="@+id/doneBtn"
             android:visibility="gone"
             android:layout_width="40dp"
@@ -105,12 +120,14 @@
             android:layout_marginStart="10dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="20sp"
+            android:textSize="14sp"
+            android:layout_marginEnd="10dp"
             android:textColor="#FFFFFF"
             android:text="00:00.0"/>
 
         <sound.recorder.widget.tools.RecorderWaveformView
             android:layout_marginStart="10dp"
+            android:visibility="gone"
             android:id="@+id/playerView"
             android:layout_width="match_parent"
             android:layout_height="50dp" />

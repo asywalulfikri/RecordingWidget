@@ -60,7 +60,7 @@
         android:layout_marginBottom="36dp"
         app:layout_constraintBottom_toBottomOf="parent">
 
-        <ImageButton
+        <androidx.appcompat.widget.AppCompatImageButton
             android:id="@+id/btnBackward"
             android:layout_width="60dp"
             android:layout_height="60dp"
@@ -71,7 +71,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <ImageButton
+        <androidx.appcompat.widget.AppCompatImageButton
             android:id="@+id/btnPlay"
             android:layout_width="66dp"
             android:layout_height="66dp"
@@ -80,7 +80,7 @@
             app:layout_constraintStart_toStartOf="parent"
             tools:ignore="MissingConstraints" />
 
-        <ImageButton
+        <androidx.appcompat.widget.AppCompatImageButton
             android:id="@+id/btnForward"
             android:layout_width="60dp"
             android:layout_height="60dp"

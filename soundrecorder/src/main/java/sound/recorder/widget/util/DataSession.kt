@@ -42,6 +42,16 @@ internal class DataSession(private val mContext: Context) {
         editor.apply()
     }
 
+    fun saveColor(color : Int,name : String){
+        val editor = sharedPref.edit()
+        editor.putInt(name,color)
+        editor.apply()
+    }
+
+    fun getColor(name : String): Int{
+        return sharedPref.getInt(name, 0)
+    }
+
     fun getBannerId(): String {
         return sharedPref.getString(bannerIdName, "").toString()
     }

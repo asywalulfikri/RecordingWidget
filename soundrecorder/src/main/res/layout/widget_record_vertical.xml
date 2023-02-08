@@ -19,11 +19,29 @@
         android:gravity="center"
         app:layout_constraintStart_toStartOf="parent">
 
+
+        <RelativeLayout
+            android:visibility="gone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/colorBtn"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:background="@drawable/ic_note"
+                android:contentDescription="@string/app_names"
+                tools:ignore="DuplicateSpeakableTextCheck" />
+
+        </RelativeLayout>
+
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
 
-            <ImageButton
+            <androidx.appcompat.widget.AppCompatImageButton
                 android:id="@+id/songBtn"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
@@ -44,7 +62,9 @@
                 tools:ignore="HardcodedText,SmallSp" />
 
         </RelativeLayout>
-        <ImageButton
+
+
+        <androidx.appcompat.widget.AppCompatImageButton
             android:visibility="gone"
             android:id="@+id/deleteBtn"
             android:clickable="false"
@@ -58,7 +78,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
 
-            <ImageButton
+            <androidx.appcompat.widget.AppCompatImageButton
                 android:id="@+id/recordBtn"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
@@ -73,7 +93,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:background="@drawable/ic_record"
                 android:text="Record"
                 android:textColor="#FFFFFF"
                 android:textSize="9sp"
@@ -81,7 +100,7 @@
 
         </RelativeLayout>
 
-        <ImageButton
+        <androidx.appcompat.widget.AppCompatImageButton
             android:layout_marginTop="5dp"
             android:id="@+id/listBtn"
             android:layout_width="40dp"
@@ -90,7 +109,7 @@
             android:contentDescription="@string/appbar_scrolling_view_behavior"
             android:src="@drawable/ic_menu" />
 
-        <ImageButton
+        <androidx.appcompat.widget.AppCompatImageButton
             android:id="@+id/doneBtn"
             android:visibility="gone"
             android:layout_width="40dp"
@@ -104,11 +123,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="10sp"
+            android:layout_marginBottom="10dp"
             android:textColor="#FFFFFF"
             android:text="00:00.0"/>
 
         <sound.recorder.widget.tools.RecorderWaveformView
             android:layout_marginTop="10dp"
+            android:visibility="gone"
             android:id="@+id/playerView"
             android:rotation="-90"
             android:layout_marginBottom="10dp"
