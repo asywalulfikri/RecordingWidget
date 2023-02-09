@@ -55,7 +55,7 @@ open class BaseActivityWidget : AppCompatActivity() {
     }
 
     private fun permissionNotification(){
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+        if (Build.VERSION.SDK_INT == Build.VERSION_CODES.TIRAMISU) {
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
                 // Pass any permission you want while launching
                 requestPermissionNotification.launch(Manifest.permission.POST_NOTIFICATIONS)
