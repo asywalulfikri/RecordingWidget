@@ -17,7 +17,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowManager
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
@@ -30,6 +29,7 @@ import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import org.greenrobot.eventbus.EventBus
 import sound.recorder.widget.R
 import sound.recorder.widget.base.BaseFragmentWidget
 import sound.recorder.widget.databinding.WidgetRecordHorizontalBinding
@@ -206,6 +206,7 @@ internal class VoiceRecorderFragmentWidgetHorizontal : BaseFragmentWidget(), Bot
 
 
 
+    @Deprecated("Deprecated in Java")
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         permissionToRecordAccepted = if (requestCode == REQUEST_RECORD_AUDIO_PERMISSION) {
@@ -343,6 +344,7 @@ internal class VoiceRecorderFragmentWidgetHorizontal : BaseFragmentWidget(), Bot
 
 
 
+    @SuppressLint("SetTextI18n")
     override fun onCancelClicked() {
         Toast.makeText(activity, "Audio record deleted", Toast.LENGTH_SHORT).show()
         binding.recordText.text = "Record"
@@ -350,7 +352,8 @@ internal class VoiceRecorderFragmentWidgetHorizontal : BaseFragmentWidget(), Bot
         stopRecording()
     }
 
-    override fun onOkClicked(filePath: String, filename: String,isChange : Boolean) {
+    @SuppressLint("SetTextI18n")
+    override fun onOkClicked(filePath: String, filename: String, isChange : Boolean) {
         // add audio record info to database
         val db = Room.databaseBuilder(
             activity as Activity,
@@ -411,6 +414,7 @@ internal class VoiceRecorderFragmentWidgetHorizontal : BaseFragmentWidget(), Bot
         if(recording){
             stopRecording()
         }
+        EventBus.getDefault().removeAllStickyEvents()
     }
 
     override fun onStopSong() {

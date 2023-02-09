@@ -30,6 +30,7 @@ import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import org.greenrobot.eventbus.EventBus
 import sound.recorder.widget.R
 import sound.recorder.widget.base.BaseFragmentWidget
 import sound.recorder.widget.databinding.WidgetRecordVerticalBinding
@@ -403,6 +404,7 @@ internal class VoiceRecorderFragmentWidgetVertical : BaseFragmentWidget(), Botto
 
     override fun onDestroy() {
         super.onDestroy()
+        EventBus.getDefault().removeAllStickyEvents()
         if (mp != null) {
             mp?.release()
             showBtnStop = false
