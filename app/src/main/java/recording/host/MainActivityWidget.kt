@@ -12,7 +12,6 @@ import sound.recorder.widget.RecordWidgetV
 import sound.recorder.widget.RecordingSDK
 import sound.recorder.widget.base.BaseActivityWidget
 import sound.recorder.widget.model.Song
-import sound.recorder.widget.ui.activity.ListVideoActivity
 
 
 class MainActivityWidget : BaseActivityWidget() {
@@ -66,8 +65,8 @@ class MainActivityWidget : BaseActivityWidget() {
 
         binding.btnKlik.setOnClickListener {
             //RecordingSDK.showDialogColorPicker(this,"background")
-            val intent = Intent(this,ListVideoActivity::class.java)
-            startActivity(intent)
+           // val intent = Intent(this,ListVideoActivity::class.java)
+            //startActivity(intent)
         }
 
         getFirebaseToken()
