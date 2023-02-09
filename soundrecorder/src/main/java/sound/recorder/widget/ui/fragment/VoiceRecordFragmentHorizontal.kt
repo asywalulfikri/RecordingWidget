@@ -135,7 +135,15 @@ internal class VoiceRecorderFragmentWidgetHorizontal : BaseFragmentWidget(), Bot
     }
 
     private fun startPermissionSong(){
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        if(Build.VERSION.SDK_INT == Build.VERSION_CODES.TIRAMISU){
+
+            if (ContextCompat.checkSelfPermission(activity as Context, Manifest.permission.READ_MEDIA_AUDIO) != PackageManager.PERMISSION_GRANTED) {
+                // Pass any permission you want while launching
+                requestPermissionSong.launch(Manifest.permission.READ_MEDIA_AUDIO)
+            }else{
+                showBottomSheetSong()
+            }
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (ContextCompat.checkSelfPermission(activity as Context, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
                 // Pass any permission you want while launching
                 requestPermissionSong.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
