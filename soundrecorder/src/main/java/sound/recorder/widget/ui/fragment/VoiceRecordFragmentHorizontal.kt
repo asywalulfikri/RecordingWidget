@@ -113,8 +113,18 @@ internal class VoiceRecorderFragmentWidgetHorizontal : BaseFragmentWidget(), Bot
             startPermissionSong()
         }
         binding.deleteBtn.isClickable = false
+
+        permissionNotification()
     }
 
+    private fun permissionNotification(){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(activity as Context, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                // Pass any permission you want while launching
+                requestPermission.launch(Manifest.permission.POST_NOTIFICATIONS)
+            }
+        }
+    }
     private fun showBottomSheetSong(){
         val bottomSheet = BottomSheetListSong(showBtnStop,this)
         bottomSheet.show(requireActivity().supportFragmentManager, LOG_TAG)
@@ -182,7 +192,7 @@ internal class VoiceRecorderFragmentWidgetHorizontal : BaseFragmentWidget(), Bot
         if(activity!=null){
             Dexter.withActivity(activity)
                 .withPermissions(
-                    Manifest.permission.CAMERA
+                    Manifest.permission.RECORD_AUDIO
                 )
                 .withListener(object : MultiplePermissionsListener {
                     override fun onPermissionsChecked(report: MultiplePermissionsReport) {
