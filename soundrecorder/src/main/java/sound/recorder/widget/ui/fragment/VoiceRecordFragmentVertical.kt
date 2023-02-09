@@ -76,8 +76,6 @@ internal class VoiceRecorderFragmentWidgetVertical : BaseFragmentWidget(), Botto
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        activity?.window?.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-
         // Record to the external cache directory for visibility
         ActivityCompat.requestPermissions(activity as Activity, permissions, REQUEST_RECORD_AUDIO_PERMISSION)
         mp = MediaPlayer()
