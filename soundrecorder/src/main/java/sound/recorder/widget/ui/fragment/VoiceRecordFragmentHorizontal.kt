@@ -17,6 +17,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
@@ -74,6 +75,8 @@ internal class VoiceRecorderFragmentWidgetHorizontal : BaseFragmentWidget(), Bot
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        activity?.window?.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
 
         // Record to the external cache directory for visibility
         ActivityCompat.requestPermissions(activity as Activity, permissions, REQUEST_RECORD_AUDIO_PERMISSION)
@@ -243,6 +246,7 @@ internal class VoiceRecorderFragmentWidgetHorizontal : BaseFragmentWidget(), Bot
              * because android doesn't support mp3 saving explicitly **/
             setOutputFormat(MediaRecorder.OutputFormat.MPEG_4)
             setAudioEncoder(MediaRecorder.AudioEncoder.AAC)
+            setAudioSamplingRate(16000)
             /** END COMMENT **/
 
             setOutputFile(dirPath+fileName)
@@ -292,42 +296,46 @@ internal class VoiceRecorderFragmentWidgetHorizontal : BaseFragmentWidget(), Bot
 
 
     private fun resumeRecording(){
-        binding.recordText.visibility = View.GONE
-        onPause = false
-        recorder?.apply {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                resume()
+        if(recorder!=null){
+            binding.recordText.visibility = View.GONE
+            onPause = false
+            recorder?.apply {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    resume()
+                }
             }
+            binding.recordBtn.setImageResource(R.drawable.ic_pause)
+            animatePlayerView()
+            timer.start()
         }
-        binding.recordBtn.setImageResource(R.drawable.ic_pause)
-        animatePlayerView()
-        timer.start()
     }
 
     @SuppressLint("SetTextI18n")
     private fun stopRecording(){
-        recording = false
-        onPause = false
-        recorder?.apply {
-            stop()
-            release()
+        if(recorder!=null){
+            recording = false
+            onPause = false
+            recorder?.apply {
+                stop()
+                release()
+            }
+            recorder = null
+            binding.recordBtn.setImageResource(R.drawable.ic_record)
+            binding.recordText.text = "Record"
+            binding.recordText.visibility = View.VISIBLE
+            binding.listBtn.visibility = View.VISIBLE
+            binding.doneBtn.visibility = View.GONE
+            binding.deleteBtn.isClickable = false
+            binding.deleteBtn.visibility = View.GONE
+            binding.deleteBtn.setImageResource(R.drawable.ic_delete_disabled)
+
+            binding.playerView.reset()
+            try {
+                timer.stop()
+            }catch (e: Exception){}
+
+            binding.timerView.text = "00:00.00"
         }
-        recorder = null
-        binding.recordBtn.setImageResource(R.drawable.ic_record)
-        binding.recordText.text = "Record"
-        binding.recordText.visibility = View.VISIBLE
-        binding.listBtn.visibility = View.VISIBLE
-        binding.doneBtn.visibility = View.GONE
-        binding.deleteBtn.isClickable = false
-        binding.deleteBtn.visibility = View.GONE
-        binding.deleteBtn.setImageResource(R.drawable.ic_delete_disabled)
-
-        binding.playerView.reset()
-        try {
-            timer.stop()
-        }catch (e: Exception){}
-
-        binding.timerView.text = "00:00.00"
     }
 
     private fun showBottomSheet(){
@@ -389,6 +397,10 @@ internal class VoiceRecorderFragmentWidgetHorizontal : BaseFragmentWidget(), Bot
             mp?.release()
             showBtnStop = false
         }
+
+        if(recording){
+            stopRecording()
+        }
     }
 
     override fun onDestroy() {
@@ -396,6 +408,10 @@ internal class VoiceRecorderFragmentWidgetHorizontal : BaseFragmentWidget(), Bot
         if (mp != null) {
             mp?.release()
             showBtnStop = false
+        }
+
+        if(recording){
+            stopRecording()
         }
     }
 

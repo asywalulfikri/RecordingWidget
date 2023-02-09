@@ -17,6 +17,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
@@ -74,6 +75,8 @@ internal class VoiceRecorderFragmentWidgetVertical : BaseFragmentWidget(), Botto
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        activity?.window?.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
 
         // Record to the external cache directory for visibility
         ActivityCompat.requestPermissions(activity as Activity, permissions, REQUEST_RECORD_AUDIO_PERMISSION)
@@ -279,31 +282,34 @@ internal class VoiceRecorderFragmentWidgetVertical : BaseFragmentWidget(), Botto
     }
 
     private fun pauseRecording(){
-        binding.recordText.visibility = View.VISIBLE
-        binding.recordText.text = "Continue"
-        onPause = true
-        recorder?.apply {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                pause()
+        if(recorder!=null){
+            binding.recordText.visibility = View.VISIBLE
+            binding.recordText.text = "Continue"
+            onPause = true
+            recorder?.apply {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    pause()
+                }
             }
+            binding.recordBtn.setImageResource(R.drawable.ic_record)
+            timer.pause()
         }
-        binding.recordBtn.setImageResource(R.drawable.ic_record)
-        timer.pause()
-
     }
 
 
     private fun resumeRecording(){
-        binding.recordText.visibility = View.GONE
-        onPause = false
-        recorder?.apply {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                resume()
+        if(recorder!=null){
+            binding.recordText.visibility = View.GONE
+            onPause = false
+            recorder?.apply {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    resume()
+                }
             }
+            binding.recordBtn.setImageResource(R.drawable.ic_pause)
+            animatePlayerView()
+            timer.start()
         }
-        binding.recordBtn.setImageResource(R.drawable.ic_pause)
-        animatePlayerView()
-        timer.start()
     }
 
     @SuppressLint("SetTextI18n")
@@ -391,6 +397,10 @@ internal class VoiceRecorderFragmentWidgetVertical : BaseFragmentWidget(), Botto
             mp?.release()
             showBtnStop = false
         }
+
+        if(recording){
+            stopRecording()
+        }
     }
 
     override fun onDestroy() {
@@ -398,6 +408,10 @@ internal class VoiceRecorderFragmentWidgetVertical : BaseFragmentWidget(), Botto
         if (mp != null) {
             mp?.release()
             showBtnStop = false
+        }
+
+        if(recording){
+            stopRecording()
         }
     }
 

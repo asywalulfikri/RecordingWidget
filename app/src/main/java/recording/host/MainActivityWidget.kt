@@ -23,24 +23,16 @@ class MainActivityWidget : BaseActivityWidget() {
 
     private lateinit var binding: ActivityMainBinding
     private val listTitle = arrayOf(
-        "Oriental Party",
-        "Jaran Goyang",
-        "Kerinduan",
-        "Sayang Via Vallen"
+        "Jaran Goyang"
+
     )
 
     private val listLocation = arrayOf(
-        R.raw.oriental_party,
-        R.raw.jaran_goyang,
-        R.raw.kerinduan,
-        R.raw.sayang_via_vallen
+        R.raw.jaran_goyang
     )
 
     private val pathRaw = arrayOf(
-        "android.resource://"+BuildConfig.APPLICATION_ID+"/raw/oriental_party",
-        "android.resource://"+BuildConfig.APPLICATION_ID+"/raw/jaran_goyang",
-        "android.resource://"+BuildConfig.APPLICATION_ID+"/raw/kerinduan",
-        "android.resource://"+BuildConfig.APPLICATION_ID+"/raw/sayang_via_vallen"
+        "android.resource://"+BuildConfig.APPLICATION_ID+"/raw/jaran_goyang"
     )
 
     private val song : ArrayList<Song> = ArrayList()

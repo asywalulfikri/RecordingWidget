@@ -1,5 +1,8 @@
 package sound.recorder.widget.base
 
+import android.content.ActivityNotFoundException
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
@@ -8,6 +11,7 @@ import com.google.android.gms.ads.*
 import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 import com.google.android.gms.tasks.Task
+import com.google.firebase.messaging.BuildConfig
 import com.google.firebase.messaging.FirebaseMessaging
 import sound.recorder.widget.util.DataSession
 import java.util.concurrent.atomic.AtomicReference
@@ -96,5 +100,14 @@ open class BaseActivityWidget : AppCompatActivity() {
 
     open fun getActivity(): BaseActivityWidget? {
         return this
+    }
+
+    open fun rating(){
+
+        try {
+            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id="+BuildConfig.VERSION_NAME)))
+        } catch (e: ActivityNotFoundException) {
+            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps")))
+        }
     }
 }
