@@ -9,7 +9,6 @@
 
 
     <application
-        android:name=".MyApp"
         android:allowBackup="false"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
