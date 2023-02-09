@@ -13,6 +13,7 @@ android {
         vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
+        multiDexEnabled true
         externalNativeBuild {
             cmake {
                 cppFlags ""
@@ -43,6 +44,10 @@ android {
     buildFeatures {
         viewBinding true
     }
+
+    dexOptions {
+        javaMaxHeapSize "4g"
+    }
 }
 
 dependencies {
@@ -63,6 +68,7 @@ dependencies {
     //implementation 'com.squareup.picasso:picasso:2.71828'
 
     implementation 'org.greenrobot:eventbus:3.3.1'
+    implementation 'com.android.support:multidex:1.0.3'
     //implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
 
     implementation platform('com.google.firebase:firebase-bom:31.2.0')
