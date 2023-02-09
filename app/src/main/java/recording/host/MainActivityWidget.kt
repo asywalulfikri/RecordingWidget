@@ -50,7 +50,6 @@ class MainActivityWidget : BaseActivityWidget() {
         for (i in listTitle.indices) {
             val itemSong = Song()
             itemSong.title = listTitle[i]
-            itemSong.location = listLocation[i]
             itemSong.pathRaw = pathRaw[i]
             song.add(itemSong)
         }

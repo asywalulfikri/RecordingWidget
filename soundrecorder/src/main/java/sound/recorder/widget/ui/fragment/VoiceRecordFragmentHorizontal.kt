@@ -414,7 +414,6 @@ internal class VoiceRecorderFragmentWidgetHorizontal : BaseFragmentWidget(), Bot
         if(recording){
             stopRecording()
         }
-        EventBus.getDefault().removeAllStickyEvents()
     }
 
     override fun onStopSong() {

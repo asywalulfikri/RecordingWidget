@@ -10,8 +10,6 @@ import android.widget.TextView;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.squareup.picasso.Picasso;
-
 import sound.recorder.widget.R;
 import sound.recorder.widget.model.Video;
 import sound.recorder.widget.util.HFRecyclerViewAdapter;
@@ -51,9 +49,9 @@ public class VideoAdapter extends HFRecyclerViewAdapter<Video,VideoAdapter.ItemV
         holder.tvUrl.setVisibility(View.GONE);
         holder.tvDatepublish.setText(video.getDatepublish());
 
-        Picasso.get()
+        /*Picasso.get()
                 .load((video.getThumbnail().equals("")) ? null : video.getThumbnail())
-                .into(holder.ivThumbnail);
+                .into(holder.ivThumbnail);*/
 
         holder.cvVideo.setOnClickListener(new View.OnClickListener() {
             @Override

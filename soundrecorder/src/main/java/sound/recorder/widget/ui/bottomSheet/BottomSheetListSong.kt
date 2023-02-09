@@ -18,7 +18,6 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior.STATE_EXPANDE
 import com.google.android.material.bottomsheet.BottomSheetBehavior.STATE_HIDDEN
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
@@ -95,7 +94,7 @@ internal class BottomSheetListSong(var showBtnStop: Boolean, private var listene
     }
 
     private fun setLog(message : String){
-        Log.d("value",Gson().toJson(message))
+
     }
 
 
@@ -232,7 +231,6 @@ internal class BottomSheetListSong(var showBtnStop: Boolean, private var listene
 
     @Subscribe(sticky = true, threadMode = ThreadMode.ASYNC)
     fun onMessageEvent(songListResponse: ArrayList<Song>?) {
-        Log.d("valueData3",Gson().toJson(songListResponse))
         songListResponse?.let { getAllMediaMp3Files(it) }
     }
 

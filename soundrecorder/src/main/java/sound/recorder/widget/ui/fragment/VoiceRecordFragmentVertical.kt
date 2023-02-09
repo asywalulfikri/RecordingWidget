@@ -404,7 +404,6 @@ internal class VoiceRecorderFragmentWidgetVertical : BaseFragmentWidget(), Botto
 
     override fun onDestroy() {
         super.onDestroy()
-        EventBus.getDefault().removeAllStickyEvents()
         if (mp != null) {
             mp?.release()
             showBtnStop = false
