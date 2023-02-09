@@ -115,17 +115,8 @@ internal class VoiceRecorderFragmentWidgetVertical : BaseFragmentWidget(), Botto
         }
         binding.deleteBtn.isClickable = false
 
-        permissionNotification()
     }
 
-    private fun permissionNotification(){
-        if (Build.VERSION.SDK_INT == Build.VERSION_CODES.TIRAMISU) {
-            if (ContextCompat.checkSelfPermission(activity as Context, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
-                // Pass any permission you want while launching
-                requestPermission.launch(Manifest.permission.POST_NOTIFICATIONS)
-            }
-        }
-    }
 
     private fun showBottomSheetSong(){
         val bottomSheet = BottomSheetListSong(showBtnStop,this)
@@ -179,15 +170,6 @@ internal class VoiceRecorderFragmentWidgetVertical : BaseFragmentWidget(), Botto
         }
 
 
-    private val requestPermissionNotification =
-        registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
-            // do something
-            if(isGranted){
-
-            }else{
-
-            }
-        }
 
     private val requestPermissionSong =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
@@ -201,7 +183,8 @@ internal class VoiceRecorderFragmentWidgetVertical : BaseFragmentWidget(), Botto
 
 
     private fun showAllowPermission(){
-        if(activity!=null){
+        setToast("Allow Permission in Setting")
+        /*if(activity!=null){
             Dexter.withActivity(activity)
                 .withPermissions(
                     Manifest.permission.RECORD_AUDIO
@@ -226,12 +209,13 @@ internal class VoiceRecorderFragmentWidgetVertical : BaseFragmentWidget(), Botto
                     }
                 })
                 .withErrorListener {
-                    Toast.makeText(activity, "Error occurred! ", Toast.LENGTH_SHORT).show()
+                    //Toast.makeText(activity, "Error occurred! ", Toast.LENGTH_SHORT).show()
+                    Log.d("messsage",it.name+".")
                 }
                 .onSameThread()
                 .check()
         }
-
+*/
     }
 
 

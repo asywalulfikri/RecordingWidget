@@ -22,17 +22,12 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.room.Room
-import com.karumi.dexter.Dexter
-import com.karumi.dexter.MultiplePermissionsReport
-import com.karumi.dexter.PermissionToken
-import com.karumi.dexter.listener.PermissionRequest
-import com.karumi.dexter.listener.multi.MultiplePermissionsListener
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import org.greenrobot.eventbus.EventBus
 import sound.recorder.widget.R
 import sound.recorder.widget.base.BaseFragmentWidget
 import sound.recorder.widget.databinding.WidgetRecordHorizontalBinding
+import sound.recorder.widget.databinding.WidgetRecordVerticalBinding
 import sound.recorder.widget.db.AppDatabase
 import sound.recorder.widget.db.AudioRecord
 import sound.recorder.widget.tools.Timer
@@ -114,17 +109,9 @@ internal class VoiceRecorderFragmentWidgetHorizontal : BaseFragmentWidget(), Bot
         }
         binding.deleteBtn.isClickable = false
 
-        permissionNotification()
     }
 
-    private fun permissionNotification(){
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            if (ContextCompat.checkSelfPermission(activity as Context, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
-                // Pass any permission you want while launching
-                requestPermission.launch(Manifest.permission.POST_NOTIFICATIONS)
-            }
-        }
-    }
+
     private fun showBottomSheetSong(){
         val bottomSheet = BottomSheetListSong(showBtnStop,this)
         bottomSheet.show(requireActivity().supportFragmentManager, LOG_TAG)
@@ -177,6 +164,7 @@ internal class VoiceRecorderFragmentWidgetHorizontal : BaseFragmentWidget(), Bot
         }
 
 
+
     private val requestPermissionSong =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
             // do something
@@ -189,7 +177,8 @@ internal class VoiceRecorderFragmentWidgetHorizontal : BaseFragmentWidget(), Bot
 
 
     private fun showAllowPermission(){
-        if(activity!=null){
+        setToast("Allow Permission in Setting")
+        /*if(activity!=null){
             Dexter.withActivity(activity)
                 .withPermissions(
                     Manifest.permission.RECORD_AUDIO
@@ -214,17 +203,17 @@ internal class VoiceRecorderFragmentWidgetHorizontal : BaseFragmentWidget(), Bot
                     }
                 })
                 .withErrorListener {
-                    Toast.makeText(activity, "Error occurred! ", Toast.LENGTH_SHORT).show()
+                    //Toast.makeText(activity, "Error occurred! ", Toast.LENGTH_SHORT).show()
+                    Log.d("messsage",it.name+".")
                 }
                 .onSameThread()
                 .check()
         }
-
+*/
     }
 
 
 
-    @Deprecated("Deprecated in Java")
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         permissionToRecordAccepted = if (requestCode == REQUEST_RECORD_AUDIO_PERMISSION) {
@@ -272,6 +261,7 @@ internal class VoiceRecorderFragmentWidgetHorizontal : BaseFragmentWidget(), Bot
                 start()
             } catch (e: IOException) {
                 Log.e(LOG_TAG, "prepare() failed")
+                setToast(e.message.toString())
             }
 
         }
@@ -298,17 +288,18 @@ internal class VoiceRecorderFragmentWidgetHorizontal : BaseFragmentWidget(), Bot
     }
 
     private fun pauseRecording(){
-        binding.recordText.visibility = View.VISIBLE
-        binding.recordText.text = "Continue"
-        onPause = true
-        recorder?.apply {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                pause()
+        if(recorder!=null){
+            binding.recordText.visibility = View.VISIBLE
+            binding.recordText.text = "Continue"
+            onPause = true
+            recorder?.apply {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    pause()
+                }
             }
+            binding.recordBtn.setImageResource(R.drawable.ic_record)
+            timer.pause()
         }
-        binding.recordBtn.setImageResource(R.drawable.ic_record)
-        timer.pause()
-
     }
 
 
@@ -349,7 +340,9 @@ internal class VoiceRecorderFragmentWidgetHorizontal : BaseFragmentWidget(), Bot
             binding.playerView.reset()
             try {
                 timer.stop()
-            }catch (e: Exception){}
+            }catch (e: Exception){
+                setToast(e.message.toString())
+            }
 
             binding.timerView.text = "00:00.00"
         }
@@ -362,7 +355,6 @@ internal class VoiceRecorderFragmentWidgetHorizontal : BaseFragmentWidget(), Bot
 
 
 
-    @SuppressLint("SetTextI18n")
     override fun onCancelClicked() {
         Toast.makeText(activity, "Audio record deleted", Toast.LENGTH_SHORT).show()
         binding.recordText.text = "Record"
@@ -370,17 +362,12 @@ internal class VoiceRecorderFragmentWidgetHorizontal : BaseFragmentWidget(), Bot
         stopRecording()
     }
 
-    @SuppressLint("SetTextI18n")
-    override fun onOkClicked(filePath: String, filename: String, isChange : Boolean) {
+    override fun onOkClicked(filePath: String, filename: String,isChange : Boolean) {
         // add audio record info to database
-        val db = Room.databaseBuilder(
-            activity as Activity,
-            AppDatabase::class.java,
-            "audioRecords").build()
+        val db = Room.databaseBuilder(activity as Activity, AppDatabase::class.java, "audioRecords").build()
 
         val duration = timer.format().split(".")[0]
         stopRecording()
-
 
         if(isChange){
             val newFile = File("$dirPath$filename.mp3")
@@ -451,4 +438,5 @@ internal class VoiceRecorderFragmentWidgetHorizontal : BaseFragmentWidget(), Bot
                 binding.timerView.text = duration
         }
     }
+
 }
