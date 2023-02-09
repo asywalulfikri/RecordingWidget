@@ -2,7 +2,6 @@ package sound.recorder.widget
 
 import android.app.Activity
 import android.content.Context
-import android.graphics.Color
 import android.util.Log
 import org.greenrobot.eventbus.EventBus
 import sound.recorder.widget.colorpicker.ColorPicker

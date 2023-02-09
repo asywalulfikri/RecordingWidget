@@ -243,6 +243,7 @@ internal class VoiceRecorderFragmentWidgetVertical : BaseFragmentWidget(), Botto
              * because android doesn't support mp3 saving explicitly **/
             setOutputFormat(MediaRecorder.OutputFormat.MPEG_4)
             setAudioEncoder(MediaRecorder.AudioEncoder.AAC)
+            setAudioSamplingRate(16000)
             /** END COMMENT **/
 
             setOutputFile(dirPath+fileName)
@@ -307,30 +308,32 @@ internal class VoiceRecorderFragmentWidgetVertical : BaseFragmentWidget(), Botto
 
     @SuppressLint("SetTextI18n")
     private fun stopRecording(){
-        recording = false
-        onPause = false
-        recorder?.apply {
-            stop()
-            release()
-        }
-        recorder = null
-        binding.recordBtn.setImageResource(R.drawable.ic_record)
-        binding.recordText.text = "Record"
-        binding.recordText.visibility = View.VISIBLE
-        binding.listBtn.visibility = View.VISIBLE
-        binding.doneBtn.visibility = View.GONE
-        binding.deleteBtn.isClickable = false
-        binding.deleteBtn.visibility = View.GONE
-        binding.deleteBtn.setImageResource(R.drawable.ic_delete_disabled)
+        if(recorder!=null){
+            recording = false
+            onPause = false
+            recorder?.apply {
+                stop()
+                release()
+            }
+            recorder = null
+            binding.recordBtn.setImageResource(R.drawable.ic_record)
+            binding.recordText.text = "Record"
+            binding.recordText.visibility = View.VISIBLE
+            binding.listBtn.visibility = View.VISIBLE
+            binding.doneBtn.visibility = View.GONE
+            binding.deleteBtn.isClickable = false
+            binding.deleteBtn.visibility = View.GONE
+            binding.deleteBtn.setImageResource(R.drawable.ic_delete_disabled)
 
-        binding.playerView.reset()
-        try {
-            timer.stop()
-        }catch (e: Exception){
-            setToast(e.message.toString())
-        }
+            binding.playerView.reset()
+            try {
+                timer.stop()
+            }catch (e: Exception){
+                setToast(e.message.toString())
+            }
 
-        binding.timerView.text = "00:00.00"
+            binding.timerView.text = "00:00.00"
+        }
     }
 
     private fun showBottomSheet(){
@@ -349,10 +352,7 @@ internal class VoiceRecorderFragmentWidgetVertical : BaseFragmentWidget(), Botto
 
     override fun onOkClicked(filePath: String, filename: String,isChange : Boolean) {
         // add audio record info to database
-        val db = Room.databaseBuilder(
-            activity as Activity,
-            AppDatabase::class.java,
-            "audioRecords").build()
+        val db = Room.databaseBuilder(activity as Activity, AppDatabase::class.java, "audioRecords").build()
 
         val duration = timer.format().split(".")[0]
         stopRecording()

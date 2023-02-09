@@ -18,7 +18,7 @@ import sound.recorder.widget.R
 import java.io.File
 
 
-internal class BottomSheet: BottomSheetDialogFragment {
+internal class BottomSheet(private var dirPath: String, private var filename: String, private var listener: OnClickListener) : BottomSheetDialogFragment() {
 
     // Step 1 - This interface defines the type of messages I want to communicate to my owner
     interface OnClickListener {
@@ -28,19 +28,7 @@ internal class BottomSheet: BottomSheetDialogFragment {
         fun onOkClicked(filePath: String, filename: String, isChange : Boolean)
     }
 
-    // Step 2 - This variable represents the listener passed in by the owning object
-    // The listener must implement the events interface and passes messages up to the parent.
-    private lateinit var listener: OnClickListener
-
-    private lateinit var filename: String
-    private lateinit var dirPath: String
     private var isChange = false
-
-    constructor(dirPath: String, filename : String, listener: OnClickListener){
-        this.dirPath = dirPath
-        this.filename = filename
-        this.listener = listener
-    }
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {

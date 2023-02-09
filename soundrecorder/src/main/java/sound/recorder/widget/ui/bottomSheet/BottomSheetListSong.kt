@@ -32,7 +32,7 @@ import sound.recorder.widget.model.Song
 import sound.recorder.widget.util.DataSession
 
 
-internal class BottomSheetListSong: BottomSheetDialogFragment,SharedPreferences.OnSharedPreferenceChangeListener {
+internal class BottomSheetListSong(var showBtnStop: Boolean, private var listener: OnClickListener) : BottomSheetDialogFragment(),SharedPreferences.OnSharedPreferenceChangeListener {
 
 
     //Load Song
@@ -40,8 +40,6 @@ internal class BottomSheetListSong: BottomSheetDialogFragment,SharedPreferences.
     var listTitleSong: ArrayList<String>? = null
     private var listLocationSong: ArrayList<String>? = null
     var adapter: ArrayAdapter<String>? = null
-    var showBtnStop = false
-
 
 
     // Step 1 - This interface defines the type of messages I want to communicate to my owner
@@ -50,18 +48,10 @@ internal class BottomSheetListSong: BottomSheetDialogFragment,SharedPreferences.
         fun onStopSong()
     }
 
-    // Step 2 - This variable represents the listener passed in by the owning object
-    // The listener must implement the events int?erface and passes messages up to the parent.
-    private var listener: OnClickListener
     private var mp : MediaPlayer? =null
     private lateinit var binding : BottomSheetSongBinding
     private var sharedPreferences : SharedPreferences? =null
     private var lisSong = ArrayList<Song>()
-
-    constructor(showBtnStop : Boolean,listener: OnClickListener) {
-        this.listener = listener
-        this.showBtnStop = showBtnStop
-    }
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {

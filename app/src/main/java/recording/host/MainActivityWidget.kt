@@ -1,8 +1,10 @@
 package recording.host
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.WindowManager
 import com.google.android.gms.ads.MobileAds
 import recording.host.databinding.ActivityMainBinding
 import sound.recorder.widget.RecordWidgetH
@@ -10,6 +12,7 @@ import sound.recorder.widget.RecordWidgetV
 import sound.recorder.widget.RecordingSDK
 import sound.recorder.widget.base.BaseActivityWidget
 import sound.recorder.widget.model.Song
+import sound.recorder.widget.ui.activity.ListVideoActivity
 
 
 class MainActivityWidget : BaseActivityWidget() {
@@ -45,6 +48,7 @@ class MainActivityWidget : BaseActivityWidget() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
+        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         setContentView(binding.root)
 
         MobileAds.initialize(this)
@@ -70,7 +74,9 @@ class MainActivityWidget : BaseActivityWidget() {
         recordWidgetV?.loadData()
 
         binding.btnKlik.setOnClickListener {
-            RecordingSDK.showDialogColorPicker(this,"background")
+            //RecordingSDK.showDialogColorPicker(this,"background")
+            val intent = Intent(this,ListVideoActivity::class.java)
+            startActivity(intent)
         }
 
         getFirebaseToken()

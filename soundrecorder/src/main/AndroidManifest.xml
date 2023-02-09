@@ -16,11 +16,15 @@
 
         <activity android:name=".ui.activity.PlayerActivityWidget"
             android:screenOrientation="landscape"/>
+
         <activity android:name=".ui.activity.ListingActivity"
             android:screenOrientation="landscape"/>
+
         <activity android:name=".ui.ListingActivityWidgetNew"
             android:screenOrientation="landscape"/>
 
+        <activity android:name=".ui.activity.ListVideoActivity"
+            android:screenOrientation="landscape"/>
 
         <service
             android:name=".notification.FirebaseMessageReceiver"
