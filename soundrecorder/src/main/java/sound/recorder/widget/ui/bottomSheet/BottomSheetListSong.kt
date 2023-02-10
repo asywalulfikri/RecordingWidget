@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.content.res.Configuration
 import android.media.MediaPlayer
+import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
@@ -82,12 +83,43 @@ internal class BottomSheetListSong(var showBtnStop: Boolean, private var listene
         listLocationSong = ArrayList()
 
         if(!RecordingSDK.isHaveSong(activity as Context)){
-            getAllMediaMp3Files(lisSong)
+            getSong(lisSong)
         }
 
         return binding.root
 
     }
+
+    private fun getSong(list : ArrayList<Song>){
+        if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.TIRAMISU){
+            getTiramisu(list)
+        }else{
+            getAllMediaMp3Files(list)
+        }
+    }
+
+
+    private fun getTiramisu(songList : ArrayList<Song>){
+        MainScope().launch {
+
+            var songTitle1 = ""
+            var songLocation1 = ""
+
+            withContext(Dispatchers.Default) {
+
+                //Process Background 2
+                for (i in songList.indices) {
+                    songTitle1 = songList[i].title.toString()
+                    songLocation1 = songList[i].pathRaw.toString()
+                    listLocationSong?.add(songLocation1)
+                    listTitleSong?.add(songTitle1)
+                }
+            }
+
+            updateView()
+        }
+    }
+
 
     private fun setToast(message : String){
         Toast.makeText(activity, "$message.",Toast.LENGTH_SHORT).show()
@@ -180,8 +212,7 @@ internal class BottomSheetListSong(var showBtnStop: Boolean, private var listene
         }
 
     }
-
-
+    
     private fun updateView(){
         val listSong: Array<String> = listTitleSong!!.toTypedArray()
         adapter =
@@ -231,7 +262,7 @@ internal class BottomSheetListSong(var showBtnStop: Boolean, private var listene
 
     @Subscribe(sticky = true, threadMode = ThreadMode.ASYNC)
     fun onMessageEvent(songListResponse: ArrayList<Song>?) {
-        songListResponse?.let { getAllMediaMp3Files(it) }
+        songListResponse?.let { getSong(it) }
     }
 
 
