@@ -121,11 +121,22 @@ open class BaseActivityWidget : AppCompatActivity() {
     }
 
     open fun rating(){
+        val appPackageName = packageName
 
         try {
-            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id="+BuildConfig.VERSION_NAME)))
-        } catch (e: ActivityNotFoundException) {
-            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps")))
+            startActivity(
+                Intent(
+                    Intent.ACTION_VIEW,
+                    Uri.parse("market://details?id=$appPackageName")
+                )
+            )
+        } catch (anfe: ActivityNotFoundException) {
+            startActivity(
+                Intent(
+                    Intent.ACTION_VIEW,
+                    Uri.parse("https://play.google.com/store/apps/details?id=$appPackageName")
+                )
+            )
         }
     }
 }
