@@ -132,7 +132,7 @@ internal class VoiceRecorderFragmentWidgetHorizontal : BaseFragmentWidget(), Bot
     }
 
     private fun startPermissionSong(){
-        if(Build.VERSION.SDK_INT == Build.VERSION_CODES.TIRAMISU){
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU){
 
             if (ContextCompat.checkSelfPermission(activity as Context, Manifest.permission.READ_MEDIA_AUDIO) != PackageManager.PERMISSION_GRANTED) {
                 // Pass any permission you want while launching
