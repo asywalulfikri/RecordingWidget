@@ -19,14 +19,14 @@ import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import sound.recorder.widget.R
-import sound.recorder.widget.adapter.Adapter
+import sound.recorder.widget.adapter.AudioRecorderAdapter
 import sound.recorder.widget.databinding.ActivityListingBinding
 import sound.recorder.widget.db.AppDatabase
 import sound.recorder.widget.db.AudioRecord
 
 
-internal class ListingActivity : AppCompatActivity(), Adapter.OnItemClickListener {
-    private lateinit var adapter : Adapter
+internal class ListingActivity : AppCompatActivity(), AudioRecorderAdapter.OnItemClickListener {
+    private lateinit var audioRecorderAdapter : AudioRecorderAdapter
     private lateinit var audioRecords : List<AudioRecord>
     private lateinit var db : AppDatabase
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<LinearLayout>
@@ -56,10 +56,10 @@ internal class ListingActivity : AppCompatActivity(), Adapter.OnItemClickListene
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
 
         audioRecords = emptyList()
-        adapter = Adapter(audioRecords, this)
+        audioRecorderAdapter = AudioRecorderAdapter(audioRecords, this)
 
         binding.recyclerview.layoutManager = LinearLayoutManager(this)
-        binding.recyclerview.adapter = adapter
+        binding.recyclerview.adapter = audioRecorderAdapter
         binding.recyclerview.itemAnimator = null
 
         db = Room.databaseBuilder(
@@ -93,7 +93,7 @@ internal class ListingActivity : AppCompatActivity(), Adapter.OnItemClickListene
             nbSelected = if (allSelected) audioRecords.size else 0
             updateBottomSheet()
 
-            adapter.notifyDataSetChanged()
+            audioRecorderAdapter.notifyDataSetChanged()
         }
 
         binding.btnClose.setOnClickListener {
@@ -112,7 +112,7 @@ internal class ListingActivity : AppCompatActivity(), Adapter.OnItemClickListene
                     fetchAll()
                 }else{
                     runOnUiThread(Runnable {
-                        adapter.setData(audioRecords)
+                        audioRecorderAdapter.setData(audioRecords)
                     })
                 }
             }
@@ -126,7 +126,7 @@ internal class ListingActivity : AppCompatActivity(), Adapter.OnItemClickListene
 
     private fun closeEditor(){
         allSelected = false
-        adapter.setEditMode(false)
+        audioRecorderAdapter.setEditMode(false)
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
 
         // hide back button
@@ -148,7 +148,7 @@ internal class ListingActivity : AppCompatActivity(), Adapter.OnItemClickListene
     private fun fetchAll(){
         GlobalScope.launch {
             audioRecords = db.audioRecordDAO().getAll()
-            adapter.setData(audioRecords)
+            audioRecorderAdapter.setData(audioRecords)
         }
     }
 
@@ -157,7 +157,7 @@ internal class ListingActivity : AppCompatActivity(), Adapter.OnItemClickListene
         GlobalScope.launch {
             audioRecords = db.audioRecordDAO().searchDatabase(query)
             runOnUiThread{
-                adapter.setData(audioRecords)
+                audioRecorderAdapter.setData(audioRecords)
             }
         }
     }
@@ -206,10 +206,10 @@ internal class ListingActivity : AppCompatActivity(), Adapter.OnItemClickListene
         val intent = Intent(this, PlayerActivityWidget::class.java)
         val audioRecord = audioRecords[position]
 
-        if(adapter.isEditMode()){
+        if(audioRecorderAdapter.isEditMode()){
             Log.d("ITEMCHANGE", audioRecord.isChecked.toString())
             audioRecord.isChecked = !audioRecord.isChecked
-            adapter.notifyItemChanged(position)
+            audioRecorderAdapter.notifyItemChanged(position)
 
             nbSelected = if (audioRecord.isChecked) nbSelected+1 else nbSelected-1
             updateBottomSheet()
@@ -223,7 +223,7 @@ internal class ListingActivity : AppCompatActivity(), Adapter.OnItemClickListene
     }
 
     override fun onItemLongClick(position: Int) {
-        adapter.setEditMode(true)
+        audioRecorderAdapter.setEditMode(true)
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
 
         val audioRecord = audioRecords[position]

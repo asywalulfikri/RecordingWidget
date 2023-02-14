@@ -9,5 +9,6 @@ class MyApp : Application() {
     override fun attachBaseContext(context: Context) {
         super.attachBaseContext(context)
         MultiDex.install(this)
+
     }
 }

@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="sound.recorder.widget">
 
-
+   <!-- <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />-->
     <uses-permission android:name="android.permission.RECORD_AUDIO"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.INTERNET"/>
@@ -36,6 +36,12 @@
         <meta-data android:name="com.google.firebase.messaging.default_notification_icon"
             android:resource="@drawable/ic_baseline_notifications_active_24" />
 
+       <!-- <service
+            android:name=".service.BackgroundService"
+            android:foregroundServiceType="mediaProjection"
+            android:enabled="true"
+            android:exported="true"
+            android:stopWithTask="true"/>-->
 
     </application>
 

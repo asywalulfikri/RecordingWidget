@@ -12,9 +12,7 @@ import sound.recorder.widget.db.AudioRecord
 import java.text.SimpleDateFormat
 import java.util.*
 
-internal class Adapter(private var audioRecords: List<AudioRecord>,
-              private val listener: OnItemClickListener
-) : RecyclerView.Adapter<Adapter.ViewHolder>() {
+internal class AudioRecorderAdapter(private var audioRecords: List<AudioRecord>, private val listener: OnItemClickListener) : RecyclerView.Adapter<AudioRecorderAdapter.ViewHolder>() {
 
     private var editMode = false
 
