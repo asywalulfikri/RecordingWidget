@@ -17,20 +17,13 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowManager
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.room.Room
-import com.karumi.dexter.Dexter
-import com.karumi.dexter.MultiplePermissionsReport
-import com.karumi.dexter.PermissionToken
-import com.karumi.dexter.listener.PermissionRequest
-import com.karumi.dexter.listener.multi.MultiplePermissionsListener
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import org.greenrobot.eventbus.EventBus
 import sound.recorder.widget.R
 import sound.recorder.widget.base.BaseFragmentWidget
 import sound.recorder.widget.databinding.WidgetRecordVerticalBinding
@@ -66,8 +59,8 @@ internal class VoiceRecorderFragmentWidgetVertical : BaseFragmentWidget(), Botto
     // Requesting permission to RECORD_AUDIO
     private var permissionToRecordAccepted = false
     private var permissions: Array<String> = arrayOf(Manifest.permission.RECORD_AUDIO)
-    var mp :  MediaPlayer? =null
-    var showBtnStop = false
+    private var mp :  MediaPlayer? =null
+    private var showBtnStop = false
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = WidgetRecordVerticalBinding.inflate(inflater, container, false)
@@ -76,7 +69,6 @@ internal class VoiceRecorderFragmentWidgetVertical : BaseFragmentWidget(), Botto
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         // Record to the external cache directory for visibility
         ActivityCompat.requestPermissions(activity as Activity, permissions, REQUEST_RECORD_AUDIO_PERMISSION)
         mp = MediaPlayer()
@@ -119,7 +111,7 @@ internal class VoiceRecorderFragmentWidgetVertical : BaseFragmentWidget(), Botto
 
 
     private fun showBottomSheetSong(){
-        val bottomSheet = BottomSheetListSong(showBtnStop,this)
+        val bottomSheet = BottomSheetListSong(mp,showBtnStop,this)
         bottomSheet.show(requireActivity().supportFragmentManager, LOG_TAG)
     }
 
@@ -138,7 +130,7 @@ internal class VoiceRecorderFragmentWidgetVertical : BaseFragmentWidget(), Botto
     }
 
     private fun startPermissionSong(){
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU){
+        if(Build.VERSION.SDK_INT >=33){
 
             showBottomSheetSong()
 
@@ -216,6 +208,7 @@ internal class VoiceRecorderFragmentWidgetVertical : BaseFragmentWidget(), Botto
 
 
 
+    @Deprecated("Deprecated in Java")
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         permissionToRecordAccepted = if (requestCode == REQUEST_RECORD_AUDIO_PERMISSION) {
@@ -223,7 +216,6 @@ internal class VoiceRecorderFragmentWidgetVertical : BaseFragmentWidget(), Botto
         } else {
             false
         }
-        //if (!permissionToRecordAccepted) finish()
     }
 
     @SuppressLint("SimpleDateFormat")
@@ -274,6 +266,7 @@ internal class VoiceRecorderFragmentWidgetVertical : BaseFragmentWidget(), Botto
 
     }
 
+
     private fun animatePlayerView(){
         if(recording && !onPause){
             val amp = recorder!!.maxAmplitude
@@ -289,6 +282,7 @@ internal class VoiceRecorderFragmentWidgetVertical : BaseFragmentWidget(), Botto
         }
     }
 
+    @SuppressLint("SetTextI18n")
     private fun pauseRecording(){
         if(recorder!=null){
             binding.recordText.visibility = View.VISIBLE
@@ -357,6 +351,7 @@ internal class VoiceRecorderFragmentWidgetVertical : BaseFragmentWidget(), Botto
 
 
 
+    @SuppressLint("SetTextI18n")
     override fun onCancelClicked() {
         Toast.makeText(activity, "Audio record deleted", Toast.LENGTH_SHORT).show()
         binding.recordText.text = "Record"
@@ -364,7 +359,8 @@ internal class VoiceRecorderFragmentWidgetVertical : BaseFragmentWidget(), Botto
         stopRecording()
     }
 
-    override fun onOkClicked(filePath: String, filename: String,isChange : Boolean) {
+    @SuppressLint("SetTextI18n")
+    override fun onOkClicked(filePath: String, filename: String, isChange : Boolean) {
         // add audio record info to database
         val db = Room.databaseBuilder(activity as Activity, AppDatabase::class.java, "audioRecords").build()
 

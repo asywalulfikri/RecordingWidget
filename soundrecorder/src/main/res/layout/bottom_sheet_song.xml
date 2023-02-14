@@ -25,6 +25,15 @@
             android:contentDescription="@string/app_names"
             tools:ignore="RtlHardcoded" />
 
+
+        <SeekBar
+            android:visibility="gone"
+            android:id="@+id/seekBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="16dp" />
+
         <ListView
             android:scrollbars="none"
             android:layout_marginTop="5dp"
@@ -34,15 +43,14 @@
 
     </LinearLayout>
 
-
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btnStop"
-        android:backgroundTint="@color/colorPrimary"
-        android:textColor="@android:color/white"
-        android:layout_alignParentRight="true"
-        android:text="Stop"
-        android:layout_alignParentBottom="true"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:backgroundTint="@color/colorPrimary"
+        android:text="Stop"
+        android:textColor="@android:color/white" />
 
 </RelativeLayout>

@@ -5,10 +5,13 @@ import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.content.res.Configuration
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -55,7 +58,7 @@ open class BaseActivityWidget : AppCompatActivity() {
     }
 
     private fun permissionNotification(){
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+        if (Build.VERSION.SDK_INT >= 33) {
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
                 // Pass any permission you want while launching
                 requestPermissionNotification.launch(Manifest.permission.POST_NOTIFICATIONS)
@@ -139,4 +142,24 @@ open class BaseActivityWidget : AppCompatActivity() {
             )
         }
     }
+
+    fun isDarkTheme(): Boolean {
+        return resources?.configuration?.uiMode!! and
+                Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
+    }
+
+
+
+    fun showKeyboard(view: View) {
+        if (view.requestFocus()) {
+            val imm = view.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager?
+            imm?.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0)
+        }
+    }
+
+    fun hideKeyboard(view: View) {
+        val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager?
+        imm?.hideSoftInputFromWindow(view.windowToken, 0)
+    }
+
 }

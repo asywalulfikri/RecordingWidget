@@ -47,7 +47,7 @@ class RecordWidgetV : LinearLayout {
 
 
     private fun setupViews(){
-        fragmentManagers?.beginTransaction()?.replace(binding.recordWidgetVertical.id, imkasFragment)?.commit()
+        fragmentManagers?.beginTransaction()?.replace(binding.recordWidgetVertical.id, imkasFragment)?.commitAllowingStateLoss()
         if(!imkasFragment.isAdded){
             addView(binding.recordWidgetVertical)
             isAdd = true
@@ -59,10 +59,10 @@ class RecordWidgetV : LinearLayout {
 
     private fun resetView(){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            fragmentManagers?.beginTransaction()?.detach(imkasFragment)?.commitNow();
+            fragmentManagers?.beginTransaction()?.detach(imkasFragment)?.commitAllowingStateLoss()
             fragmentManagers?.beginTransaction()?.attach(imkasFragment)?.commitNow();
         } else {
-            fragmentManagers?.beginTransaction()?.detach(imkasFragment)?.attach(imkasFragment)?.commit();
+            fragmentManagers?.beginTransaction()?.detach(imkasFragment)?.attach(imkasFragment)?.commitAllowingStateLoss()
         }
         addView(binding.recordWidgetVertical)
     }

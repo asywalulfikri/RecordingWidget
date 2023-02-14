@@ -113,7 +113,7 @@ internal class VoiceRecorderFragmentWidgetHorizontal : BaseFragmentWidget(), Bot
 
 
     private fun showBottomSheetSong(){
-        val bottomSheet = BottomSheetListSong(showBtnStop,this)
+        val bottomSheet = BottomSheetListSong(mp,showBtnStop,this)
         bottomSheet.show(requireActivity().supportFragmentManager, LOG_TAG)
     }
 
@@ -132,7 +132,7 @@ internal class VoiceRecorderFragmentWidgetHorizontal : BaseFragmentWidget(), Bot
     }
 
     private fun startPermissionSong(){
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU){
+        if(Build.VERSION.SDK_INT >= 33){
 
             showBottomSheetSong()
 

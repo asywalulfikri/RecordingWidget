@@ -1,20 +1,16 @@
 package sound.recorder.widget.ui.bottomSheet
 
-import android.content.ContentResolver
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.SharedPreferences
-import android.content.res.Configuration
 import android.media.MediaPlayer
+import android.media.ToneGenerator
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
-import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.view.WindowManager
-import android.view.inputmethod.InputMethodManager
+import android.view.*
 import android.widget.*
+import androidx.core.view.WindowCompat
 import com.google.android.material.bottomsheet.BottomSheetBehavior.STATE_EXPANDED
 import com.google.android.material.bottomsheet.BottomSheetBehavior.STATE_HIDDEN
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -26,20 +22,20 @@ import kotlinx.coroutines.withContext
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
+import sound.recorder.widget.BuildConfig
 import sound.recorder.widget.RecordingSDK
 import sound.recorder.widget.databinding.BottomSheetSongBinding
 import sound.recorder.widget.model.Song
 import sound.recorder.widget.util.DataSession
 
 
-internal class BottomSheetListSong(var showBtnStop: Boolean, private var listener: OnClickListener) : BottomSheetDialogFragment(),SharedPreferences.OnSharedPreferenceChangeListener {
+internal class BottomSheetListSong(private  var mediaPlayer: MediaPlayer?,var showBtnStop: Boolean, private var listener: OnClickListener) : BottomSheetDialogFragment(),SharedPreferences.OnSharedPreferenceChangeListener {
 
 
     //Load Song
-    private var contentResolver: ContentResolver? = null
-    var listTitleSong: ArrayList<String>? = null
+    private var listTitleSong: ArrayList<String>? = null
     private var listLocationSong: ArrayList<String>? = null
-    var adapter: ArrayAdapter<String>? = null
+    private var adapter: ArrayAdapter<String>? = null
 
 
     // Step 1 - This interface defines the type of messages I want to communicate to my owner
@@ -48,17 +44,24 @@ internal class BottomSheetListSong(var showBtnStop: Boolean, private var listene
         fun onStopSong()
     }
 
-    private var mp : MediaPlayer? =null
     private lateinit var binding : BottomSheetSongBinding
     private var sharedPreferences : SharedPreferences? =null
     private var lisSong = ArrayList<Song>()
 
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = BottomSheetSongBinding.inflate(layoutInflater)
         (dialog as? BottomSheetDialog)?.behavior?.state = STATE_EXPANDED
         (dialog as? BottomSheetDialog)?.behavior?.isDraggable = false
-        dialog?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            dialog?.window?.let { WindowCompat.setDecorFitsSystemWindows(it, false) }
+        } else {
+            @Suppress("DEPRECATION")
+            dialog?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
+        }
+
+        //dialog?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
 
         sharedPreferences = DataSession(activity as Context).getShared()
         sharedPreferences?.registerOnSharedPreferenceChangeListener(this)
@@ -78,7 +81,6 @@ internal class BottomSheetListSong(var showBtnStop: Boolean, private var listene
             dismiss()
         }
 
-
         listTitleSong = ArrayList()
         listLocationSong = ArrayList()
 
@@ -86,12 +88,33 @@ internal class BottomSheetListSong(var showBtnStop: Boolean, private var listene
             getSong(lisSong)
         }
 
+        if(BuildConfig.DEBUG){
+            setupSeekBar()
+        }
+        setupSeekBar()
+
         return binding.root
 
     }
 
+    private fun setupSeekBar(){
+        binding.seekBar.visibility = View.VISIBLE
+        if(mediaPlayer!=null){
+            binding.seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+                override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
+                    val volume = (1 - Math.log((ToneGenerator.MAX_VOLUME - progress).toDouble()) / Math.log(ToneGenerator.MAX_VOLUME.toDouble())).toFloat()
+                    mediaPlayer?.setVolume(volume, volume)
+                }
+
+                override fun onStartTrackingTouch(seekBar: SeekBar) {}
+                override fun onStopTrackingTouch(seekBar: SeekBar) {}
+            })
+        }
+    }
+
+
     private fun getSong(list : ArrayList<Song>){
-        if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.TIRAMISU){
+        if(Build.VERSION.SDK_INT>32){
             getTiramisu(list)
         }else{
             getAllMediaMp3Files(list)
@@ -102,8 +125,8 @@ internal class BottomSheetListSong(var showBtnStop: Boolean, private var listene
     private fun getTiramisu(songList : ArrayList<Song>){
         MainScope().launch {
 
-            var songTitle1 = ""
-            var songLocation1 = ""
+            var songTitle1: String
+            var songLocation1: String
 
             withContext(Dispatchers.Default) {
 
@@ -120,29 +143,11 @@ internal class BottomSheetListSong(var showBtnStop: Boolean, private var listene
         }
     }
 
-
-    private fun setToast(message : String){
-        Toast.makeText(activity, "$message.",Toast.LENGTH_SHORT).show()
-    }
-
-    private fun setLog(message : String){
-
-    }
-
-
-    private fun stopMusic(){
-        if (this.mp != null) {
-            mp?.release()
-        }
-    }
-
-
+    @SuppressLint("Recycle")
     private fun getAllMediaMp3Files(songList : ArrayList<Song>) {
-        setLog(songList.size.toString())
-        contentResolver = context?.contentResolver
+        //contentResolver = activity?.contentResolver
         val uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
-        val cursor = contentResolver?.query(
-            uri,
+        val cursor = activity?.contentResolver?.query(uri,
             null,
             null,
             null,
@@ -159,8 +164,8 @@ internal class BottomSheetListSong(var showBtnStop: Boolean, private var listene
 
             MainScope().launch {
 
-                var songTitle1 = ""
-                var songLocation1 = ""
+                var songTitle1: String
+                var songLocation1: String
 
                 withContext(Dispatchers.Default) {
 
@@ -212,41 +217,20 @@ internal class BottomSheetListSong(var showBtnStop: Boolean, private var listene
         }
 
     }
-    
+
     private fun updateView(){
-        val listSong: Array<String> = listTitleSong!!.toTypedArray()
-        adapter =
-            ArrayAdapter(activity as Context, android.R.layout.simple_list_item_1, listSong)
+        val listSong = listTitleSong!!.toTypedArray()
+        adapter = ArrayAdapter(activity as Context, android.R.layout.simple_list_item_1, listSong)
         binding.listView.adapter = adapter
         adapter?.notifyDataSetChanged()
         binding.listView.onItemClickListener =
-            AdapterView.OnItemClickListener { adapterView: AdapterView<*>?, view: View?, i: Int, l: Long ->
+            AdapterView.OnItemClickListener { _: AdapterView<*>?, _: View?, i: Int, _: Long ->
                 //dismiss()
                 (dialog as? BottomSheetDialog)?.behavior?.state = STATE_HIDDEN
                 listener.onPlaySong(listLocationSong?.get(i).toString())
                 binding.btnStop.visibility = View.VISIBLE
 
             }
-    }
-
-
-    private fun isDarkTheme(): Boolean {
-        return activity?.resources?.configuration?.uiMode!! and
-                Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
-    }
-
-
-
-    private fun showKeyboard(view: View) {
-        if (view.requestFocus()) {
-            val imm = view.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager?
-            imm?.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0)
-        }
-    }
-
-    private fun hideKeyboard(view: View) {
-        val imm = context?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager?
-        imm?.hideSoftInputFromWindow(view.windowToken, 0)
     }
 
 
@@ -265,12 +249,10 @@ internal class BottomSheetListSong(var showBtnStop: Boolean, private var listene
         songListResponse?.let { getSong(it) }
     }
 
-
     override fun onResume() {
         super.onResume()
         sharedPreferences?.registerOnSharedPreferenceChangeListener(this)
     }
-
 
     override fun onPause() {
         super.onPause()
@@ -278,6 +260,6 @@ internal class BottomSheetListSong(var showBtnStop: Boolean, private var listene
     }
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
-        setLog(key.toString())
+
     }
 }
