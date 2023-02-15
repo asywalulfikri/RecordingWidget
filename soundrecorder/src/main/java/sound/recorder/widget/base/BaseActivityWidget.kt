@@ -23,6 +23,7 @@ import com.google.android.gms.tasks.Task
 import com.google.firebase.messaging.BuildConfig
 import com.google.firebase.messaging.FirebaseMessaging
 import sound.recorder.widget.util.DataSession
+import sound.recorder.widget.util.MusicAnimationView
 import java.util.concurrent.atomic.AtomicReference
 
 open class BaseActivityWidget : AppCompatActivity() {
@@ -38,6 +39,17 @@ open class BaseActivityWidget : AppCompatActivity() {
         MobileAds.initialize(this) {}
         dataSession = DataSession(this)
         adRequest = AdRequest.Builder().build()
+    }
+
+    fun setupAnimationNot(musicAnimation : MusicAnimationView){
+        val myImageList = intArrayOf(sound.recorder.widget.R.drawable.note1, sound.recorder.widget.R.drawable.note2, sound.recorder.widget.R.drawable.note2)
+        musicAnimation.setImages(myImageList).start()
+        musicAnimation.start()
+    }
+
+
+    fun animation(): Boolean{
+        return DataSession(this).getAnimation()
     }
 
     fun setupAds(mAdView: AdView) {

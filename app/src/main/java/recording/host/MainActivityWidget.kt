@@ -1,9 +1,10 @@
 package recording.host
 
-import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.view.WindowManager
 import com.google.android.gms.ads.MobileAds
 import recording.host.databinding.ActivityMainBinding
@@ -12,9 +13,11 @@ import sound.recorder.widget.RecordWidgetV
 import sound.recorder.widget.RecordingSDK
 import sound.recorder.widget.base.BaseActivityWidget
 import sound.recorder.widget.model.Song
+import sound.recorder.widget.util.Constant
+import sound.recorder.widget.util.DataSession
 
 
-class MainActivityWidget : BaseActivityWidget() {
+class MainActivityWidget : BaseActivityWidget(),SharedPreferences.OnSharedPreferenceChangeListener{
 
 
     private var recordWidgetH : RecordWidgetH? =null
@@ -23,7 +26,6 @@ class MainActivityWidget : BaseActivityWidget() {
     private lateinit var binding: ActivityMainBinding
     private val listTitle = arrayOf(
         "Jaran Goyang"
-
     )
 
     private val listLocation = arrayOf(
@@ -35,12 +37,24 @@ class MainActivityWidget : BaseActivityWidget() {
     )
 
     private val song : ArrayList<Song> = ArrayList()
+    private var sharedPreferences : SharedPreferences? =null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         setContentView(binding.root)
+
+        sharedPreferences = DataSession(this).getShared()
+        sharedPreferences?.registerOnSharedPreferenceChangeListener(this)
+
+        setupAnimationNot(binding.musicView)
+
+        if(DataSession(this).getAnimation()){
+            binding.musicView.visibility = View.VISIBLE
+        }else{
+            binding.musicView.visibility = View.INVISIBLE
+        }
 
         MobileAds.initialize(this)
 
@@ -70,7 +84,12 @@ class MainActivityWidget : BaseActivityWidget() {
         }
 
         getFirebaseToken()
+        setupBackground()
 
+    }
+
+    private fun setupBackground(){
+        binding.rlBackground.setBackgroundColor(getSharedPreferenceUpdate().getInt(Constant.keyShared.backgroundColor,-1))
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -87,6 +106,24 @@ class MainActivityWidget : BaseActivityWidget() {
             R.id.action_settings -> true
             else -> super.onOptionsItemSelected(item)
         }
+    }
+
+
+    private fun getSharedPreferenceUpdate() : SharedPreferences{
+        return DataSession(this).getSharedUpdate()
+    }
+
+    override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
+       if(key==Constant.keyShared.backgroundColor){
+          binding.rlBackground.setBackgroundColor(getSharedPreferenceUpdate().getInt(Constant.keyShared.backgroundColor,-1))
+       }else if(key==Constant.keyShared.animation){
+           val animation = getSharedPreferenceUpdate().getBoolean(Constant.keyShared.animation,false)
+           if(!animation){
+              binding.musicView.visibility =View.INVISIBLE
+           }else{
+              binding.musicView.visibility =View.VISIBLE
+           }
+       }
     }
 
 

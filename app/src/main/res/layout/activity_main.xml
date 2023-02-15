@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rlBackground"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivityWidget">
@@ -21,7 +23,6 @@
             app:popupTheme="@style/Theme.RecordingWidget.PopupOverlay" />
 
     </com.google.android.material.appbar.AppBarLayout>
-
 
     <LinearLayout
         android:layout_below="@+id/appBar"
@@ -75,4 +76,12 @@
     </LinearLayout>
 
 
+
+    <sound.recorder.widget.util.MusicAnimationView
+        android:layout_width="match_parent"
+        android:id="@+id/musicView"
+        android:layout_height="wrap_content"
+        app:fallCount="40"
+        app:fallSpeed="0.1"
+        />
 </RelativeLayout>

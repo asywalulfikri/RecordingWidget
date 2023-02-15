@@ -179,7 +179,7 @@ internal class VoiceRecorderFragmentWidgetHorizontal : BaseFragmentWidget(), Bot
 
 
     private fun showBottomSheetSong(){
-        val bottomSheet = BottomSheetListSong(mp,showBtnStop,this)
+        val bottomSheet = BottomSheetListSong(showBtnStop,this)
         bottomSheet.show(requireActivity().supportFragmentManager, LOG_TAG)
     }
 

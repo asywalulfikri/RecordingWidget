@@ -127,12 +127,20 @@
             android:textColor="#FFFFFF"
             android:text="00:00.0"/>
 
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/settingBtn"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginBottom="5dp"
+            android:background="@drawable/ic_circle_selectable"
+            android:src="@drawable/ic_baseline_settings_24"/>
+
         <sound.recorder.widget.tools.RecorderWaveformView
             android:layout_marginTop="10dp"
             android:visibility="gone"
             android:id="@+id/playerView"
             android:rotation="-90"
-            android:layout_marginBottom="10dp"
+            android:layout_marginBottom="5dp"
             android:layout_width="40dp"
             android:layout_height="40dp" />
 

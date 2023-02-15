@@ -3,8 +3,6 @@ package sound.recorder.widget.ui.bottomSheet
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.SharedPreferences
-import android.media.MediaPlayer
-import android.media.ToneGenerator
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
@@ -22,14 +20,13 @@ import kotlinx.coroutines.withContext
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
-import sound.recorder.widget.BuildConfig
 import sound.recorder.widget.RecordingSDK
 import sound.recorder.widget.databinding.BottomSheetSongBinding
 import sound.recorder.widget.model.Song
 import sound.recorder.widget.util.DataSession
 
 
-internal class BottomSheetListSong(private  var mediaPlayer: MediaPlayer?,var showBtnStop: Boolean, private var listener: OnClickListener) : BottomSheetDialogFragment(),SharedPreferences.OnSharedPreferenceChangeListener {
+internal class BottomSheetListSong(var showBtnStop: Boolean, private var listener: OnClickListener) : BottomSheetDialogFragment(),SharedPreferences.OnSharedPreferenceChangeListener {
 
 
     //Load Song
@@ -88,28 +85,8 @@ internal class BottomSheetListSong(private  var mediaPlayer: MediaPlayer?,var sh
             getSong(lisSong)
         }
 
-        if(BuildConfig.DEBUG){
-            setupSeekBar()
-        }
-        setupSeekBar()
-
         return binding.root
 
-    }
-
-    private fun setupSeekBar(){
-        binding.seekBar.visibility = View.VISIBLE
-        if(mediaPlayer!=null){
-            binding.seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-                override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
-                    val volume = (1 - Math.log((ToneGenerator.MAX_VOLUME - progress).toDouble()) / Math.log(ToneGenerator.MAX_VOLUME.toDouble())).toFloat()
-                    mediaPlayer?.setVolume(volume, volume)
-                }
-
-                override fun onStartTrackingTouch(seekBar: SeekBar) {}
-                override fun onStopTrackingTouch(seekBar: SeekBar) {}
-            })
-        }
     }
 
 

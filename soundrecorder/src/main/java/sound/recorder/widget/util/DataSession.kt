@@ -4,7 +4,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import sound.recorder.widget.model.Song
 
-internal class DataSession(private val mContext: Context) {
+open class DataSession(private val mContext: Context) {
 
     companion object {
         const val TAG = "Preferences"
@@ -21,6 +21,18 @@ internal class DataSession(private val mContext: Context) {
 
     fun getShared(): SharedPreferences{
         return mContext.getSharedPreferences("recordingWidget", 0)
+    }
+
+    fun getSharedUpdate(): SharedPreferences {
+        return mContext.getSharedPreferences("recordingWidget", 0)
+    }
+
+    fun getAnimation(): Boolean{
+        return sharedPref.getBoolean(Constant.keyShared.animation, false)
+    }
+
+    fun getVolume(): Int{
+        return sharedPref.getInt(Constant.keyShared.volume, 100)
     }
 
     fun addInitiate(status : Boolean,admobId : String, bannerId : String, interstitialId : String){
@@ -48,8 +60,20 @@ internal class DataSession(private val mContext: Context) {
         editor.apply()
     }
 
-    fun getColor(name : String): Int{
-        return sharedPref.getInt(name, 0)
+    fun saveAnimation(value : Boolean){
+        val editor = sharedPref.edit()
+        editor.putBoolean(Constant.keyShared.animation,value)
+        editor.apply()
+    }
+
+    fun saveVolume(value : Int){
+        val editor = sharedPref.edit()
+        editor.putInt(Constant.keyShared.volume,value)
+        editor.apply()
+    }
+
+    fun getBackgroundColor(): Int{
+        return sharedPref.getInt(Constant.keyShared.backgroundColor, -1)
     }
 
     fun getBannerId(): String {

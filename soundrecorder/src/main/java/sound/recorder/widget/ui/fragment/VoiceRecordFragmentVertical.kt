@@ -6,9 +6,11 @@ import android.app.Activity
 import android.app.Dialog
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.media.MediaPlayer
 import android.media.MediaRecorder
+import android.media.ToneGenerator
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -39,19 +41,19 @@ import sound.recorder.widget.tools.Timer
 import sound.recorder.widget.ui.ListingActivityWidgetNew
 import sound.recorder.widget.ui.bottomSheet.BottomSheet
 import sound.recorder.widget.ui.bottomSheet.BottomSheetListSong
-import sound.recorder.widget.util.RecordingEventListener
-import sound.recorder.widget.util.ScreenRecorder
-import sound.recorder.widget.util.ScreenRecorderMode
+import sound.recorder.widget.ui.bottomSheet.BottomSheetSetting
+import sound.recorder.widget.util.*
 import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.math.ln
 
 private const val LOG_TAG = "AudioRecordTest"
 private const val REQUEST_RECORD_AUDIO_PERMISSION = 200
 
 internal class VoiceRecorderFragmentWidgetVertical : BaseFragmentWidget(), BottomSheet.OnClickListener,
-    BottomSheetListSong.OnClickListener, Timer.OnTimerUpdateListener {
+    BottomSheetListSong.OnClickListener, Timer.OnTimerUpdateListener,SharedPreferences.OnSharedPreferenceChangeListener {
 
     private lateinit var fileName: String
     private lateinit var dirPath: String
@@ -70,12 +72,15 @@ internal class VoiceRecorderFragmentWidgetVertical : BaseFragmentWidget(), Botto
     private var permissions: Array<String> = arrayOf(Manifest.permission.RECORD_AUDIO)
     private var mp :  MediaPlayer? =null
     private var showBtnStop = false
+    private var songIsPlaying = false
 
 
     //ScreenRecorder
     var screenRecorder: ScreenRecorder? =null
     var recordingScreen = false
     var pauseRecordScreen = false
+    private var sharedPreferences : SharedPreferences? =null
+    private var volume : Float? =null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = WidgetRecordVerticalBinding.inflate(inflater, container, false)
@@ -87,7 +92,15 @@ internal class VoiceRecorderFragmentWidgetVertical : BaseFragmentWidget(), Botto
         // Record to the external cache directory for visibility
         if(activity!=null){
             ActivityCompat.requestPermissions(activity as Activity, permissions, REQUEST_RECORD_AUDIO_PERMISSION)
+
+            sharedPreferences = DataSession(requireContext()).getShared()
+            sharedPreferences?.registerOnSharedPreferenceChangeListener(this)
+
             mp = MediaPlayer()
+            val progress = sharedPreferences?.getInt(Constant.keyShared.volume,100)
+            volume = (1 - ln((ToneGenerator.MAX_VOLUME - progress!!).toDouble()) / ln(
+                ToneGenerator.MAX_VOLUME.toDouble())).toFloat()
+
             setupAds()
 
             //setupScreenRecorder()
@@ -123,7 +136,13 @@ internal class VoiceRecorderFragmentWidgetVertical : BaseFragmentWidget(), Botto
             binding.songBtn.setOnClickListener {
                 startPermissionSong()
             }
+
             binding.deleteBtn.isClickable = false
+
+            binding.settingBtn.setOnClickListener {
+                val bottomSheet = BottomSheetSetting()
+                bottomSheet.show(requireActivity().supportFragmentManager, LOG_TAG)
+            }
         }
     }
 
@@ -181,7 +200,7 @@ internal class VoiceRecorderFragmentWidgetVertical : BaseFragmentWidget(), Botto
 
 
     private fun showBottomSheetSong(){
-        val bottomSheet = BottomSheetListSong(mp,showBtnStop,this)
+        val bottomSheet = BottomSheetListSong(showBtnStop,this)
         bottomSheet.show(requireActivity().supportFragmentManager, LOG_TAG)
     }
 
@@ -508,22 +527,33 @@ internal class VoiceRecorderFragmentWidgetVertical : BaseFragmentWidget(), Botto
             releaseMediaPlayer()
         }
         mp = MediaPlayer.create(activity, Uri.parse(filePath))
+
         if (mp != null) {
             showBtnStop = true
+            volume?.let { mp?.setVolume(it, volume!!) }
             mp?.start()
+            songIsPlaying = true
         }
     }
 
 
     override fun onPause() {
         super.onPause()
+        sharedPreferences?.unregisterOnSharedPreferenceChangeListener(this)
         if (mp != null) {
             mp?.release()
             showBtnStop = false
+            songIsPlaying = false
         }
 
         if(recorder!=null&&recordingAudio){
-            stopRecordingAudio()
+            recordingAudio = false
+            pauseRecordAudio= false
+            recorder?.apply {
+                release()
+            }
+            recorder = null
+            showLayoutStopRecord()
         }
     }
 
@@ -532,9 +562,16 @@ internal class VoiceRecorderFragmentWidgetVertical : BaseFragmentWidget(), Botto
         if (mp != null) {
             mp?.release()
             showBtnStop = false
+            songIsPlaying = false
         }
         if(recorder!=null&&recordingAudio){
-            stopRecordingAudio()
+            recordingAudio = false
+            pauseRecordAudio= false
+            recorder?.apply {
+                release()
+            }
+            recorder = null
+            showLayoutStopRecord()
         }
     }
 
@@ -545,6 +582,7 @@ internal class VoiceRecorderFragmentWidgetVertical : BaseFragmentWidget(), Botto
     private fun releaseMediaPlayer() {
         mp?.release()
         mp = null
+        songIsPlaying = false
         showBtnStop = false
     }
 
@@ -553,6 +591,27 @@ internal class VoiceRecorderFragmentWidgetVertical : BaseFragmentWidget(), Botto
         activity?.runOnUiThread{
             if(recordingAudio)
                 binding.timerView.text = duration
+        }
+    }
+
+
+    override fun onResume() {
+        super.onResume()
+        sharedPreferences?.registerOnSharedPreferenceChangeListener(this)
+    }
+
+
+
+    override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
+        if(key==Constant.keyShared.volume){
+            if(mp!=null){
+                val progress = sharedPreferences?.getInt(Constant.keyShared.volume,100)
+                val volume = (1 - ln((ToneGenerator.MAX_VOLUME - progress!!).toDouble()) / ln(
+                    ToneGenerator.MAX_VOLUME.toDouble())).toFloat()
+                if(songIsPlaying){
+                    mp?.setVolume(volume,volume)
+                }
+            }
         }
     }
 

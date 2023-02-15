@@ -7,6 +7,7 @@ import org.greenrobot.eventbus.EventBus
 import sound.recorder.widget.colorpicker.ColorPicker
 import sound.recorder.widget.colorpicker.ColorPicker.OnChooseColorListener
 import sound.recorder.widget.model.Song
+import sound.recorder.widget.util.Constant
 import sound.recorder.widget.util.DataSession
 
 
@@ -39,7 +40,7 @@ object RecordingSDK {
         return DataSession(context).isContainSong()
     }
 
-    fun showDialogColorPicker(context: Context, name : String){
+    fun showDialogColorPicker(context: Context){
         val colorPicker = ColorPicker(context as Activity)
         val colors: ArrayList<String> = ArrayList()
         colors.add("#82B926")
@@ -60,7 +61,7 @@ object RecordingSDK {
                 override fun onChooseColor(position: Int, color: Int) {
 
                     if(color!=0){
-                        DataSession(context).saveColor(color,name)
+                        DataSession(context).saveColor(color,Constant.keyShared.backgroundColor)
                     }
                 }
 
