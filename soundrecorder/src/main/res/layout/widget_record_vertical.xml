@@ -41,38 +41,27 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
 
-            <androidx.appcompat.widget.AppCompatImageButton
+            <ImageView
                 android:id="@+id/songBtn"
                 android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_height="44dp"
                 android:layout_marginTop="5dp"
                 android:layout_marginBottom="5dp"
-                android:background="@drawable/my_song"
                 android:contentDescription="@string/app_names"
+                app:srcCompat="@drawable/my_song"
                 tools:ignore="DuplicateSpeakableTextCheck" />
-
-            <TextView
-                android:id="@+id/tvMySong"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:text="My Song"
-                android:textColor="#FFFFFF"
-                android:textSize="8sp"
-                tools:ignore="HardcodedText,SmallSp" />
 
         </RelativeLayout>
 
 
-        <androidx.appcompat.widget.AppCompatImageButton
+        <ImageView
             android:visibility="gone"
             android:id="@+id/deleteBtn"
             android:clickable="false"
             android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_height="44dp"
             android:contentDescription="@string/app_names"
-            android:background="@drawable/ic_circle_selectable"
-            android:src="@drawable/ic_delete_disabled"/>
+            app:srcCompat="@drawable/ic_delete_disabled"/>
 
         <RelativeLayout
             android:layout_width="wrap_content"
@@ -93,6 +82,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
+                android:fontFamily="@font/rimouski"
                 android:text="Record"
                 android:textColor="#FFFFFF"
                 android:textSize="9sp"
@@ -100,40 +90,38 @@
 
         </RelativeLayout>
 
-        <androidx.appcompat.widget.AppCompatImageButton
-            android:layout_marginTop="5dp"
+        <ImageView
             android:id="@+id/listBtn"
             android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:background="@drawable/ic_circle_selectable"
+            android:layout_height="44dp"
             android:contentDescription="@string/appbar_scrolling_view_behavior"
-            android:src="@drawable/ic_menu" />
+            app:srcCompat="@drawable/ic_menu" />
 
-        <androidx.appcompat.widget.AppCompatImageButton
+        <ImageView
             android:id="@+id/doneBtn"
             android:visibility="gone"
+            android:layout_marginTop="5dp"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:background="@drawable/ic_circle_selectable"
-            android:src="@drawable/ic_done"/>
+            app:srcCompat="@drawable/ic_done"/>
 
         <TextView
             android:id="@+id/timerView"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="5dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="10sp"
-            android:layout_marginBottom="10dp"
+            android:fontFamily="@font/intercom_roboto_medium"
+            android:layout_marginBottom="5dp"
             android:textColor="#FFFFFF"
             android:text="00:00.0"/>
 
-        <androidx.appcompat.widget.AppCompatImageButton
+        <ImageView
             android:id="@+id/settingBtn"
             android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_height="44dp"
             android:layout_marginBottom="5dp"
-            android:background="@drawable/ic_circle_selectable"
-            android:src="@drawable/ic_baseline_settings_24"/>
+            app:srcCompat="@drawable/ic_baseline_settings_24"/>
 
         <sound.recorder.widget.tools.RecorderWaveformView
             android:layout_marginTop="10dp"

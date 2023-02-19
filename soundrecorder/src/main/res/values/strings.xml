@@ -26,6 +26,12 @@
         <item>@color/white</item>
         <item>@color/color15</item>
 
+        <item>#000000</item>
+        <item>#DEC015</item>
+        <item>#15DEBC</item>
+        <item>#1E083F</item>
+        <item>#083F15</item>
+
     </array>
 
     <color name="color1">#2062af</color>

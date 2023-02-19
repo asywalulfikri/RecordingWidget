@@ -15,19 +15,30 @@
         <entry key="soundrecorder/src/main/res/drawable/ic_baseline_movie_24.xml" value="0.194" />
         <entry key="soundrecorder/src/main/res/drawable/ic_baseline_notifications_active_24.xml" value="0.194" />
         <entry key="soundrecorder/src/main/res/drawable/ic_baseline_pause_24.xml" value="0.194" />
+        <entry key="soundrecorder/src/main/res/drawable/ic_baseline_settings_24.xml" value="0.194" />
         <entry key="soundrecorder/src/main/res/drawable/ic_baseline_stop_24.xml" value="0.194" />
         <entry key="soundrecorder/src/main/res/drawable/ic_baseline_videocam_24.xml" value="0.194" />
+        <entry key="soundrecorder/src/main/res/drawable/ic_baseline_volume_down_24.xml" value="0.194" />
         <entry key="soundrecorder/src/main/res/drawable/ic_circle.xml" value="0.194" />
         <entry key="soundrecorder/src/main/res/drawable/ic_circle_pressed.xml" value="0.194" />
         <entry key="soundrecorder/src/main/res/drawable/ic_close.xml" value="0.194" />
+        <entry key="soundrecorder/src/main/res/drawable/ic_close_386747.xml" value="0.194" />
+        <entry key="soundrecorder/src/main/res/drawable/ic_confirm_386760.xml" value="0.194" />
+        <entry key="soundrecorder/src/main/res/drawable/ic_delete.xml" value="0.194" />
+        <entry key="soundrecorder/src/main/res/drawable/ic_delete_disabled.xml" value="0.194" />
         <entry key="soundrecorder/src/main/res/drawable/ic_done.xml" value="0.194" />
         <entry key="soundrecorder/src/main/res/drawable/ic_forward.xml" value="0.194" />
+        <entry key="soundrecorder/src/main/res/drawable/ic_menu.xml" value="0.194" />
+        <entry key="soundrecorder/src/main/res/drawable/ic_menu_386763.xml" value="0.194" />
+        <entry key="soundrecorder/src/main/res/drawable/ic_music_386756.xml" value="0.194" />
         <entry key="soundrecorder/src/main/res/drawable/ic_record.xml" value="0.194" />
+        <entry key="soundrecorder/src/main/res/drawable/ic_sound_386751.xml" value="0.194" />
         <entry key="soundrecorder/src/main/res/drawable/my_song.xml" value="0.194" />
         <entry key="soundrecorder/src/main/res/drawable/seekbar_border_shadow.xml" value="0.194" />
         <entry key="soundrecorder/src/main/res/drawable/seekbar_custom_thumb.xml" value="0.194" />
         <entry key="soundrecorder/src/main/res/drawable/seekbar_progress.xml" value="0.194" />
         <entry key="soundrecorder/src/main/res/drawable/seekbar_style.xml" value="0.194" />
+        <entry key="soundrecorder/src/main/res/drawable/settings_386765 2.xml" value="0.194" />
         <entry key="soundrecorder/src/main/res/layout/activity_list_video.xml" value="0.259375" />
         <entry key="soundrecorder/src/main/res/layout/activity_listing.xml" value="0.11770833333333333" />
         <entry key="soundrecorder/src/main/res/layout/activity_listing_new.xml" value="0.165" />

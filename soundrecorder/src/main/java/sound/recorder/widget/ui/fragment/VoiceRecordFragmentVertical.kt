@@ -299,7 +299,6 @@ internal class VoiceRecorderFragmentWidgetVertical : BaseFragmentWidget(), Botto
         binding.recordText.visibility = View.GONE
         binding.deleteBtn.visibility = View.VISIBLE
         binding.deleteBtn.isClickable = true
-        binding.deleteBtn.setImageResource(R.drawable.ic_delete_enabled)
         binding.recordBtn.setImageResource(R.drawable.ic_pause)
 
         timer = Timer(this)

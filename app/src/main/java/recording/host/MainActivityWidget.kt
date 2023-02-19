@@ -71,8 +71,8 @@ class MainActivityWidget : BaseActivityWidget(),SharedPreferences.OnSharedPrefer
 
         setSupportActionBar(binding.toolbar)
 
-        recordWidgetH = RecordWidgetH(this)
-        recordWidgetH?.loadData()
+       /* recordWidgetH = RecordWidgetH(this)
+        recordWidgetH?.loadData()*/
 
         recordWidgetV = RecordWidgetV(this)
         recordWidgetV?.loadData()

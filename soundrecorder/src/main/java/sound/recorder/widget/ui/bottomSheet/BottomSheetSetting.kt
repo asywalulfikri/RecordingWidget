@@ -10,6 +10,7 @@ import androidx.core.view.WindowCompat
 import com.google.android.material.bottomsheet.BottomSheetBehavior.STATE_EXPANDED
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import kotlinx.android.synthetic.main.bottom_sheet_setting.*
 import sound.recorder.widget.RecordingSDK
 import sound.recorder.widget.databinding.BottomSheetSettingBinding
 import sound.recorder.widget.model.Song
@@ -66,6 +67,16 @@ internal class BottomSheetSetting() : BottomSheetDialogFragment(),SharedPreferen
                 DataSession(requireContext()).saveAnimation(true)
             } else {
                 DataSession(requireContext()).saveAnimation(false)
+            }
+        }
+
+        binding.rlAnimation.setOnClickListener {
+            if(binding.cbAnimation.isChecked){
+                cbAnimation.isChecked = false
+                DataSession(requireContext()).saveAnimation(false)
+            }else{
+                cbAnimation.isChecked = true
+                DataSession(requireContext()).saveAnimation(true)
             }
         }
 

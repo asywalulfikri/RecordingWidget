@@ -299,7 +299,7 @@ internal class VoiceRecorderFragmentWidgetHorizontal : BaseFragmentWidget(), Bot
         binding.recordText.visibility = View.GONE
         binding.deleteBtn.visibility = View.VISIBLE
         binding.deleteBtn.isClickable = true
-        binding.deleteBtn.setImageResource(R.drawable.ic_delete_enabled)
+       // binding.deleteBtn.setImageResource(R.drawable.ic_delete_enabled)
         binding.recordBtn.setImageResource(R.drawable.ic_pause)
 
         timer = Timer(this)
@@ -322,7 +322,6 @@ internal class VoiceRecorderFragmentWidgetHorizontal : BaseFragmentWidget(), Bot
         binding.doneBtn.visibility = View.GONE
         binding.deleteBtn.isClickable = false
         binding.deleteBtn.visibility = View.GONE
-        binding.deleteBtn.setImageResource(R.drawable.ic_delete_disabled)
 
         binding.playerView.reset()
         try {
