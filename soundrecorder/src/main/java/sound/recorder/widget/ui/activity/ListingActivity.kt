@@ -224,6 +224,7 @@ internal class ListingActivity : AppCompatActivity(), AudioRecorderAdapter.OnIte
 
     override fun onItemLongClick(position: Int) {
         audioRecorderAdapter.setEditMode(true)
+        binding.bottomSheet.visibility = View.VISIBLE
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
 
         val audioRecord = audioRecords[position]

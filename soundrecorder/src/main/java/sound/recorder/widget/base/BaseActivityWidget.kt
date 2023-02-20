@@ -42,7 +42,7 @@ open class BaseActivityWidget : AppCompatActivity() {
     }
 
     fun setupAnimationNot(musicAnimation : MusicAnimationView){
-        val myImageList = intArrayOf(sound.recorder.widget.R.drawable.note1, sound.recorder.widget.R.drawable.note2, sound.recorder.widget.R.drawable.note2)
+        val myImageList = intArrayOf(sound.recorder.widget.R.drawable.music_8, sound.recorder.widget.R.drawable.music_not9, sound.recorder.widget.R.drawable.audio_track)
         musicAnimation.setImages(myImageList).start()
         musicAnimation.start()
     }

@@ -26,12 +26,18 @@
         <entry key="soundrecorder/src/main/res/drawable/ic_confirm_386760.xml" value="0.194" />
         <entry key="soundrecorder/src/main/res/drawable/ic_delete.xml" value="0.194" />
         <entry key="soundrecorder/src/main/res/drawable/ic_delete_disabled.xml" value="0.194" />
+        <entry key="soundrecorder/src/main/res/drawable/ic_delete_disabled2.xml" value="0.194" />
         <entry key="soundrecorder/src/main/res/drawable/ic_done.xml" value="0.194" />
+        <entry key="soundrecorder/src/main/res/drawable/ic_edit.xml" value="0.194" />
+        <entry key="soundrecorder/src/main/res/drawable/ic_edit_disabled.xml" value="0.194" />
         <entry key="soundrecorder/src/main/res/drawable/ic_forward.xml" value="0.194" />
         <entry key="soundrecorder/src/main/res/drawable/ic_menu.xml" value="0.194" />
         <entry key="soundrecorder/src/main/res/drawable/ic_menu_386763.xml" value="0.194" />
         <entry key="soundrecorder/src/main/res/drawable/ic_music_386756.xml" value="0.194" />
+        <entry key="soundrecorder/src/main/res/drawable/ic_play.xml" value="0.194" />
+        <entry key="soundrecorder/src/main/res/drawable/ic_play_386758.xml" value="0.194" />
         <entry key="soundrecorder/src/main/res/drawable/ic_record.xml" value="0.194" />
+        <entry key="soundrecorder/src/main/res/drawable/ic_rectangle_tool.xml" value="0.165" />
         <entry key="soundrecorder/src/main/res/drawable/ic_sound_386751.xml" value="0.194" />
         <entry key="soundrecorder/src/main/res/drawable/my_song.xml" value="0.194" />
         <entry key="soundrecorder/src/main/res/drawable/seekbar_border_shadow.xml" value="0.194" />
@@ -40,18 +46,18 @@
         <entry key="soundrecorder/src/main/res/drawable/seekbar_style.xml" value="0.194" />
         <entry key="soundrecorder/src/main/res/drawable/settings_386765 2.xml" value="0.194" />
         <entry key="soundrecorder/src/main/res/layout/activity_list_video.xml" value="0.259375" />
-        <entry key="soundrecorder/src/main/res/layout/activity_listing.xml" value="0.11770833333333333" />
+        <entry key="soundrecorder/src/main/res/layout/activity_listing.xml" value="0.165" />
         <entry key="soundrecorder/src/main/res/layout/activity_listing_new.xml" value="0.165" />
         <entry key="soundrecorder/src/main/res/layout/activity_player.xml" value="0.259375" />
         <entry key="soundrecorder/src/main/res/layout/bottom_sheet.xml" value="0.259375" />
-        <entry key="soundrecorder/src/main/res/layout/bottom_sheet_setting.xml" value="0.25" />
+        <entry key="soundrecorder/src/main/res/layout/bottom_sheet_setting.xml" value="0.1" />
         <entry key="soundrecorder/src/main/res/layout/bottom_sheet_song.xml" value="0.259375" />
         <entry key="soundrecorder/src/main/res/layout/color_palette_layout.xml" value="0.259375" />
         <entry key="soundrecorder/src/main/res/layout/dialog_alert.xml" value="0.259375" />
         <entry key="soundrecorder/src/main/res/layout/fragment_recordings_list.xml" value="0.259375" />
         <entry key="soundrecorder/src/main/res/layout/item_footer.xml" value="0.259375" />
         <entry key="soundrecorder/src/main/res/layout/item_recording.xml" value="0.259375" />
-        <entry key="soundrecorder/src/main/res/layout/itemview_layout.xml" value="0.259375" />
+        <entry key="soundrecorder/src/main/res/layout/itemview_layout.xml" value="0.1" />
         <entry key="soundrecorder/src/main/res/layout/layout_empty.xml" value="0.259375" />
         <entry key="soundrecorder/src/main/res/layout/layout_empty_horizontal.xml" value="0.259375" />
         <entry key="soundrecorder/src/main/res/layout/layout_empty_vertical.xml" value="0.259375" />

@@ -7,7 +7,6 @@ import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 
 import androidx.core.content.ContextCompat;
@@ -61,29 +60,26 @@ public class MusicAnimationView extends View {
 
     public MusicAnimationView start(){
 
-        this.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                mFallNotesState = FallNotesState.START;
+        this.postDelayed(() -> {
+            mFallNotesState = FallNotesState.START;
 
-                if (mFallNotesThread == null) {
-                    mFallNotesThread = new FallNotesThread();
+            if (mFallNotesThread == null) {
+                mFallNotesThread = new FallNotesThread();
+            }
+
+            mNotes = new Notes[mNotesCount];
+            for (int i = 0; i < mNotes.length; i++) {
+                if(mNotes.length>0){
+                    mNotes[i] = new Notes();
                 }
+            }
 
-                mNotes = new Notes[mNotesCount];
-                for (int i = 0; i < mNotes.length; i++) {
-                    if(mNotes.length>0){
-                        mNotes[i] = new Notes();
-                    }
+            if (mFallNotesState == FallNotesState.START) {
+                if(!mFallNotesThread.isAlive()) {
+                    mFallNotesThread.start();
                 }
+                mFallNotesState = FallNotesState.RUNNING;
 
-                if (mFallNotesState == FallNotesState.START) {
-                    if(!mFallNotesThread.isAlive()) {
-                        mFallNotesThread.start();
-                    }
-                    mFallNotesState = FallNotesState.RUNNING;
-
-                }
             }
         }, 1000);
         return this;
@@ -183,7 +179,7 @@ public class MusicAnimationView extends View {
              TO INITIATE myImageList WITH SOME VALUES IF NONE WAS PROVIDED
              */
             if(myImageList==null){
-                myImageList = new int[]{R.drawable.note1, R.drawable.note2};
+                myImageList = new int[]{R.drawable.music_8, R.drawable.music_not9};
                 images = new Drawable[myImageList.length];
 
                 for(int i=0;i<myImageList.length;i++){

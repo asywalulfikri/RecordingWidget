@@ -18,7 +18,7 @@
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
             android:layout_width="match_parent"
-            android:layout_height="130dp"
+            android:layout_height="100dp"
             app:expandedTitleMarginStart="22dp"
             app:contentScrim="@color/colorBackground"
             app:statusBarScrim="@color/colorBackground"
@@ -93,7 +93,7 @@
         android:gravity="center"
         app:behavior_hideable="true"
         app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
-        android:background="@color/colorBackground">
+        android:background="#FFF9AA2D">
         <LinearLayout
             android:id="@+id/llRename"
             android:layout_weight="1"
@@ -111,7 +111,9 @@
                 android:id="@+id/tvRename"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/colorDisabled"
+                android:fontFamily="@font/rimouski"
+                android:textColor="@color/white"
+                android:textSize="18sp"
                 android:text="Rename"/>
         </LinearLayout>
 
@@ -130,9 +132,11 @@
                 app:srcCompat="@drawable/ic_delete_disabled2"/>
             <TextView
                 android:id="@+id/tvDelete"
+                android:textSize="18sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/colorDisabled"
+                android:fontFamily="@font/rimouski"
+                android:textColor="@color/white"
                 android:text="Delete"/>
         </LinearLayout>
     </LinearLayout>

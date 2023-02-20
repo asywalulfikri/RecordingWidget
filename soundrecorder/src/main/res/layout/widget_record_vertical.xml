@@ -8,7 +8,7 @@
     app:cardCornerRadius="30dp">
 
     <LinearLayout
-        android:background="#656565"
+        android:background="#FFF9AA"
         android:id="@+id/linearLayout"
         android:layout_width="60dp"
         android:layout_height="match_parent"
@@ -113,7 +113,7 @@
             android:textSize="10sp"
             android:fontFamily="@font/intercom_roboto_medium"
             android:layout_marginBottom="5dp"
-            android:textColor="#FFFFFF"
+            android:textColor="@color/black_de"
             android:text="00:00.0"/>
 
         <ImageView
