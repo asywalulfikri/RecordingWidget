@@ -1,7 +1,6 @@
 package sound.recorder.widget.ui.bottomSheet
 
 import android.content.SharedPreferences
-import android.media.ToneGenerator
 import android.os.Build
 import android.os.Bundle
 import android.view.*
@@ -13,25 +12,11 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import kotlinx.android.synthetic.main.bottom_sheet_setting.*
 import sound.recorder.widget.RecordingSDK
 import sound.recorder.widget.databinding.BottomSheetSettingBinding
-import sound.recorder.widget.model.Song
 import sound.recorder.widget.util.Constant
 import sound.recorder.widget.util.DataSession
 
 
-internal class BottomSheetSetting() : BottomSheetDialogFragment(),SharedPreferences.OnSharedPreferenceChangeListener {
-
-
-    //Load Song
-    private var listTitleSong: ArrayList<String>? = null
-    private var listLocationSong: ArrayList<String>? = null
-    private var adapter: ArrayAdapter<String>? = null
-
-
-    // Step 1 - This interface defines the type of messages I want to communicate to my owner
-    interface OnClickListener {
-        fun onPlaySong(filePath: String)
-        fun onStopSong()
-    }
+internal class BottomSheetSetting : BottomSheetDialogFragment(),SharedPreferences.OnSharedPreferenceChangeListener {
 
     private lateinit var binding : BottomSheetSettingBinding
     private var sharedPreferences : SharedPreferences? =null
@@ -48,7 +33,6 @@ internal class BottomSheetSetting() : BottomSheetDialogFragment(),SharedPreferen
             dialog?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
         }
 
-        //dialog?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
 
         sharedPreferences = DataSession(requireContext()).getShared()
         sharedPreferences?.registerOnSharedPreferenceChangeListener(this)
@@ -105,8 +89,10 @@ internal class BottomSheetSetting() : BottomSheetDialogFragment(),SharedPreferen
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
         if(key== Constant.keyShared.backgroundColor){
-            sharedPreferences?.let { it?.getInt(Constant.keyShared.backgroundColor,-1)
-                ?.let { it1 -> binding.btnColor.setBackgroundColor(it1) } }
+            sharedPreferences?.let {
+                it.getInt(Constant.keyShared.backgroundColor,-1)
+                    .let { it1 -> binding.btnColor.setBackgroundColor(it1) }
+            }
         }
 
     }

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="sound.recorder.widget">
 
    <!-- <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />-->
@@ -10,7 +11,9 @@
     <application
         android:allowBackup="false"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:usesCleartextTraffic="true"
+        android:theme="@style/AppTheme"
+        tools:ignore="UnusedAttribute">
 
         <activity android:name=".ui.activity.PlayerActivityWidget"
             android:screenOrientation="landscape"/>
@@ -18,7 +21,7 @@
         <activity android:name=".ui.activity.ListingActivity"
             android:screenOrientation="landscape"/>
 
-        <activity android:name=".ui.ListingActivityWidgetNew"
+        <activity android:name=".ui.activity.ListingActivityWidgetNew"
             android:screenOrientation="landscape"/>
 
         <service

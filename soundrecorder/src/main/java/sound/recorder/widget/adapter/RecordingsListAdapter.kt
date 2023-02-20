@@ -40,6 +40,7 @@ class RecordingsListAdapter(private var onItemClick : (recording: Recording) -> 
         return recordingsList.size
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     fun setData(recordings: List<Recording>) {
         recordingsList = recordings
         notifyDataSetChanged()

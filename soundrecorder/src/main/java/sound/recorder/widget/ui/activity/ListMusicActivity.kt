@@ -1,4 +1,4 @@
-package sound.recorder.widget.ui
+package sound.recorder.widget.ui.activity
 
 import android.annotation.SuppressLint
 import android.content.Intent
@@ -22,9 +22,7 @@ import sound.recorder.widget.base.BaseActivityWidget
 import sound.recorder.widget.databinding.ActivityListingNewBinding
 import sound.recorder.widget.db.AppDatabase
 import sound.recorder.widget.db.AudioRecord
-import sound.recorder.widget.ui.activity.PlayerActivityWidget
 import java.io.File
-import java.lang.Runnable
 
 
 internal class ListingActivityWidgetNew : BaseActivityWidget(), AudioRecorderAdapter.OnItemClickListener {
@@ -113,9 +111,9 @@ internal class ListingActivityWidgetNew : BaseActivityWidget(), AudioRecorderAda
                 if(audioRecords.isEmpty()){
                     fetchAll()
                 }else{
-                    runOnUiThread(Runnable {
+                    runOnUiThread {
                         audioRecorderAdapter.setData(audioRecords)
-                    })
+                    }
                 }
             }
         }
@@ -160,14 +158,6 @@ internal class ListingActivityWidgetNew : BaseActivityWidget(), AudioRecorderAda
     }
 
     private fun fetchAll(){
-       /* GlobalScope.launch {
-            audioRecords = db.audioRecordDAO().getAll()
-            runOnUiThread{
-                adapter.setData(audioRecords)
-            }
-           // adapter.setData(audioRecords)
-        }*/
-
         MainScope().launch {
             withContext(Dispatchers.Default) {
                 audioRecords = db.audioRecordDAO().getAll()

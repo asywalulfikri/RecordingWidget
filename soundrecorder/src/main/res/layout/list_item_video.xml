@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:background="#FFE09115"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cv_video"
-        android:layout_marginTop="5dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginBottom="5dp"
+        android:layout_margin="8dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -18,10 +17,24 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <ImageView
-                android:id="@+id/iv_thuumnail"
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="250dp" />
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:scaleType="centerCrop"
+                    android:id="@+id/iv_thumbnail"
+                    android:layout_width="match_parent"
+                    android:layout_height="150dp" />
+
+                <ImageView
+                    android:id="@+id/iv_play"
+                    android:layout_centerInParent="true"
+                    app:srcCompat="@drawable/ic_play"
+                    android:layout_width="50dp"
+                    android:layout_height="55dp" />
+
+            </RelativeLayout>
 
             <LinearLayout
                 android:layout_margin="10dp"
@@ -32,25 +45,28 @@
                 <TextView
                     android:textStyle="bold"
                     android:id="@+id/tv_title"
-                    android:text="TITLE"
+                    android:text="Cover Gendang Koplo"
+                    android:fontFamily="@font/rimouski"
+                    android:textSize="15sp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
 
                 <TextView
                     android:id="@+id/tv_description"
-                    android:text="TITLE"
+                    android:text="Mari Belajar Cover Gendang"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
 
                 <TextView
                     android:id="@+id/tv_url"
                     android:text="TITLE"
+                    android:visibility="gone"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
 
                 <TextView
                     android:id="@+id/tv_datepublish"
-                    android:text="TITLE"
+                    android:text="17 Februari 2019"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
 

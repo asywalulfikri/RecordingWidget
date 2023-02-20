@@ -1,5 +1,6 @@
 package sound.recorder.widget.adapter
 
+import android.annotation.SuppressLint
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -53,6 +54,7 @@ internal class AudioRecorderAdapter(private var audioRecords: List<AudioRecord>,
         return audioRecords.size
     }
 
+    @SuppressLint("SimpleDateFormat", "SetTextI18n")
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         if(position != RecyclerView.NO_POSITION){
             val audioRecord = audioRecords[position]
@@ -78,11 +80,13 @@ internal class AudioRecorderAdapter(private var audioRecords: List<AudioRecord>,
 
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     fun setData(audioRecords: List<AudioRecord>){
         this.audioRecords = audioRecords
         notifyDataSetChanged()
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     fun setEditMode(mode: Boolean){
         editMode = mode
         notifyDataSetChanged()
@@ -91,8 +95,5 @@ internal class AudioRecorderAdapter(private var audioRecords: List<AudioRecord>,
     fun isEditMode():Boolean{
         return editMode
     }
-
-
-
 
 }

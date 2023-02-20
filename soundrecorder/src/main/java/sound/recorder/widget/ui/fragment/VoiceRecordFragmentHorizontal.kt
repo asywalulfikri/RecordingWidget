@@ -38,7 +38,7 @@ import sound.recorder.widget.db.AppDatabase
 import sound.recorder.widget.db.AudioRecord
 import sound.recorder.widget.service.BackgroundService
 import sound.recorder.widget.tools.Timer
-import sound.recorder.widget.ui.ListingActivityWidgetNew
+import sound.recorder.widget.ui.activity.ListingActivityWidgetNew
 import sound.recorder.widget.ui.bottomSheet.BottomSheet
 import sound.recorder.widget.ui.bottomSheet.BottomSheetListSong
 import sound.recorder.widget.ui.bottomSheet.BottomSheetSetting

@@ -7,12 +7,14 @@ import android.view.MenuItem
 import android.view.View
 import android.view.WindowManager
 import com.google.android.gms.ads.MobileAds
+import com.google.firebase.firestore.FirebaseFirestore
 import recording.host.databinding.ActivityMainBinding
 import sound.recorder.widget.RecordWidgetH
 import sound.recorder.widget.RecordWidgetV
 import sound.recorder.widget.RecordingSDK
 import sound.recorder.widget.base.BaseActivityWidget
 import sound.recorder.widget.model.Song
+import sound.recorder.widget.ui.bottomSheet.BottomSheetVideo
 import sound.recorder.widget.util.Constant
 import sound.recorder.widget.util.DataSession
 
@@ -38,12 +40,17 @@ class MainActivityWidget : BaseActivityWidget(),SharedPreferences.OnSharedPrefer
 
     private val song : ArrayList<Song> = ArrayList()
     private var sharedPreferences : SharedPreferences? =null
+    private var firebaseFirestore: FirebaseFirestore? = null
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         setContentView(binding.root)
+
+        firebaseFirestore = FirebaseFirestore.getInstance()
+
 
         sharedPreferences = DataSession(this).getShared()
         sharedPreferences?.registerOnSharedPreferenceChangeListener(this)
@@ -78,6 +85,8 @@ class MainActivityWidget : BaseActivityWidget(),SharedPreferences.OnSharedPrefer
         recordWidgetV?.loadData()
 
         binding.btnKlik.setOnClickListener {
+            val bottomSheet = BottomSheetVideo(firebaseFirestore)
+            bottomSheet.show(this.supportFragmentManager, "")
             //RecordingSDK.showDialogColorPicker(this,"background")
            // val intent = Intent(this,ListVideoActivity::class.java)
             //startActivity(intent)
