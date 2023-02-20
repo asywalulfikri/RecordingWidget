@@ -46,6 +46,10 @@ open class BottomSheetVideo(var firestore: FirebaseFirestore?) : BaseBottomSheet
             dialog?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
         }
 
+        binding.ivClose.setOnClickListener {
+            dismiss()
+        }
+
 
         setupRecyclerView()
         load(false)
