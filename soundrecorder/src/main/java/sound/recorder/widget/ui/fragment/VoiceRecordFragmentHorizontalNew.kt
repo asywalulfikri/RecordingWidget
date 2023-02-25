@@ -310,6 +310,7 @@ internal class VoiceRecorderFragmentWidgetHorizontalNew : BaseFragmentWidget(), 
         binding.recordText.visibility = View.VISIBLE
         binding.recordText.text = "Continue"
         binding.recordBtn.setBackgroundResource(R.drawable.ic_record_button)
+        binding.recordBtn.setImageResource(0)
         timer.pause()
     }
 
