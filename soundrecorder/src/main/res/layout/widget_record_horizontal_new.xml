@@ -1,19 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    app:cardCornerRadius="30dp">
+    android:layout_width="match_parent"
+    android:background="@drawable/bg_border"
+    android:layout_height="wrap_content">
 
     <LinearLayout
         android:orientation="horizontal"
-        android:background="#656565"
         android:id="@+id/linearLayout"
-        android:layout_width="wrap_content"
-        android:layout_height="60dp"
-        android:padding="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="65dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:gravity="center"
@@ -49,6 +47,15 @@
                 android:contentDescription="@string/app_names"
                 tools:ignore="DuplicateSpeakableTextCheck" />
 
+            <TextView
+                android:id="@+id/tvMySong"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:textColor="#FFFFFF"
+                android:textSize="8sp"
+                tools:ignore="HardcodedText,SmallSp" />
+
         </RelativeLayout>
 
         <ImageView
@@ -59,7 +66,7 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:contentDescription="@string/app_names"
-            app:srcCompat="@drawable/ic_delete_disabled"/>
+            android:src="@drawable/ic_delete_disabled"/>
 
         <RelativeLayout
             android:layout_width="wrap_content"
@@ -67,11 +74,11 @@
 
             <androidx.appcompat.widget.AppCompatImageButton
                 android:id="@+id/recordBtn"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="10dp"
-                android:background="@drawable/ic_record"
+                android:background="@drawable/ic_record_button"
                 android:contentDescription="@string/app_names"
                 tools:ignore="DuplicateSpeakableTextCheck" />
 
@@ -83,8 +90,9 @@
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="10dp"
                 android:text="Record"
-                android:textColor="#FFFFFF"
-                android:textSize="9sp"
+                android:textColor="#000000"
+                android:textSize="8sp"
+                android:textStyle="bold"
                 tools:ignore="HardcodedText,SmallSp" />
 
         </RelativeLayout>
@@ -94,15 +102,23 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:contentDescription="@string/app_names"
-            app:srcCompat="@drawable/ic_menu" />
+            android:src="@drawable/ic_menu" />
 
         <ImageView
             android:id="@+id/doneBtn"
             android:visibility="gone"
-            android:layout_marginStart="5dp"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            app:srcCompat="@drawable/ic_done"/>
+            android:src="@drawable/ic_done"/>
+
+        <ImageView
+            android:id="@+id/settingBtn"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/ic_baseline_settings_24"/>
+
 
         <TextView
             android:id="@+id/timerView"
@@ -116,20 +132,11 @@
 
         <sound.recorder.widget.tools.RecorderWaveformView
             android:layout_marginStart="10dp"
-            android:visibility="gone"
             android:id="@+id/playerView"
             android:layout_width="match_parent"
             android:layout_height="50dp" />
 
 
-        <ImageView
-            android:id="@+id/settingBtn"
-            android:layout_marginEnd="10dp"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:src="@drawable/ic_baseline_settings_24"/>
-
-
     </LinearLayout>
 
-</androidx.cardview.widget.CardView>
+</RelativeLayout>

@@ -8,6 +8,7 @@
         <entry key="app/src/main/res/layout/content_main.xml" value="0.259375" />
         <entry key="app/src/main/res/layout/fragment_first.xml" value="0.259375" />
         <entry key="app/src/main/res/layout/fragment_second.xml" value="0.259375" />
+        <entry key="soundrecorder/src/main/res/drawable/bg_border.xml" value="0.125" />
         <entry key="soundrecorder/src/main/res/drawable/btn_record.xml" value="0.194" />
         <entry key="soundrecorder/src/main/res/drawable/button_border.xml" value="0.194" />
         <entry key="soundrecorder/src/main/res/drawable/ic_back.xml" value="0.194" />
@@ -60,6 +61,7 @@
         <entry key="soundrecorder/src/main/res/layout/itemview_layout.xml" value="0.1" />
         <entry key="soundrecorder/src/main/res/layout/layout_empty.xml" value="0.259375" />
         <entry key="soundrecorder/src/main/res/layout/layout_empty_horizontal.xml" value="0.259375" />
+        <entry key="soundrecorder/src/main/res/layout/layout_empty_horizontal_new.xml" value="0.253125" />
         <entry key="soundrecorder/src/main/res/layout/layout_empty_vertical.xml" value="0.259375" />
         <entry key="soundrecorder/src/main/res/layout/layout_setting.xml" value="0.259375" />
         <entry key="soundrecorder/src/main/res/layout/list_item_video.xml" value="0.259375" />
@@ -68,6 +70,7 @@
         <entry key="soundrecorder/src/main/res/layout/palette_item.xml" value="0.259375" />
         <entry key="soundrecorder/src/main/res/layout/row_song_view.xml" value="0.259375" />
         <entry key="soundrecorder/src/main/res/layout/widget_record_horizontal.xml" value="0.259375" />
+        <entry key="soundrecorder/src/main/res/layout/widget_record_horizontal_new.xml" value="0.25" />
         <entry key="soundrecorder/src/main/res/layout/widget_record_vertical.xml" value="0.335" />
       </map>
     </option>

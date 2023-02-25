@@ -10,6 +10,7 @@ import com.google.android.gms.ads.MobileAds
 import com.google.firebase.firestore.FirebaseFirestore
 import recording.host.databinding.ActivityMainBinding
 import sound.recorder.widget.RecordWidgetH
+import sound.recorder.widget.RecordWidgetHN
 import sound.recorder.widget.RecordWidgetV
 import sound.recorder.widget.RecordingSDK
 import sound.recorder.widget.base.BaseActivityWidget
@@ -22,7 +23,7 @@ import sound.recorder.widget.util.DataSession
 class MainActivityWidget : BaseActivityWidget(),SharedPreferences.OnSharedPreferenceChangeListener{
 
 
-    private var recordWidgetH : RecordWidgetH? =null
+    private var recordWidgetH : RecordWidgetHN? =null
     private var recordWidgetV : RecordWidgetV? =null
 
     private lateinit var binding: ActivityMainBinding
@@ -78,8 +79,8 @@ class MainActivityWidget : BaseActivityWidget(),SharedPreferences.OnSharedPrefer
 
         setSupportActionBar(binding.toolbar)
 
-       /* recordWidgetH = RecordWidgetH(this)
-        recordWidgetH?.loadData()*/
+        recordWidgetH = RecordWidgetHN(this)
+        recordWidgetH?.loadData()
 
         recordWidgetV = RecordWidgetV(this)
         recordWidgetV?.loadData()
