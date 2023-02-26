@@ -48,11 +48,11 @@ internal class RecorderWaveformView: View {
     private fun init(attrs: AttributeSet?){
         amplitudes = ArrayList()
         paintRead = Paint() //Paint.ANTI_ALIAS_FLAG
-        paintRead.color = Color.rgb(244, 81, 30) // orange
+        paintRead.color = Color.rgb(255, 127, 0) // orange
 
         // get screen width
         val displayMetrics = resources.displayMetrics
-        sw = displayMetrics.widthPixels
+        sw = displayMetrics.widthPixels/3
 
         maxSpikes = (sw/(w+d)).toInt()
         spikes = ArrayList()

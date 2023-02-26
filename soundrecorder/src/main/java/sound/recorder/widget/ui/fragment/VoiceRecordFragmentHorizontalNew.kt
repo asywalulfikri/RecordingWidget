@@ -316,6 +316,7 @@ internal class VoiceRecorderFragmentWidgetHorizontalNew : BaseFragmentWidget(), 
 
     private fun showLayoutStopRecord(){
         binding.recordBtn.setBackgroundResource(R.drawable.ic_record_button)
+        binding.recordBtn.setImageResource(0)
         binding.recordText.text = "Record"
         binding.recordText.visibility = View.VISIBLE
         binding.listBtn.visibility = View.VISIBLE
@@ -493,6 +494,7 @@ internal class VoiceRecorderFragmentWidgetHorizontalNew : BaseFragmentWidget(), 
         Toast.makeText(activity, "Audio record deleted", Toast.LENGTH_SHORT).show()
         binding.recordText.text = "Record"
         binding.recordText.visibility = View.VISIBLE
+        binding.recordBtn.setImageResource(0)
 
         stopRecordingAudio()
     }
@@ -518,6 +520,7 @@ internal class VoiceRecorderFragmentWidgetHorizontalNew : BaseFragmentWidget(), 
         Toast.makeText(activity,"Successfully saved the recording",Toast.LENGTH_LONG).show()
         binding.recordText.visibility = View.VISIBLE
         binding.recordText.text = "Record"
+        binding.recordBtn.setImageResource(0)
         showInterstitial()
 
     }

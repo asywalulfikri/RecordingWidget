@@ -132,9 +132,10 @@
 
         <sound.recorder.widget.tools.RecorderWaveformView
             android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
             android:id="@+id/playerView"
             android:layout_width="match_parent"
-            android:layout_height="50dp" />
+            android:layout_height="match_parent" />
 
 
     </LinearLayout>

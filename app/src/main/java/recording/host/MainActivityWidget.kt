@@ -23,7 +23,8 @@ import sound.recorder.widget.util.DataSession
 class MainActivityWidget : BaseActivityWidget(),SharedPreferences.OnSharedPreferenceChangeListener{
 
 
-    private var recordWidgetH : RecordWidgetHN? =null
+    private var recordWidgetHN : RecordWidgetHN? =null
+    private var recordWidgetH : RecordWidgetH? =null
     private var recordWidgetV : RecordWidgetV? =null
 
     private lateinit var binding: ActivityMainBinding
@@ -79,7 +80,11 @@ class MainActivityWidget : BaseActivityWidget(),SharedPreferences.OnSharedPrefer
 
         setSupportActionBar(binding.toolbar)
 
-        recordWidgetH = RecordWidgetHN(this)
+        recordWidgetHN = RecordWidgetHN(this)
+        recordWidgetHN?.loadData()
+
+
+        recordWidgetH = RecordWidgetH(this)
         recordWidgetH?.loadData()
 
         recordWidgetV = RecordWidgetV(this)
