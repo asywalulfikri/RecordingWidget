@@ -37,7 +37,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
 
-            <sound.recorder.widget.RecordWidgetV
+            <sound.recorder.widget.RecordWidgetVN
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
                 android:layout_marginStart="10dp"
@@ -53,7 +53,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
 
-            <sound.recorder.widget.RecordWidgetHN
+            <sound.recorder.widget.RecordWidgetHB
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
                 android:layout_marginStart="10dp"

@@ -9,10 +9,7 @@ import android.view.WindowManager
 import com.google.android.gms.ads.MobileAds
 import com.google.firebase.firestore.FirebaseFirestore
 import recording.host.databinding.ActivityMainBinding
-import sound.recorder.widget.RecordWidgetH
-import sound.recorder.widget.RecordWidgetHN
-import sound.recorder.widget.RecordWidgetV
-import sound.recorder.widget.RecordingSDK
+import sound.recorder.widget.*
 import sound.recorder.widget.base.BaseActivityWidget
 import sound.recorder.widget.model.Song
 import sound.recorder.widget.ui.bottomSheet.BottomSheetVideo
@@ -23,9 +20,9 @@ import sound.recorder.widget.util.DataSession
 class MainActivityWidget : BaseActivityWidget(),SharedPreferences.OnSharedPreferenceChangeListener{
 
 
-    private var recordWidgetHN : RecordWidgetHN? =null
+    private var recordWidgetHN : RecordWidgetHB? =null
     private var recordWidgetH : RecordWidgetH? =null
-    private var recordWidgetV : RecordWidgetV? =null
+    private var recordWidgetVN : RecordWidgetVN? =null
 
     private lateinit var binding: ActivityMainBinding
     private val listTitle = arrayOf(
@@ -80,15 +77,15 @@ class MainActivityWidget : BaseActivityWidget(),SharedPreferences.OnSharedPrefer
 
         setSupportActionBar(binding.toolbar)
 
-        recordWidgetHN = RecordWidgetHN(this)
+        recordWidgetHN = RecordWidgetHB(this)
         recordWidgetHN?.loadData()
 
 
         recordWidgetH = RecordWidgetH(this)
         recordWidgetH?.loadData()
 
-        recordWidgetV = RecordWidgetV(this)
-        recordWidgetV?.loadData()
+        recordWidgetVN = RecordWidgetVN(this)
+        recordWidgetVN?.loadData()
 
         binding.btnKlik.setOnClickListener {
             val bottomSheet = BottomSheetVideo(firebaseFirestore)

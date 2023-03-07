@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:background="@drawable/bg_border_transparent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="65dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:gravity="center"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <RelativeLayout
+            android:visibility="gone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/colorBtn"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:background="@drawable/ic_note"
+                android:contentDescription="@string/app_names"
+                tools:ignore="DuplicateSpeakableTextCheck" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_marginStart="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/songBtn"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="@drawable/ic_music_note_2162469"
+                android:contentDescription="@string/app_names"
+                tools:ignore="DuplicateSpeakableTextCheck" />
+
+            <TextView
+                android:id="@+id/tvMySong"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:textColor="#FFFFFF"
+                android:textSize="8sp"
+                tools:ignore="HardcodedText,SmallSp" />
+
+        </RelativeLayout>
+
+        <ImageView
+            android:visibility="gone"
+            android:layout_marginStart="6dp"
+            android:id="@+id/deleteBtn"
+            android:clickable="false"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:contentDescription="@string/app_names"
+            android:src="@drawable/ic_cancel"/>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/recordBtn"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:background="@drawable/ic_record_black"
+                android:contentDescription="@string/app_names"
+                tools:ignore="DuplicateSpeakableTextCheck" />
+
+            <TextView
+                android:id="@+id/recordText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:text="Record"
+                android:textColor="#FFFFFF"
+                android:textSize="8sp"
+                android:textStyle="bold"
+                tools:ignore="HardcodedText,SmallSp" />
+
+        </RelativeLayout>
+
+        <ImageView
+            android:id="@+id/listBtn"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:contentDescription="@string/app_names"
+            android:src="@drawable/ic_list_2162474" />
+
+        <ImageView
+            android:id="@+id/doneBtn"
+            android:visibility="gone"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/ic_check"/>
+
+        <ImageView
+            android:id="@+id/settingBtn"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/ic_setting_2162457"/>
+
+
+        <TextView
+            android:id="@+id/timerView"
+            android:layout_marginStart="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:layout_marginEnd="10dp"
+            android:textColor="#000000"
+            android:text="00:00.0"/>
+
+        <sound.recorder.widget.tools.RecorderWaveformView
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:id="@+id/playerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+
+    </LinearLayout>
+
+</RelativeLayout>
