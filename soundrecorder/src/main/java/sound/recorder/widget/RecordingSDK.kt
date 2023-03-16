@@ -17,6 +17,10 @@ object RecordingSDK {
         DataSession(ctx).addInitiate(true,admobId,bannerId,interstitialId)
         DataSession(ctx).initiateSong(false)
     }
+
+    fun initSdkColor(context: Context,colorWidget : Int,colorRunningText: Int) {
+        DataSession(context).addColor(colorWidget,colorRunningText)
+    }
     fun initSdk(context: Context,admobId: String, bannerId: String, interstitialId: String): RecordingSDK {
 
         initSdkRecording(

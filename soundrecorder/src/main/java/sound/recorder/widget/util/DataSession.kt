@@ -2,6 +2,7 @@ package sound.recorder.widget.util
 
 import android.content.Context
 import android.content.SharedPreferences
+import sound.recorder.widget.R
 import sound.recorder.widget.model.Song
 
 open class DataSession(private val mContext: Context) {
@@ -42,6 +43,25 @@ open class DataSession(private val mContext: Context) {
         editor.putString(bannerIdName, bannerId)
         editor.putString(interstitialIdName, interstitialId)
         editor.apply()
+    }
+
+    fun addColor(colorWidget : Int, colorRunningText: Int){
+        val editor = sharedPref.edit()
+        if(colorWidget!=0){
+            editor.putInt(Constant.keyShared.colorWidget, colorWidget)
+        }
+        if(colorRunningText!=0){
+            editor.putInt(Constant.keyShared.colorRunningText, colorRunningText)
+        }
+        editor.apply()
+    }
+
+    fun getColorWidget(): Int{
+        return sharedPref.getInt(Constant.keyShared.colorWidget,R.color.color7)
+    }
+
+    fun getColorRunningText(): Int{
+        return sharedPref.getInt(Constant.keyShared.colorRunningText, R.color.white)
     }
 
     fun isContainSong(): Boolean {

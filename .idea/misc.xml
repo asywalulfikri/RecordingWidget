@@ -53,6 +53,7 @@
         <entry key="soundrecorder/src/main/res/layout/activity_listing_new.xml" value="0.165" />
         <entry key="soundrecorder/src/main/res/layout/activity_player.xml" value="0.259375" />
         <entry key="soundrecorder/src/main/res/layout/bottom_sheet.xml" value="0.259375" />
+        <entry key="soundrecorder/src/main/res/layout/bottom_sheet_notes.xml" value="0.253125" />
         <entry key="soundrecorder/src/main/res/layout/bottom_sheet_setting.xml" value="0.1" />
         <entry key="soundrecorder/src/main/res/layout/bottom_sheet_song.xml" value="0.259375" />
         <entry key="soundrecorder/src/main/res/layout/color_palette_layout.xml" value="0.259375" />
@@ -73,6 +74,7 @@
         <entry key="soundrecorder/src/main/res/layout/palette_item.xml" value="0.259375" />
         <entry key="soundrecorder/src/main/res/layout/row_song_view.xml" value="0.259375" />
         <entry key="soundrecorder/src/main/res/layout/widget_record_horizontal.xml" value="0.259375" />
+        <entry key="soundrecorder/src/main/res/layout/widget_record_horizontal_black.xml" value="0.253125" />
         <entry key="soundrecorder/src/main/res/layout/widget_record_horizontal_new.xml" value="0.25" />
         <entry key="soundrecorder/src/main/res/layout/widget_record_horizontal_transparent.xml" value="0.253125" />
         <entry key="soundrecorder/src/main/res/layout/widget_record_vertical.xml" value="0.335" />
@@ -86,7 +88,7 @@
       <item index="1" class="java.lang.String" itemvalue="org.greenrobot.eventbus.Subscribe" />
     </list>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" project-jdk-name="1.8" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">

@@ -8,6 +8,8 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
+import android.content.res.ColorStateList
+import android.graphics.PorterDuff
 import android.media.MediaPlayer
 import android.media.MediaRecorder
 import android.media.ToneGenerator
@@ -142,6 +144,15 @@ internal class VoiceRecorderFragmentWidgetHorizontalNew : BaseFragmentWidget(), 
             binding.settingBtn.setOnClickListener {
                 val bottomSheet = BottomSheetSetting()
                 bottomSheet.show(requireActivity().supportFragmentManager, LOG_TAG)
+            }
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+
+                val color = DataSession(requireContext()).getColorWidget()
+
+                //binding.bgWidget.background.setColorFilter(color, PorterDuff.Mode.SRC_OVER)
+                binding.bgWidget.setBackgroundColor(color)
+               // binding.bgWidget.backgroundTintList = (ColorStateList.valueOf(DataSession(requireContext()).getColorWidget()))
             }
         }
     }
@@ -388,11 +399,6 @@ internal class VoiceRecorderFragmentWidgetHorizontalNew : BaseFragmentWidget(), 
                 }, refreshRate
             )
         }
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        //screenRecorder?.onActivityResult(requestCode, resultCode, data,requireContext())
     }
 
 

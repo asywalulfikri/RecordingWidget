@@ -20,7 +20,8 @@ import sound.recorder.widget.util.DataSession
 class MainActivityWidget : BaseActivityWidget(),SharedPreferences.OnSharedPreferenceChangeListener{
 
 
-    private var recordWidgetHN : RecordWidgetHB? =null
+    private var recordWidgetHN : RecordWidgetHN? =null
+    private var recordWidgetHB : RecordWidgetHB? =null
     private var recordWidgetH : RecordWidgetH? =null
     private var recordWidgetVN : RecordWidgetVN? =null
 
@@ -65,6 +66,7 @@ class MainActivityWidget : BaseActivityWidget(),SharedPreferences.OnSharedPrefer
         MobileAds.initialize(this)
 
         RecordingSDK.initSdk(this,"","ca-app-pub-3940256099942544/6300978111","ca-app-pub-3940256099942544/1033173712").run()
+        RecordingSDK.initSdkColor(this, sound.recorder.widget.R.color.color7,R.color.white)
 
         for (i in listTitle.indices) {
             val itemSong = Song()
@@ -77,8 +79,11 @@ class MainActivityWidget : BaseActivityWidget(),SharedPreferences.OnSharedPrefer
 
         setSupportActionBar(binding.toolbar)
 
-        recordWidgetHN = RecordWidgetHB(this)
+        recordWidgetHN = RecordWidgetHN(this)
         recordWidgetHN?.loadData()
+
+        recordWidgetHB = RecordWidgetHB(this)
+        recordWidgetHB?.loadData()
 
 
         recordWidgetH = RecordWidgetH(this)
