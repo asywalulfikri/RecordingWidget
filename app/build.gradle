@@ -50,7 +50,7 @@ dependencies {
 
     implementation 'com.google.firebase:firebase-crashlytics-ktx:18.3.5'
     implementation 'com.google.firebase:firebase-analytics-ktx:21.2.0'
-    implementation 'com.google.firebase:firebase-firestore:24.4.3'
+    implementation 'com.google.firebase:firebase-firestore:24.4.4'
 
     implementation project(path: ':soundrecorder')
 }
