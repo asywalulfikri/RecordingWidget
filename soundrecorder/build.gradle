@@ -75,7 +75,9 @@ dependencies {
     implementation 'androidx.room:room-runtime:2.5.1'
     kapt 'androidx.room:room-compiler:2.5.1'
     implementation 'androidx.room:room-ktx:2.5.1'
-   // implementation 'com.squareup.picasso:picasso:2.71828'
+    annotationProcessor "androidx.room:room-compiler:2.5.1"
+
+    implementation 'com.squareup.picasso:picasso:2.71828'
 
     implementation 'org.greenrobot:eventbus:3.3.1'
     implementation 'com.android.support:multidex:1.0.3'
