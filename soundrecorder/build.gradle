@@ -91,3 +91,17 @@ dependencies {
     implementation 'androidx.work:work-runtime-ktx:2.8.1'
 
 }
+
+
+project.afterEvaluate {
+    publishing {
+        publications {
+            release(MavenPublication) {
+                from components.release
+                groupId = 'recording'
+                artifactId = 'recordingSDK'
+                version = '0.0.44'
+            }
+        }
+    }
+}
