@@ -428,8 +428,8 @@ internal class VoiceRecorderFragmentWidgetHorizontal : BaseFragmentWidget(), Bot
             recorder?.apply {
                 stop()
                 release()
+                recorder = null
             }
-            recorder = null
             showLayoutStopRecord()
 
         }

@@ -430,8 +430,8 @@ internal class VoiceRecorderFragmentWidgetVerticalNew : BaseFragmentWidget(), Bo
             recorder?.apply {
                 stop()
                 release()
+                recorder = null
             }
-            recorder = null
             showLayoutStopRecord()
 
         }

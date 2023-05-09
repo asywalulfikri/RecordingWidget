@@ -436,8 +436,8 @@ internal class VoiceRecorderFragmentWidgetHorizontalNew : BaseFragmentWidget(), 
             recorder?.apply {
                 stop()
                 release()
+                recorder = null
             }
-            recorder = null
             showLayoutStopRecord()
 
         }
