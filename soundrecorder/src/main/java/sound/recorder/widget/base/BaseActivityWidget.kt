@@ -79,7 +79,7 @@ open class BaseActivityWidget : AppCompatActivity() {
     }
 
     private val requestPermissionNotification =
-        registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted -> }
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) { _ -> }
 
     fun setupInterstitial() {
         adRequest?.let {
@@ -168,6 +168,7 @@ open class BaseActivityWidget : AppCompatActivity() {
             imm?.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0)
         }
     }
+
 
     fun hideKeyboard(view: View) {
         val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager?

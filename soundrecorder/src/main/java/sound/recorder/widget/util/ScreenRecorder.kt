@@ -32,7 +32,7 @@ interface RecordingEventListener {
     fun onRecordingModeChanged(mode: ScreenRecorderMode)
 }
 
-class ScreenRecorder(private val app: Application) {
+class ScreenRecorder(app: Application) {
     var listener : RecordingEventListener? = null
 
     var mode: ScreenRecorderMode = ScreenRecorderMode.STOPPED

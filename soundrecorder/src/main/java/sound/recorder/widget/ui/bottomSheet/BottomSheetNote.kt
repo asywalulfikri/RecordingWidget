@@ -1,11 +1,9 @@
 package sound.recorder.widget.ui.bottomSheet
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Build
 import android.os.Bundle
-import android.provider.MediaStore
 import android.view.*
 import android.widget.*
 import androidx.core.view.WindowCompat
@@ -13,17 +11,9 @@ import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetBehavior.STATE_EXPANDED
-import com.google.android.material.bottomsheet.BottomSheetBehavior.STATE_HIDDEN
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.MainScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import org.greenrobot.eventbus.EventBus
-import org.greenrobot.eventbus.Subscribe
-import org.greenrobot.eventbus.ThreadMode
-import sound.recorder.widget.RecordingSDK
 import sound.recorder.widget.databinding.BottomSheetNotesBinding
 import sound.recorder.widget.model.Song
 import sound.recorder.widget.notes.DatabaseHelper
@@ -93,7 +83,7 @@ internal class BottomSheetNote(var showBtnStop: Boolean, private var listener: O
     }
 
     private fun songNote() {
-        mAdapter = NotesAdapter(activity, notesList)
+        mAdapter = NotesAdapter(notesList)
         val mLayoutManager: RecyclerView.LayoutManager = LinearLayoutManager(activity)
         binding.recyclerView.layoutManager = mLayoutManager
         binding.recyclerView.itemAnimator = DefaultItemAnimator()

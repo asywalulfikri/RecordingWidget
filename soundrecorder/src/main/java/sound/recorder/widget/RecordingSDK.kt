@@ -75,7 +75,7 @@ object RecordingSDK {
             })
             .addListenerButton(
                 "newButton"
-            ) { v, position, color -> {
+            ) { _, position, _ -> {
                 Log.d("position", "" + position)
             } }.show()
     }
