@@ -66,7 +66,6 @@ internal class BottomSheetSetting : BottomSheetDialogFragment(),SharedPreference
         setupSeekBar()
         binding.seekBar.progress = DataSession(requireContext()).getVolume()
 
-
         return binding.root
 
     }
@@ -93,7 +92,6 @@ internal class BottomSheetSetting : BottomSheetDialogFragment(),SharedPreference
                     .let { it1 -> binding.btnColor.setBackgroundColor(it1) }
             }
         }
-
     }
 
     override fun onResume() {

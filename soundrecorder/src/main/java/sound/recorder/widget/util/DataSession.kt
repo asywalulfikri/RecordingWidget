@@ -2,6 +2,7 @@ package sound.recorder.widget.util
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.util.Log
 import sound.recorder.widget.R
 import sound.recorder.widget.model.Song
 
@@ -32,6 +33,28 @@ open class DataSession(private val mContext: Context) {
         return sharedPref.getBoolean(Constant.keyShared.animation, false)
     }
 
+    fun getVersionCode(): Int{
+        return sharedPref.getInt("version_code", 0)
+    }
+
+    fun getRawPath(): Int?{
+        return sharedPref.getInt("rawPath",0)
+    }
+
+    fun getSplashScreenColor(): String?{
+        return sharedPref.getString("splashScreenColor","")
+    }
+
+    fun getTitleColor(): String?{
+        return sharedPref.getString("titleColor","")
+    }
+
+    fun getJsonName(): String?{
+        return sharedPref.getString("jsonName","")
+    }
+
+
+
     fun getVolume(): Int{
         return sharedPref.getInt(Constant.keyShared.volume, 100)
     }
@@ -42,6 +65,29 @@ open class DataSession(private val mContext: Context) {
         editor.putString(admobIdName, admobId)
         editor.putString(bannerIdName, bannerId)
         editor.putString(interstitialIdName, interstitialId)
+        editor.apply()
+    }
+
+    fun setInfoApp(versionCode : Int, jsonName : String,rawPath : Int,splashScreenColor : String, titleColor : String){
+        val editor = sharedPref.edit()
+        Log.d("yamete11",jsonName)
+        if(versionCode!=0){
+            editor.putInt("versionCode", versionCode)
+        }
+        if(rawPath!=0){
+            editor.putInt("rawPath", rawPath)
+        }
+        if(splashScreenColor.isNotEmpty()){
+            editor.putString("splashScreenColor", splashScreenColor)
+        }
+        if(titleColor.isNotEmpty()){
+            editor.putString("titleColor", titleColor)
+        }
+
+        if(jsonName.isNotEmpty()){
+            editor.putString("jsonName",jsonName)
+        }
+        Log.d("yamete",jsonName)
         editor.apply()
     }
 

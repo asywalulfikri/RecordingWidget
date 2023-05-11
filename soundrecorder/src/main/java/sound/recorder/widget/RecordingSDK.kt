@@ -1,8 +1,12 @@
 package sound.recorder.widget
 
 import android.app.Activity
+import android.content.ActivityNotFoundException
 import android.content.Context
+import android.content.Intent
 import android.util.Log
+import android.widget.Toast
+import androidx.core.content.ContextCompat.startActivity
 import org.greenrobot.eventbus.EventBus
 import sound.recorder.widget.colorpicker.ColorPicker
 import sound.recorder.widget.colorpicker.ColorPicker.OnChooseColorListener
@@ -40,8 +44,34 @@ object RecordingSDK {
         EventBus.getDefault().postSticky(listSong)
     }
 
+    fun addInfo(context: Context,versionCode : Int, jsonName : String,rawPath : Int,splashScreenColor : String, titleColor : String){
+        Log.d("yamete22",jsonName)
+        DataSession(context).setInfoApp(versionCode,jsonName,rawPath,splashScreenColor,titleColor)
+    }
+
     fun isHaveSong(context: Context): Boolean{
         return DataSession(context).isContainSong()
+    }
+
+
+    fun openEmail(context: Context,appName : String,info : String){
+        val emailIntent = Intent(Intent.ACTION_SEND)
+        emailIntent.type = "text/plain"
+        emailIntent.putExtra(Intent.EXTRA_EMAIL, arrayOf("feedbackmygame@gmail.com"))
+        emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Feedback $appName")
+        emailIntent.putExtra(Intent.EXTRA_TEXT, info)
+        emailIntent.type = "message/rfc822"
+
+        try {
+            context.startActivity(
+                Intent.createChooser(
+                    emailIntent,
+                    "Send email using..."
+                )
+            )
+        } catch (ex: ActivityNotFoundException) {
+            Toast.makeText(context,"No email clients installed.",Toast.LENGTH_SHORT).show()
+        }
     }
 
     fun showDialogColorPicker(context: Context){
