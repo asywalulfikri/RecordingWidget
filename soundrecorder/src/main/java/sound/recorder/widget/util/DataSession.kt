@@ -37,8 +37,8 @@ open class DataSession(private val mContext: Context) {
         return sharedPref.getInt("version_code", 0)
     }
 
-    fun getRawPath(): Int?{
-        return sharedPref.getInt("rawPath",0)
+    fun getRawPath(): String?{
+        return sharedPref.getString("rawPath","")
     }
 
     fun getSplashScreenColor(): String?{
@@ -68,14 +68,14 @@ open class DataSession(private val mContext: Context) {
         editor.apply()
     }
 
-    fun setInfoApp(versionCode : Int, jsonName : String,rawPath : Int,splashScreenColor : String, titleColor : String){
+    fun setInfoApp(versionCode : Int, jsonName : String,rawPath : String,splashScreenColor : String, titleColor : String){
         val editor = sharedPref.edit()
         Log.d("yamete11",jsonName)
         if(versionCode!=0){
             editor.putInt("versionCode", versionCode)
         }
-        if(rawPath!=0){
-            editor.putInt("rawPath", rawPath)
+        if(rawPath.isNotEmpty()){
+            editor.putString("rawPath", rawPath)
         }
         if(splashScreenColor.isNotEmpty()){
             editor.putString("splashScreenColor", splashScreenColor)

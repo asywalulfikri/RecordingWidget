@@ -44,8 +44,7 @@ object RecordingSDK {
         EventBus.getDefault().postSticky(listSong)
     }
 
-    fun addInfo(context: Context,versionCode : Int, jsonName : String,rawPath : Int,splashScreenColor : String, titleColor : String){
-        Log.d("yamete22",jsonName)
+    fun addInfo(context: Context,versionCode : Int, jsonName : String,rawPath : String,splashScreenColor : String, titleColor : String){
         DataSession(context).setInfoApp(versionCode,jsonName,rawPath,splashScreenColor,titleColor)
     }
 

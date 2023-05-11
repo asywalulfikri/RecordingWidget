@@ -2,8 +2,10 @@ package recording.host
 
 import android.content.Intent
 import android.os.Bundle
+import com.google.firebase.FirebaseApp
 import sound.recorder.widget.RecordingSDK
 import sound.recorder.widget.base.BaseActivityWidget
+import sound.recorder.widget.ui.activity.SplashScreenSDKActivity
 
 
 class BeforeSplashScreenActivity : BaseActivityWidget() {
@@ -12,12 +14,12 @@ class BeforeSplashScreenActivity : BaseActivityWidget() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        //val rawPath =  "android.resource://"+BuildConfig.APPLICATION_ID+"/raw/splash_animation"
-        RecordingSDK.addInfo(this,BuildConfig.VERSION_CODE,"recording_json",R.raw.splash_animation,"#1D7FFF","")
+        val rawPath =  "android.resource://"+BuildConfig.APPLICATION_ID+"/raw/splash_animation"
+        RecordingSDK.addInfo(this,BuildConfig.VERSION_CODE,"recording_json",rawPath,"#1D7FFF","")
 
-       // FirebaseApp.initializeApp(this);
-       // val intent = Intent(this, SplashScreenSDKActivity::class.java)
-       // startActivityForResult(intent,1212)
+        FirebaseApp.initializeApp(this);
+        val intent = Intent(this, SplashScreenSDKActivity::class.java)
+        startActivityForResult(intent,1212)
 
 
         //For Info Devices

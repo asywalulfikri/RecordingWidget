@@ -45,10 +45,8 @@ class SplashScreenSDKActivity : BaseActivityWidget() {
 
         jsonName = " "
 
-        if(dataSession?.getRawPath()!=0){
-            //rawAnim = dataSession?.getRawPath()
-           // val resourceId = resources.getIdentifier("resource_name", "integer", packageName)
-            dataSession?.getRawPath()?.let { binding.animationView.setAnimation(it) }
+        if(dataSession?.getRawPath().toString().isNotEmpty()){
+            binding.animationView.setAnimation(dataSession?.getRawPath())
         }
 
         if(dataSession?.getSplashScreenColor().toString().isNotEmpty()){
@@ -72,8 +70,7 @@ class SplashScreenSDKActivity : BaseActivityWidget() {
         }
 
     }
-
-
+    
     private fun isInternetAvailable(): Boolean {
         val connectivityManager = getSystemService(CONNECTIVITY_SERVICE) as ConnectivityManager
         val networkInfo = connectivityManager.activeNetworkInfo
