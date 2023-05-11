@@ -28,7 +28,7 @@
         android:layout_marginEnd="20dp"
         android:scaleType="centerInside"
         app:lottie_autoPlay="true"
-
+        app:lottie_rawRes="@raw/splash_screen_1"
         app:lottie_loop="true" />
 
     <com.airbnb.lottie.LottieAnimationView
@@ -39,6 +39,7 @@
         android:layout_centerInParent="true"
         android:layout_marginEnd="20dp"
         android:scaleType="centerInside"
+        app:lottie_rawRes="@raw/splash_screen_2"
         app:lottie_autoPlay="true"
         app:lottie_loop="true" />
 

@@ -53,11 +53,11 @@ class SplashScreenSDKActivity : BaseActivityWidget() {
         binding.tvTitle.text = dataSession?.getAppName()
 
 
-        if(isInternetAvailable()){
+       /* if(isInternetAvailable()){
             checkVersion()
         }else{
             goToNextPage()
-        }
+        }*/
 
     }
 
@@ -94,18 +94,18 @@ class SplashScreenSDKActivity : BaseActivityWidget() {
         val maintenance = checkVersionResponse.app_info?.maintenance
 
         if(maintenance==true){
-            showUpdateDialog(getString(R.string.dialog_maintenance))
+            showUpdateDialog("Sorry..The application is under maintenance, Please try again later")
         }else{
             if(force==false){
                 if(currentVersion<latestVersion!!){
-                    showUpdateDialog(getString(R.string.dialog_msg_update_app_version))
+                    showUpdateDialog("The new version is available in Play Store, please update your application")
                 }else{
                     goToNextPage()
                 }
             } else if (isLatestVersion(currentVersion, latestVersion!!) && force!!) {
                 goToNextPage()
             } else {
-                showUpdateDialog(getString(R.string.dialog_msg_update_app))
+                showUpdateDialog("Please update your Application")
             }
         }
 
@@ -132,14 +132,14 @@ class SplashScreenSDKActivity : BaseActivityWidget() {
 
         // if button is clicked, close the custom dialog
         btnPrimary.setOnClickListener {
-            if(message==getString(R.string.dialog_maintenance)){
+            if(message=="Sorry..The application is under maintenance, Please try again later"){
                 finish()
             }else{
                 gotoPlayStore()
             }
         }
 
-        if(message==getString(R.string.dialog_msg_update_app_version)){
+        if(message=="The new version is available in Play Store, please update your application"){
             btnCancel.visibility = View.VISIBLE
         }
         btnCancel.setOnClickListener {
