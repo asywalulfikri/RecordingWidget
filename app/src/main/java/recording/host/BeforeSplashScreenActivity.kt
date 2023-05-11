@@ -14,8 +14,7 @@ class BeforeSplashScreenActivity : BaseActivityWidget() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val rawPath =  "android.resource://"+BuildConfig.APPLICATION_ID+"/raw/splash_animation"
-        RecordingSDK.addInfo(this,BuildConfig.VERSION_CODE,"recording_json",rawPath,"#1D7FFF","")
+        RecordingSDK.addInfo(this,BuildConfig.VERSION_CODE,getString(R.string.app_name),"recording_json","1")
 
         FirebaseApp.initializeApp(this);
         val intent = Intent(this, SplashScreenSDKActivity::class.java)

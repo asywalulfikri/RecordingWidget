@@ -29,8 +29,6 @@ import sound.recorder.widget.util.DataSession
 class SplashScreenSDKActivity : BaseActivityWidget() {
 
     private lateinit var binding: ActivitySplashSdkBinding
-    private var backgroundColor = "#F4511E"
-    private var titleColor = "#000000"
     private var jsonName = ""
     private var currentVersionCode = 0
     private var dataSession : DataSession? =null
@@ -42,25 +40,17 @@ class SplashScreenSDKActivity : BaseActivityWidget() {
         setContentView(binding.root)
 
         dataSession = DataSession(this)
-
-        jsonName = " "
-
-        if(dataSession?.getRawPath().toString().isNotEmpty()){
-            binding.animationView.setAnimation(dataSession?.getRawPath())
-        }
-
-        if(dataSession?.getSplashScreenColor().toString().isNotEmpty()){
-            backgroundColor = dataSession?.getSplashScreenColor().toString()
-        }
-
-        if(dataSession?.getTitleColor().toString().isNotEmpty()){
-            titleColor = dataSession?.getTitleColor().toString()
-        }
-
-        //setup color
-        binding.backgroundSplash.setBackgroundColor(Color.parseColor(backgroundColor))
-        binding.tvTitle.setTextColor(Color.parseColor(titleColor))
         jsonName = dataSession?.getJsonName().toString()
+
+        if(dataSession?.getSplashScreenType()=="1"){
+            binding.backgroundSplash.setBackgroundColor(Color.parseColor("#f8a424"))
+            binding.animationView1.visibility = View.VISIBLE
+        }else{
+            binding.backgroundSplash.setBackgroundColor(Color.parseColor("#3490dc"))
+            binding.animationView2.visibility =  View.VISIBLE
+        }
+
+        binding.tvTitle.text = dataSession?.getAppName()
 
 
         if(isInternetAvailable()){

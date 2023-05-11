@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.util.Log
 import sound.recorder.widget.R
-import sound.recorder.widget.model.Song
 
 open class DataSession(private val mContext: Context) {
 
@@ -37,17 +36,14 @@ open class DataSession(private val mContext: Context) {
         return sharedPref.getInt("version_code", 0)
     }
 
-    fun getRawPath(): String?{
-        return sharedPref.getString("rawPath","")
+    fun getSplashScreenType(): String?{
+        return sharedPref.getString("splashScreenType","")
     }
 
-    fun getSplashScreenColor(): String?{
-        return sharedPref.getString("splashScreenColor","")
+    fun getAppName(): String?{
+        return sharedPref.getString("appName","")
     }
 
-    fun getTitleColor(): String?{
-        return sharedPref.getString("titleColor","")
-    }
 
     fun getJsonName(): String?{
         return sharedPref.getString("jsonName","")
@@ -68,26 +64,17 @@ open class DataSession(private val mContext: Context) {
         editor.apply()
     }
 
-    fun setInfoApp(versionCode : Int, jsonName : String,rawPath : String,splashScreenColor : String, titleColor : String){
+    fun setInfoApp(versionCode : Int,appName: String, jsonName : String,splashScreenType: String){
         val editor = sharedPref.edit()
-        Log.d("yamete11",jsonName)
         if(versionCode!=0){
             editor.putInt("versionCode", versionCode)
         }
-        if(rawPath.isNotEmpty()){
-            editor.putString("rawPath", rawPath)
-        }
-        if(splashScreenColor.isNotEmpty()){
-            editor.putString("splashScreenColor", splashScreenColor)
-        }
-        if(titleColor.isNotEmpty()){
-            editor.putString("titleColor", titleColor)
-        }
+        editor.putString("splashScreenType", splashScreenType)
+        editor.putString("appName",appName)
 
         if(jsonName.isNotEmpty()){
             editor.putString("jsonName",jsonName)
         }
-        Log.d("yamete",jsonName)
         editor.apply()
     }
 
