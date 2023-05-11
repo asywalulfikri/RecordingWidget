@@ -70,7 +70,7 @@ class SplashScreenSDKActivity : BaseActivityWidget() {
         }
 
     }
-    
+
     private fun isInternetAvailable(): Boolean {
         val connectivityManager = getSystemService(CONNECTIVITY_SERVICE) as ConnectivityManager
         val networkInfo = connectivityManager.activeNetworkInfo
