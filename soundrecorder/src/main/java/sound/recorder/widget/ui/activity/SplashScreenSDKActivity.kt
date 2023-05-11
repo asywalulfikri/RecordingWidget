@@ -28,7 +28,7 @@ import sound.recorder.widget.util.DataSession
 @SuppressLint("CustomSplashScreen")
 class SplashScreenSDKActivity : BaseActivityWidget() {
 
-    private lateinit var binding: ActivitySplashSdkBinding
+    //private lateinit var binding: ActivitySplashSdkBinding
     private var jsonName = ""
     private var currentVersionCode = 0
     private var dataSession : DataSession? =null
@@ -36,28 +36,28 @@ class SplashScreenSDKActivity : BaseActivityWidget() {
     @SuppressLint("NotifyDataSetChanged")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivitySplashSdkBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+       // binding = ActivitySplashSdkBinding.inflate(layoutInflater)
+        setContentView(R.layout.activity_splash_sdk)
 
         dataSession = DataSession(this)
         jsonName = dataSession?.getJsonName().toString()
 
-        if(dataSession?.getSplashScreenType()=="1"){
+      /*  if(dataSession?.getSplashScreenType()=="1"){
             binding.backgroundSplash.setBackgroundColor(Color.parseColor("#f8a424"))
             binding.animationView1.visibility = View.VISIBLE
         }else{
             binding.backgroundSplash.setBackgroundColor(Color.parseColor("#3490dc"))
             binding.animationView2.visibility =  View.VISIBLE
-        }
+        }*/
 
-        binding.tvTitle.text = dataSession?.getAppName()
+       // binding.tvTitle.text = dataSession?.getAppName()
 
 
-       /* if(isInternetAvailable()){
+        if(isInternetAvailable()){
             checkVersion()
         }else{
             goToNextPage()
-        }*/
+        }
 
     }
 
