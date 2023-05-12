@@ -13,7 +13,6 @@ import android.view.View
 import android.view.Window
 import android.widget.Button
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.tasks.Task
 import com.google.firebase.FirebaseApp
@@ -31,7 +30,7 @@ class SplashScreenSDKActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivitySplashSdkBinding
     private var jsonName = ""
-    private var currentVersionCode = 0
+    private var currentVersionCode : Int? =null
     private var dataSession : DataSession? =null
 
     @SuppressLint("NotifyDataSetChanged")
@@ -39,6 +38,8 @@ class SplashScreenSDKActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivitySplashSdkBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        FirebaseApp.initializeApp(this);
 
         dataSession = DataSession(this)
         jsonName = dataSession?.getJsonName().toString()
@@ -52,8 +53,7 @@ class SplashScreenSDKActivity : AppCompatActivity() {
         }
 
         binding.tvTitle.text = dataSession?.getAppName()
-        Toast.makeText(this,jsonName+"--",Toast.LENGTH_SHORT).show()
-
+        currentVersionCode = dataSession?.getVersionCode()
 
         if(isInternetAvailable()){
             checkVersion()
@@ -81,9 +81,12 @@ class SplashScreenSDKActivity : AppCompatActivity() {
                 if (task.isSuccessful) {
                     val json = mFirebaseRemoteConfig.getString(jsonName)
                     val menuConfig = Gson().fromJson(json, MenuConfig::class.java)
-                    Log.d("value_json", Gson().toJson(menuConfig) + "---")
-                    Toast.makeText(this,"sukse",Toast.LENGTH_SHORT).show()
-                    //checkVersionSuccess(menuConfig)
+                    Log.d("value_json", Gson().toJson(menuConfig) + "---"+jsonName)
+                    if(menuConfig.app_info!=null){
+                        checkVersionSuccess(menuConfig)
+                    }else{
+                        goToNextPage()
+                    }
                 }
             }
 
@@ -99,12 +102,12 @@ class SplashScreenSDKActivity : AppCompatActivity() {
             showUpdateDialog("Sorry..The application is under maintenance, Please try again later")
         }else{
             if(force==false){
-                if(currentVersion<latestVersion!!){
+                if(currentVersion!!<latestVersion!!){
                     showUpdateDialog("The new version is available in Play Store, please update your application")
                 }else{
                     goToNextPage()
                 }
-            } else if (isLatestVersion(currentVersion, latestVersion!!) && force!!) {
+            } else if (isLatestVersion(currentVersion!!, latestVersion!!) && force!!) {
                 goToNextPage()
             } else {
                 showUpdateDialog("Please update your Application")
