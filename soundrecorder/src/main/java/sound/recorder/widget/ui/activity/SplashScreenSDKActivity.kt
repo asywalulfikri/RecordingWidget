@@ -37,7 +37,7 @@ class SplashScreenSDKActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySplashSdkBinding.inflate(layoutInflater)
-       // setContentView(R.layout.activity_splash_sdk)
+        setContentView(binding.root)
 
         dataSession = DataSession(this)
         jsonName = dataSession?.getJsonName().toString()
@@ -68,7 +68,6 @@ class SplashScreenSDKActivity : AppCompatActivity() {
     }
 
     private fun checkVersion() {
-        FirebaseApp.initializeApp(this)
         val mFirebaseRemoteConfig = FirebaseRemoteConfig.getInstance()
         val configSettings = FirebaseRemoteConfigSettings.Builder()
             .setMinimumFetchIntervalInSeconds(10)
