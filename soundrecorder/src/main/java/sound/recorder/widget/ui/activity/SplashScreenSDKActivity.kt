@@ -13,22 +13,22 @@ import android.view.View
 import android.view.Window
 import android.widget.Button
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.tasks.Task
 import com.google.firebase.FirebaseApp
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings
 import com.google.gson.Gson
 import sound.recorder.widget.R
-import sound.recorder.widget.base.BaseActivityWidget
 import sound.recorder.widget.databinding.ActivitySplashSdkBinding
 import sound.recorder.widget.model.MenuConfig
 import sound.recorder.widget.util.DataSession
 
 
 @SuppressLint("CustomSplashScreen")
-class SplashScreenSDKActivity : BaseActivityWidget() {
+class SplashScreenSDKActivity : AppCompatActivity() {
 
-    //private lateinit var binding: ActivitySplashSdkBinding
+    private lateinit var binding: ActivitySplashSdkBinding
     private var jsonName = ""
     private var currentVersionCode = 0
     private var dataSession : DataSession? =null
@@ -36,21 +36,21 @@ class SplashScreenSDKActivity : BaseActivityWidget() {
     @SuppressLint("NotifyDataSetChanged")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-       // binding = ActivitySplashSdkBinding.inflate(layoutInflater)
-        setContentView(R.layout.activity_splash_sdk)
+        binding = ActivitySplashSdkBinding.inflate(layoutInflater)
+       // setContentView(R.layout.activity_splash_sdk)
 
         dataSession = DataSession(this)
         jsonName = dataSession?.getJsonName().toString()
 
-      /*  if(dataSession?.getSplashScreenType()=="1"){
+        if(dataSession?.getSplashScreenType()=="1"){
             binding.backgroundSplash.setBackgroundColor(Color.parseColor("#f8a424"))
             binding.animationView1.visibility = View.VISIBLE
         }else{
             binding.backgroundSplash.setBackgroundColor(Color.parseColor("#3490dc"))
             binding.animationView2.visibility =  View.VISIBLE
-        }*/
+        }
 
-       // binding.tvTitle.text = dataSession?.getAppName()
+        binding.tvTitle.text = dataSession?.getAppName()
 
 
         if(isInternetAvailable()){
