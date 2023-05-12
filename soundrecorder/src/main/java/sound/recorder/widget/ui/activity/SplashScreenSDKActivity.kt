@@ -13,6 +13,7 @@ import android.view.View
 import android.view.Window
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.tasks.Task
 import com.google.firebase.FirebaseApp
@@ -51,6 +52,7 @@ class SplashScreenSDKActivity : AppCompatActivity() {
         }
 
         binding.tvTitle.text = dataSession?.getAppName()
+        Toast.makeText(this,jsonName+"--",Toast.LENGTH_SHORT).show()
 
 
         if(isInternetAvailable()){
@@ -79,8 +81,9 @@ class SplashScreenSDKActivity : AppCompatActivity() {
                 if (task.isSuccessful) {
                     val json = mFirebaseRemoteConfig.getString(jsonName)
                     val menuConfig = Gson().fromJson(json, MenuConfig::class.java)
-                    checkVersionSuccess(menuConfig)
                     Log.d("value_json", Gson().toJson(menuConfig) + "---")
+                    Toast.makeText(this,"sukse",Toast.LENGTH_SHORT).show()
+                    //checkVersionSuccess(menuConfig)
                 }
             }
 
