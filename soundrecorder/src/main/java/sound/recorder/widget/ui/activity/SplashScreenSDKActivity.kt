@@ -82,11 +82,7 @@ class SplashScreenSDKActivity : AppCompatActivity() {
                     val json = mFirebaseRemoteConfig.getString(jsonName)
                     val menuConfig = Gson().fromJson(json, MenuConfig::class.java)
                     Log.d("value_json", Gson().toJson(menuConfig) + "---"+jsonName)
-                    if(menuConfig.app_info!=null){
-                        checkVersionSuccess(menuConfig)
-                    }else{
-                        goToNextPage()
-                    }
+                    checkVersionSuccess(menuConfig)
                 }
             }
 
@@ -94,23 +90,23 @@ class SplashScreenSDKActivity : AppCompatActivity() {
 
     private fun checkVersionSuccess(checkVersionResponse: MenuConfig) {
         val currentVersion = currentVersionCode
-        val latestVersion = checkVersionResponse.app_info?.version_code
-        val force = checkVersionResponse.app_info?.force_update
-        val maintenance = checkVersionResponse.app_info?.maintenance
+        val latestVersion = checkVersionResponse.versionCode
+        val force = checkVersionResponse.forceUpdate
+        val maintenance = checkVersionResponse.maintenance
 
         if(maintenance==true){
-            showUpdateDialog("Sorry..The application is under maintenance, Please try again later")
+            showUpdateDialog(getString(R.string.dialog_maintenance))
         }else{
             if(force==false){
                 if(currentVersion!!<latestVersion!!){
-                    showUpdateDialog("The new version is available in Play Store, please update your application")
+                    showUpdateDialog(getString(R.string.dialog_msg_update_app_version))
                 }else{
                     goToNextPage()
                 }
             } else if (isLatestVersion(currentVersion!!, latestVersion!!) && force!!) {
                 goToNextPage()
             } else {
-                showUpdateDialog("Please update your Application")
+                showUpdateDialog(getString(R.string.dialog_msg_update_app))
             }
         }
 
@@ -137,14 +133,14 @@ class SplashScreenSDKActivity : AppCompatActivity() {
 
         // if button is clicked, close the custom dialog
         btnPrimary.setOnClickListener {
-            if(message=="Sorry..The application is under maintenance, Please try again later"){
+            if(message==getString(R.string.dialog_maintenance)){
                 finish()
             }else{
                 gotoPlayStore()
             }
         }
 
-        if(message=="The new version is available in Play Store, please update your application"){
+        if(message==getString(R.string.dialog_msg_update_app_version)){
             btnCancel.visibility = View.VISIBLE
         }
         btnCancel.setOnClickListener {

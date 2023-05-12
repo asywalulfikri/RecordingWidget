@@ -1,3 +1,4 @@
+/*
 package sound.recorder.widget.ui.bottomSheet
 
 import android.app.Dialog
@@ -65,12 +66,14 @@ open class BottomSheetSplashScreen(var mFirebaseRemoteConfig: FirebaseRemoteConf
         val layoutParams =  (dialog as? BottomSheetDialog)?.window?.attributes
         layoutParams?.width = screenWidth
         dialog?.window?.attributes = layoutParams
-        /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+        */
+/*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             dialog?.window?.let { WindowCompat.setDecorFitsSystemWindows(it, false) }
         } else {
             @Suppress("DEPRECATION")
             dialog?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
-        }*/
+        }*//*
+
 
         getShared().registerOnSharedPreferenceChangeListener(this)
         dataSession = DataSession(requireContext())
@@ -224,4 +227,4 @@ open class BottomSheetSplashScreen(var mFirebaseRemoteConfig: FirebaseRemoteConf
         setToast(key.toString())
     }
 
-}
+}*/

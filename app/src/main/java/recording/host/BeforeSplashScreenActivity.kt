@@ -2,17 +2,13 @@ package recording.host
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.DisplayMetrics
 import com.google.firebase.FirebaseApp
-import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import sound.recorder.widget.RecordingSDK
 import sound.recorder.widget.base.BaseActivityWidget
 import sound.recorder.widget.ui.activity.SplashScreenSDKActivity
-import sound.recorder.widget.ui.bottomSheet.BottomSheetSplashScreen
-import sound.recorder.widget.ui.bottomSheet.BottomSheetVideo
 
 
-class BeforeSplashScreenActivity : BaseActivityWidget(),BottomSheetSplashScreen.OnMoveListener {
+class BeforeSplashScreenActivity : BaseActivityWidget() {
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,10 +42,5 @@ class BeforeSplashScreenActivity : BaseActivityWidget(),BottomSheetSplashScreen.
             startActivity(Intent(this, MainActivityWidget::class.java))
             finish()
         }
-    }
-
-    override fun onMovePage() {
-        startActivity(Intent(this, MainActivityWidget::class.java))
-        finish()
     }
 }
