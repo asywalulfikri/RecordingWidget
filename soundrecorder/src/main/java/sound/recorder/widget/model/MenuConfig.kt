@@ -10,4 +10,5 @@ class MenuConfig : Serializable {
     var versionCode : Int? =  null
     var forceUpdate : Boolean? = null
     var maintenance : Boolean? =null
+    var showDialog : Boolean? = null
 }

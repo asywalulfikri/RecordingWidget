@@ -87,25 +87,30 @@ class SplashScreenSDKActivity : BaseActivityWidget() {
         val latestVersion = checkVersionResponse.versionCode
         val force = checkVersionResponse.forceUpdate
         val maintenance = checkVersionResponse.maintenance
+        val showDialog = checkVersionResponse.showDialog
 
         Log.d("infoSDK",
             "App version code now = $currentVersion , App version code live = $latestVersion"
         )
 
-        if(maintenance==true){
-            showUpdateDialog(getString(R.string.dialog_maintenance))
-        }else{
-            if(force==false){
-                if(currentVersion!!<latestVersion!!){
-                    showUpdateDialog(getString(R.string.dialog_msg_update_app_version))
-                }else{
+        if(showDialog==true){
+            if(maintenance==true){
+                showUpdateDialog(getString(R.string.dialog_maintenance))
+            }else{
+                if(force==false){
+                    if(currentVersion!!<latestVersion!!){
+                        showUpdateDialog(getString(R.string.dialog_msg_update_app_version))
+                    }else{
+                        goToNextPage()
+                    }
+                } else if (isLatestVersion(currentVersion!!, latestVersion!!) && force!!) {
                     goToNextPage()
+                } else {
+                    showUpdateDialog(getString(R.string.dialog_msg_update_app))
                 }
-            } else if (isLatestVersion(currentVersion!!, latestVersion!!) && force!!) {
-                goToNextPage()
-            } else {
-                showUpdateDialog(getString(R.string.dialog_msg_update_app))
             }
+        }else{
+            goToNextPage()
         }
 
     }
