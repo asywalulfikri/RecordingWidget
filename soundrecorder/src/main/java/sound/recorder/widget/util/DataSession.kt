@@ -33,7 +33,7 @@ open class DataSession(private val mContext: Context) {
     }
 
     fun getVersionCode(): Int{
-        return sharedPref.getInt("version_code", 0)
+        return sharedPref.getInt("versionCode", 0)
     }
 
     fun getSplashScreenType(): String?{
@@ -66,15 +66,11 @@ open class DataSession(private val mContext: Context) {
 
     fun setInfoApp(versionCode : Int,appName: String, jsonName : String,splashScreenType: String){
         val editor = sharedPref.edit()
-        if(versionCode!=0){
-            editor.putInt("versionCode", versionCode)
-        }
+        editor.putInt("versionCode", versionCode)
         editor.putString("splashScreenType", splashScreenType)
         editor.putString("appName",appName)
+        editor.putString("jsonName",jsonName)
 
-        if(jsonName.isNotEmpty()){
-            editor.putString("jsonName",jsonName)
-        }
         editor.apply()
     }
 

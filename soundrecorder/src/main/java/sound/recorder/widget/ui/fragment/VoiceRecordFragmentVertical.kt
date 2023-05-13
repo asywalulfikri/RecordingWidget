@@ -431,7 +431,6 @@ internal class VoiceRecorderFragmentWidgetVertical : BaseFragmentWidget(), Botto
                 recorder = null
             }
             showLayoutStopRecord()
-
         }
     }
 

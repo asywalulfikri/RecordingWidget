@@ -38,9 +38,13 @@ class BeforeSplashScreenActivity : BaseActivityWidget() {
     @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if(requestCode==1212){
-            startActivity(Intent(this, MainActivityWidget::class.java))
-            finish()
+        if(requestCode==1212 && resultCode == RESULT_OK){
+            if(data?.hasExtra("exit")==true){
+                finish()
+            }else{
+                startActivity(Intent(this, MainActivityWidget::class.java))
+                finish()
+            }
         }
     }
 }

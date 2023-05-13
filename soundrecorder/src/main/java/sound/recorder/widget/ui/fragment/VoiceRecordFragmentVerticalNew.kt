@@ -33,7 +33,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import sound.recorder.widget.R
 import sound.recorder.widget.base.BaseFragmentWidget
-import sound.recorder.widget.databinding.WidgetRecordVerticalNewBinding
+import sound.recorder.widget.databinding.WidgetRecordVerticalBlackBinding
 import sound.recorder.widget.db.AppDatabase
 import sound.recorder.widget.db.AudioRecord
 import sound.recorder.widget.service.BackgroundService
@@ -64,7 +64,7 @@ internal class VoiceRecorderFragmentWidgetVerticalNew : BaseFragmentWidget(), Bo
     private lateinit var timer: Timer
 
     private lateinit var handler: Handler
-    private var _binding: WidgetRecordVerticalNewBinding? = null
+    private var _binding: WidgetRecordVerticalBlackBinding? = null
     private val binding get() = _binding!!
 
     // Requesting permission to RECORD_AUDIO
@@ -83,7 +83,7 @@ internal class VoiceRecorderFragmentWidgetVerticalNew : BaseFragmentWidget(), Bo
     private var volume : Float? =null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        _binding = WidgetRecordVerticalNewBinding.inflate(inflater, container, false)
+        _binding = WidgetRecordVerticalBlackBinding.inflate(inflater, container, false)
         return binding.root
     }
 

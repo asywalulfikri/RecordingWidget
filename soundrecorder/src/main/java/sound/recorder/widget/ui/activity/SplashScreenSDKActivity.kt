@@ -5,7 +5,6 @@ import android.app.Dialog
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.graphics.Color
-import android.net.ConnectivityManager
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -13,20 +12,20 @@ import android.view.View
 import android.view.Window
 import android.widget.Button
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.tasks.Task
 import com.google.firebase.FirebaseApp
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings
 import com.google.gson.Gson
 import sound.recorder.widget.R
+import sound.recorder.widget.base.BaseActivityWidget
 import sound.recorder.widget.databinding.ActivitySplashSdkBinding
 import sound.recorder.widget.model.MenuConfig
 import sound.recorder.widget.util.DataSession
 
 
 @SuppressLint("CustomSplashScreen")
-class SplashScreenSDKActivity : AppCompatActivity() {
+class SplashScreenSDKActivity : BaseActivityWidget() {
 
     private lateinit var binding: ActivitySplashSdkBinding
     private var jsonName = ""
@@ -39,7 +38,7 @@ class SplashScreenSDKActivity : AppCompatActivity() {
         binding = ActivitySplashSdkBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        FirebaseApp.initializeApp(this);
+        FirebaseApp.initializeApp(this)
 
         dataSession = DataSession(this)
         jsonName = dataSession?.getJsonName().toString()
@@ -55,24 +54,16 @@ class SplashScreenSDKActivity : AppCompatActivity() {
         binding.tvTitle.text = dataSession?.getAppName()
         currentVersionCode = dataSession?.getVersionCode()
 
-        if(isInternetAvailable()){
-            checkVersion()
-        }else{
-            goToNextPage()
-        }
+        checkVersion()
 
     }
 
-    private fun isInternetAvailable(): Boolean {
-        val connectivityManager = getSystemService(CONNECTIVITY_SERVICE) as ConnectivityManager
-        val networkInfo = connectivityManager.activeNetworkInfo
-        return networkInfo != null && networkInfo.isConnected
-    }
 
     private fun checkVersion() {
         val mFirebaseRemoteConfig = FirebaseRemoteConfig.getInstance()
         val configSettings = FirebaseRemoteConfigSettings.Builder()
             .setMinimumFetchIntervalInSeconds(10)
+            .setFetchTimeoutInSeconds(1)
             .build()
         mFirebaseRemoteConfig.setConfigSettingsAsync(configSettings)
         mFirebaseRemoteConfig.fetchAndActivate()
@@ -83,6 +74,9 @@ class SplashScreenSDKActivity : AppCompatActivity() {
                     val menuConfig = Gson().fromJson(json, MenuConfig::class.java)
                     Log.d("value_json", Gson().toJson(menuConfig) + "---"+jsonName)
                     checkVersionSuccess(menuConfig)
+                }else{
+                    Log.d("value_json", task.exception?.message.toString() +"---"+jsonName)
+                    goToNextPage()
                 }
             }
 
@@ -93,6 +87,10 @@ class SplashScreenSDKActivity : AppCompatActivity() {
         val latestVersion = checkVersionResponse.versionCode
         val force = checkVersionResponse.forceUpdate
         val maintenance = checkVersionResponse.maintenance
+
+        Log.d("infoSDK",
+            "App version code now = $currentVersion , App version code live = $latestVersion"
+        )
 
         if(maintenance==true){
             showUpdateDialog(getString(R.string.dialog_maintenance))
@@ -117,6 +115,7 @@ class SplashScreenSDKActivity : AppCompatActivity() {
         return currentVersion >= latestVersion
     }
 
+    @SuppressLint("SetTextI18n")
     private fun showUpdateDialog(message : String) {
 
         // custom dialog
@@ -134,6 +133,9 @@ class SplashScreenSDKActivity : AppCompatActivity() {
         // if button is clicked, close the custom dialog
         btnPrimary.setOnClickListener {
             if(message==getString(R.string.dialog_maintenance)){
+                val intent = Intent()
+                intent.putExtra("exit",true)
+                setResult(RESULT_OK,intent)
                 finish()
             }else{
                 gotoPlayStore()
@@ -142,6 +144,8 @@ class SplashScreenSDKActivity : AppCompatActivity() {
 
         if(message==getString(R.string.dialog_msg_update_app_version)){
             btnCancel.visibility = View.VISIBLE
+        }else if(message==getString(R.string.dialog_maintenance)){
+            btnPrimary.text = "Exit"
         }
         btnCancel.setOnClickListener {
             dialog.dismiss()

@@ -79,18 +79,13 @@ class MainActivityWidget : BaseActivityWidget(),SharedPreferences.OnSharedPrefer
 
         setSupportActionBar(binding.toolbar)
 
-        recordWidgetHN = RecordWidgetHN(this)
-        recordWidgetHN?.loadData()
+      /*  recordWidgetHN = RecordWidgetHN(this)
 
         recordWidgetHB = RecordWidgetHB(this)
-        recordWidgetHB?.loadData()
-
 
         recordWidgetH = RecordWidgetH(this)
-        recordWidgetH?.loadData()
 
-        recordWidgetVN = RecordWidgetVN(this)
-        recordWidgetVN?.loadData()
+        recordWidgetVN = RecordWidgetVN(this)*/
 
         binding.btnKlik.setOnClickListener {
             val bottomSheet = BottomSheetVideo(firebaseFirestore)

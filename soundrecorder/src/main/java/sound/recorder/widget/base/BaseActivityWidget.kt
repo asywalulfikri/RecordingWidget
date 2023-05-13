@@ -1,11 +1,10 @@
 package sound.recorder.widget.base
 
-import android.Manifest
 import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.content.res.Configuration
+import android.net.ConnectivityManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -15,15 +14,15 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import com.google.android.gms.ads.*
 import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 import com.google.android.gms.tasks.Task
-import com.google.firebase.messaging.BuildConfig
 import com.google.firebase.messaging.FirebaseMessaging
 import sound.recorder.widget.util.DataSession
 import sound.recorder.widget.util.MusicAnimationView
+import java.io.IOException
+import java.net.*
 import java.util.concurrent.atomic.AtomicReference
 
 open class BaseActivityWidget : AppCompatActivity() {
@@ -68,6 +67,8 @@ open class BaseActivityWidget : AppCompatActivity() {
                 })
         }
     }
+
+
 
     private fun permissionNotification(){
         if (Build.VERSION.SDK_INT >= 33) {

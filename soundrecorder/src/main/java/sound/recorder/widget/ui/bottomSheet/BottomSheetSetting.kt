@@ -17,10 +17,10 @@ import sound.recorder.widget.util.DataSession
 
 internal class BottomSheetSetting : BottomSheetDialogFragment(),SharedPreferences.OnSharedPreferenceChangeListener {
 
-    private lateinit var binding : BottomSheetSettingBinding
+    private var binding : BottomSheetSettingBinding? = null
     private var sharedPreferences : SharedPreferences? =null
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): RelativeLayout? {
         binding = BottomSheetSettingBinding.inflate(layoutInflater)
         (dialog as? BottomSheetDialog)?.behavior?.state = STATE_EXPANDED
         (dialog as? BottomSheetDialog)?.behavior?.isDraggable = false
@@ -36,16 +36,16 @@ internal class BottomSheetSetting : BottomSheetDialogFragment(),SharedPreference
         sharedPreferences = DataSession(requireContext()).getShared()
         sharedPreferences?.registerOnSharedPreferenceChangeListener(this)
 
-        binding.layoutBackground.setOnClickListener {
+        binding?.layoutBackground?.setOnClickListener {
             RecordingSDK.showDialogColorPicker(requireContext())
             dismiss()
         }
 
-        binding.btnColor.setBackgroundColor(DataSession(requireContext()).getBackgroundColor())
+        binding?.btnColor?.setBackgroundColor(DataSession(requireContext()).getBackgroundColor())
 
-        binding.cbAnimation.isChecked = DataSession(requireContext()).getAnimation()
+        binding?.cbAnimation?.isChecked = DataSession(requireContext()).getAnimation()
 
-        binding.cbAnimation.setOnCheckedChangeListener { _, b ->
+        binding?.cbAnimation?.setOnCheckedChangeListener { _, b ->
             if (b) {
                 DataSession(requireContext()).saveAnimation(true)
             } else {
@@ -53,25 +53,25 @@ internal class BottomSheetSetting : BottomSheetDialogFragment(),SharedPreference
             }
         }
 
-        binding.rlAnimation.setOnClickListener {
-            if(binding.cbAnimation.isChecked){
-                binding.cbAnimation.isChecked = false
+        binding?.rlAnimation?.setOnClickListener {
+            if(binding?.cbAnimation?.isChecked == true){
+                binding?.cbAnimation?.isChecked = false
                 DataSession(requireContext()).saveAnimation(false)
             }else{
-                binding.cbAnimation.isChecked = true
+                binding?.cbAnimation?.isChecked = true
                 DataSession(requireContext()).saveAnimation(true)
             }
         }
 
         setupSeekBar()
-        binding.seekBar.progress = DataSession(requireContext()).getVolume()
+        binding?.seekBar?.progress = DataSession(requireContext()).getVolume()
 
-        return binding.root
+        return binding?.root
 
     }
 
     private fun setupSeekBar(){
-        binding.seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+        binding?.seekBar?.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
                 DataSession(requireContext()).saveVolume(progress)
             }
@@ -89,7 +89,7 @@ internal class BottomSheetSetting : BottomSheetDialogFragment(),SharedPreference
         if(key== Constant.keyShared.backgroundColor){
             sharedPreferences?.let {
                 it.getInt(Constant.keyShared.backgroundColor,-1)
-                    .let { it1 -> binding.btnColor.setBackgroundColor(it1) }
+                    .let { it1 -> binding?.btnColor?.setBackgroundColor(it1) }
             }
         }
     }
