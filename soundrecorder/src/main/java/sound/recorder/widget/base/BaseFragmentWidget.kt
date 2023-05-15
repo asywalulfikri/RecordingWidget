@@ -17,6 +17,7 @@ import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 import sound.recorder.widget.util.DataSession
+import sound.recorder.widget.util.Toastic
 
 open class BaseFragmentWidget : Fragment(){
 
@@ -29,8 +30,44 @@ open class BaseFragmentWidget : Fragment(){
         dataSession = DataSession(activity as Context)
     }
 
-    fun setToast(message : String){
-        Toast.makeText(activity,message,Toast.LENGTH_SHORT).show()
+    fun setToastError(message : String){
+        Toastic.toastic(
+            context = requireContext(),
+            message = message,
+            duration = Toastic.LENGTH_SHORT,
+            type = Toastic.SUCCESS,
+            isIconAnimated = true
+        ).show()
+    }
+
+    fun setToastWarning(message : String){
+        Toastic.toastic(
+            context = requireContext(),
+            message = message,
+            duration = Toastic.LENGTH_SHORT,
+            type = Toastic.WARNING,
+            isIconAnimated = true
+        ).show()
+    }
+
+    fun setToastSuccess(message : String){
+        Toastic.toastic(
+            context = requireContext(),
+            message = message,
+            duration = Toastic.LENGTH_SHORT,
+            type = Toastic.SUCCESS,
+            isIconAnimated = true
+        ).show()
+    }
+
+    fun setToastInfo(message : String){
+        Toastic.toastic(
+            context = requireContext(),
+            message = message,
+            duration = Toastic.LENGTH_SHORT,
+            type = Toastic.INFO,
+            isIconAnimated = true
+        ).show()
     }
 
     @SuppressLint("NewApi")
@@ -51,6 +88,8 @@ open class BaseFragmentWidget : Fragment(){
         intent.data = Uri.fromParts("package", activity?.packageName.toString(), null)
         activity?.startActivity(intent)
     }
+
+
 
 
     fun setupAds() {

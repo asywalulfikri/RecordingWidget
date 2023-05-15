@@ -44,7 +44,7 @@
                 android:id="@+id/songBtn"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:background="@drawable/my_song"
+                android:background="@drawable/ic_song1"
                 android:contentDescription="@string/app_names"
                 tools:ignore="DuplicateSpeakableTextCheck" />
 
@@ -67,7 +67,7 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:contentDescription="@string/app_names"
-            android:src="@drawable/ic_delete_disabled"/>
+            app:srcCompat="@drawable/ic_delete_disabled"/>
 
         <RelativeLayout
             android:layout_width="wrap_content"

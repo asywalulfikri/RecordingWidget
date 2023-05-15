@@ -229,7 +229,7 @@ internal class ListingActivityWidgetNew : BaseActivityWidget(), AudioRecorderAda
                 intent.putExtra("filename", audioRecord.filename)
                 startActivity(intent)
             }else{
-                setToast("This Audio Not Found Anymore \uD83D\uDE1E")
+                setToastError("This Audio Not Found Anymore \uD83D\uDE1E")
             }
         }
 

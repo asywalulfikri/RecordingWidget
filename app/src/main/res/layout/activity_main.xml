@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<LinearLayout
+    android:orientation="vertical"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -24,13 +25,36 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
+
+    <TextView
+        android:id="@+id/running_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:singleLine="true"
+        android:ellipsize="marquee"
+        android:marqueeRepeatLimit="marquee_forever"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:scrollHorizontally="true"
+        android:padding="10dp"
+        android:textSize="18sp"
+        android:textColor="@android:color/black"
+        />
+
     <LinearLayout
-        android:layout_below="@+id/appBar"
         android:orientation="horizontal"
         android:id="@+id/widgetVoice"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
+        <sound.recorder.widget.RecordWidgetV
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
 
         <LinearLayout
             android:orientation="vertical"
@@ -58,7 +82,7 @@
                 android:layout_marginBottom="10dp"
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="10dp"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
 
@@ -100,4 +124,4 @@
         app:fallCount="40"
         app:fallSpeed="0.1"
         />
-</RelativeLayout>
+</LinearLayout>

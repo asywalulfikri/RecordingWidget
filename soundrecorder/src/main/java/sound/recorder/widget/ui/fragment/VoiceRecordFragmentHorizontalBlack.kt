@@ -115,7 +115,7 @@ internal class VoiceRecorderFragmentWidgetHorizontalBlack : BaseFragmentWidget()
                         else -> startPermission()
                     }
                 }else{
-                    setToast("Your device not support to record audio")
+                    setToastError("Your device not support to record audio")
                 }
             }
 
@@ -271,7 +271,7 @@ internal class VoiceRecorderFragmentWidgetHorizontalBlack : BaseFragmentWidget()
 
 
     private fun showAllowPermission(){
-        setToast("Allow Permission in Setting")
+        setToastInfo("Allow Permission in Setting")
     }
 
 
@@ -329,7 +329,7 @@ internal class VoiceRecorderFragmentWidgetHorizontalBlack : BaseFragmentWidget()
         try {
             timer.stop()
         }catch (e: Exception){
-            setToast(e.message.toString())
+            setToastError(e.message.toString())
         }
 
         binding.timerView.text = "00:00.00"
@@ -365,7 +365,7 @@ internal class VoiceRecorderFragmentWidgetHorizontalBlack : BaseFragmentWidget()
                 start()
             } catch (e: IOException) {
                 Log.e(LOG_TAG, "prepare() failed")
-                setToast(e.message.toString())
+                setToastError(e.message.toString())
             }
 
         }

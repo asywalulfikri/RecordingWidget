@@ -1,43 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:clickable="true"
-    android:foreground="?attr/selectableItemBackground"
     android:paddingBottom="10dp"
     android:paddingLeft="16dp"
     android:paddingRight="16dp"
-    android:paddingTop="10dp">
+    android:paddingTop="10dp"
+    android:focusable="true">
 
     <TextView
         android:id="@+id/dot"
         android:text="."
         android:layout_width="wrap_content"
         android:layout_height="30dp"
-        android:layout_marginRight="10dp"
+        android:layout_marginEnd="10dp"
         android:layout_marginTop="10dp"
         android:includeFontPadding="false"
         android:textColor="@color/colorAccent"
         android:lineSpacingExtra="0dp"
-        android:textSize="40sp" />
+        android:textSize="40sp"
+        tools:ignore="HardcodedText" />
 
-    <TextView
-        android:id="@+id/timestamp"
-        android:text="dfdfd"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+    <LinearLayout
         android:layout_toRightOf="@id/dot"
-        android:textColor="#858585"
-        android:textSize="14sp" />
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/note"
-        android:text="My Note is /........"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/timestamp"
-        android:layout_toRightOf="@id/dot"
-        android:textColor="#232323"
-        android:textSize="18sp" />
+        <TextView
+            android:id="@+id/title"
+            android:text="Indonesia Raya "
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/rimouski"
+            android:textStyle="bold"
+            android:textColor="@color/black_de"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/note"
+            android:text="1 4 6 5 1 | 3 4 | "
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/timestamp"
+            android:fontFamily="@font/rimouski"
+            android:maxLines="3"
+            android:ellipsize="end"
+            android:textColor="#7C7C7C"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/timestamp"
+            android:text="14 Mei"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="#858585"
+            android:textSize="14sp" />
+
+    </LinearLayout>
 
 </RelativeLayout>

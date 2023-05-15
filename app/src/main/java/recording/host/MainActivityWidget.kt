@@ -11,13 +11,16 @@ import com.google.firebase.firestore.FirebaseFirestore
 import recording.host.databinding.ActivityMainBinding
 import sound.recorder.widget.*
 import sound.recorder.widget.base.BaseActivityWidget
+import sound.recorder.widget.model.MyEventBus
+import sound.recorder.widget.model.MyListener
 import sound.recorder.widget.model.Song
+import sound.recorder.widget.notes.Note
 import sound.recorder.widget.ui.bottomSheet.BottomSheetVideo
 import sound.recorder.widget.util.Constant
 import sound.recorder.widget.util.DataSession
 
 
-class MainActivityWidget : BaseActivityWidget(),SharedPreferences.OnSharedPreferenceChangeListener{
+class MainActivityWidget : BaseActivityWidget(),SharedPreferences.OnSharedPreferenceChangeListener,MyListener{
 
 
     private var recordWidgetHN : RecordWidgetHN? =null
@@ -43,11 +46,15 @@ class MainActivityWidget : BaseActivityWidget(),SharedPreferences.OnSharedPrefer
     private var firebaseFirestore: FirebaseFirestore? = null
 
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         setContentView(binding.root)
+
+        MyEventBus.setMyListener(this)
+
 
         firebaseFirestore = FirebaseFirestore.getInstance()
 
@@ -136,6 +143,12 @@ class MainActivityWidget : BaseActivityWidget(),SharedPreferences.OnSharedPrefer
               binding.musicView.visibility =View.VISIBLE
            }
        }
+    }
+
+    override fun onCallback(note: Note) {
+       // setToastSuccess(getNoteValue(note))
+        binding.runningText.text = getNoteValue(note)
+        binding.runningText.isSelected = true
     }
 
 

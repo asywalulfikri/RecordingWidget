@@ -1,51 +1,46 @@
 package sound.recorder.widget.ui.bottomSheet
 
+import android.annotation.SuppressLint
 import android.content.Context
-import android.content.SharedPreferences
 import android.os.Build
 import android.os.Bundle
+import android.text.TextUtils
 import android.view.*
 import android.widget.*
+import androidx.appcompat.app.AlertDialog
 import androidx.core.view.WindowCompat
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetBehavior.STATE_EXPANDED
 import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import org.greenrobot.eventbus.EventBus
+import com.google.gson.Gson
+import sound.recorder.widget.R
+import sound.recorder.widget.base.BaseBottomSheet
 import sound.recorder.widget.databinding.BottomSheetNotesBinding
-import sound.recorder.widget.model.Song
+import sound.recorder.widget.model.MyEventBus
+import sound.recorder.widget.model.MyListener
 import sound.recorder.widget.notes.DatabaseHelper
 import sound.recorder.widget.notes.Note
 import sound.recorder.widget.notes.NotesAdapter
 import sound.recorder.widget.notes.utils.MyDividerItemDecoration
 import sound.recorder.widget.notes.utils.RecyclerTouchListener
-import sound.recorder.widget.util.DataSession
 
 
-internal class BottomSheetNote(var showBtnStop: Boolean, private var listener: OnClickListener) : BottomSheetDialogFragment(),SharedPreferences.OnSharedPreferenceChangeListener {
-
-
-    //Load Song
-    private var listTitleSong: ArrayList<String>? = null
-    private var listLocationSong: ArrayList<String>? = null
-    private var adapter: ArrayAdapter<String>? = null
-
-
-    // Step 1 - This interface defines the type of messages I want to communicate to my owner
-    interface OnClickListener {
-        fun onPlaySong(filePath: String)
-        fun onStopSong()
-    }
+internal class BottomSheetNote() : BaseBottomSheet() {
 
     private lateinit var binding : BottomSheetNotesBinding
-    private var sharedPreferences : SharedPreferences? =null
 
-    private val notesList: MutableList<Note> = ArrayList()
+    private val notesList: ArrayList<Note> = ArrayList()
     private var db: DatabaseHelper? = null
     private var mAdapter: NotesAdapter? = null
+    var callback: MyListener? = null
+    var valueNote : String? =null
 
+
+    constructor(context: Context) : this() {
+
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = BottomSheetNotesBinding.inflate(layoutInflater)
@@ -59,14 +54,15 @@ internal class BottomSheetNote(var showBtnStop: Boolean, private var listener: O
             dialog?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
         }
 
-        //dialog?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
+        songNote()
 
-        sharedPreferences = DataSession(activity as Context).getShared()
-        sharedPreferences?.registerOnSharedPreferenceChangeListener(this)
+        binding.fab.setOnClickListener {
+            showNoteDialog(false, null, -1)
+        }
 
-
-        db = DatabaseHelper(activity)
-        db?.allNotes?.let { notesList.addAll(it) }
+        binding.ivClose.setOnClickListener {
+            dismiss()
+        }
 
 
         return binding.root
@@ -83,62 +79,158 @@ internal class BottomSheetNote(var showBtnStop: Boolean, private var listener: O
     }
 
     private fun songNote() {
+        db = DatabaseHelper(requireContext())
+        notesList.addAll(db!!.allNotes)
+
         mAdapter = NotesAdapter(notesList)
-        val mLayoutManager: RecyclerView.LayoutManager = LinearLayoutManager(activity)
+        val mLayoutManager: RecyclerView.LayoutManager = LinearLayoutManager(requireContext())
         binding.recyclerView.layoutManager = mLayoutManager
         binding.recyclerView.itemAnimator = DefaultItemAnimator()
-        context?.let { MyDividerItemDecoration(it, LinearLayoutManager.VERTICAL, 16) }?.let {
-            binding.recyclerView.addItemDecoration(
-                it
+        binding.recyclerView.addItemDecoration(
+            MyDividerItemDecoration(
+                requireContext(),
+                LinearLayoutManager.VERTICAL,
+                16
             )
-        }
+        )
         binding.recyclerView.adapter = mAdapter
         toggleEmptyNotes()
         binding.recyclerView.addOnItemTouchListener(
-            RecyclerTouchListener(activity,
+            RecyclerTouchListener(requireContext(),
                 binding.recyclerView, object : RecyclerTouchListener.ClickListener {
-
                     override fun onClick(view: View?, position: Int) {
-                       // showActionsDialog(position)
+                        showActionsDialog(position)
                     }
 
                     override fun onLongClick(view: View?, position: Int) {
-                        //showActionsDialog(position)
+                        showActionsDialog(position)
                     }
                 })
         )
     }
 
-    private fun getSong(list : ArrayList<Song>){
-
+    private fun showActionsDialog(position: Int) {
+        val colors = arrayOf<CharSequence>("1. Use Note", "2. Edit Note", "3. Delete Note")
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setTitle("Choose option")
+        builder.setItems(colors) { dialog, which ->
+            when (which) {
+                0 -> {
+                    useNote(notesList[position])
+                }
+                1 -> {
+                    showNoteDialog(true, notesList[position], position)
+                }
+                else -> {
+                    deleteNote(position)
+                }
+            }
+        }
+        builder.show()
     }
 
-    override fun onStart() {
-        super.onStart()
-        EventBus.getDefault().register(this)
+    private fun deleteNote(position: Int) {
+        // deleting the note from db
+        db?.deleteNote(notesList[position])
+
+        // removing the note from the list
+        notesList.removeAt(position)
+        mAdapter?.notifyItemRemoved(position)
+        toggleEmptyNotes()
     }
 
-    override fun onStop() {
-        EventBus.getDefault().unregister(this)
-        super.onStop()
+    private fun useNote(note: Note) {
+        MyEventBus.postActionCompleted(note)
     }
 
-   /* @Subscribe(sticky = true, threadMode = ThreadMode.ASYNC)
-    fun onMessageEvent(songListResponse: ArrayList<Song>?) {
-        songListResponse?.let { getSong(it) }
-    }*/
 
-    override fun onResume() {
-        super.onResume()
-        sharedPreferences?.registerOnSharedPreferenceChangeListener(this)
+    private fun showNoteDialog(shouldUpdate: Boolean, note: Note?, position: Int) {
+        val layoutInflaterAndroid = LayoutInflater.from(requireContext())
+        @SuppressLint("InflateParams") val view =
+            layoutInflaterAndroid.inflate(R.layout.note_dialog, null)
+        val alertDialogBuilderUserInput = AlertDialog.Builder(requireContext())
+        alertDialogBuilderUserInput.setView(view)
+        val inputNote = view.findViewById<EditText>(R.id.note)
+        val inputTitle = view.findViewById<EditText>(R.id.title)
+        val dialogTitle = view.findViewById<TextView>(R.id.dialog_title)
+        dialogTitle.text = if (!shouldUpdate) getString(R.string.lbl_new_note_title) else getString(R.string.lbl_edit_note_title)
+
+        if (shouldUpdate && note != null) {
+            inputNote.setText(note.note)
+            inputTitle.setText(note.title)
+        }
+        alertDialogBuilderUserInput
+            .setCancelable(false)
+            .setPositiveButton(
+                if (shouldUpdate) "update" else "save"
+            ) { dialogBox, id -> }
+            .setNegativeButton(
+                "cancel"
+            ) { dialogBox, id -> dialogBox.cancel() }
+        val alertDialog = alertDialogBuilderUserInput.create()
+        alertDialog.show()
+        alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(
+            View.OnClickListener {
+                // Show toast message when no text is entered
+                if (TextUtils.isEmpty(inputNote.text.toString())) {
+                    setToastWarning("Enter Note!")
+                    return@OnClickListener
+                }else if (TextUtils.isEmpty(inputNote.text.toString())) {
+                    setToastWarning("Enter Note Title!")
+                    return@OnClickListener
+                }else {
+                    alertDialog.dismiss()
+                }
+
+                val note1 = Note()
+                note1.title = inputTitle.text.toString()
+                note1.note = inputNote.text.toString()
+                val input = Gson().toJson(note1)
+
+                // check if user updating note
+                if (shouldUpdate && note != null) {
+                    // update note by it's id
+                    updateNote(input,inputTitle.text.toString(), position)
+                } else {
+                    // create new note
+                    createNote(input,inputTitle.text.toString())
+                }
+            })
     }
 
-    override fun onPause() {
-        super.onPause()
-        sharedPreferences?.unregisterOnSharedPreferenceChangeListener(this)
+
+    @SuppressLint("NotifyDataSetChanged")
+    private fun createNote(note: String,title : String) {
+        // inserting note in db and getting
+        // newly inserted note id
+        val id = db?.insertNote(note,title)
+
+        // get the newly inserted note from db
+        val n = db?.getNote(id!!)
+        if (n != null) {
+            // adding new note to array list at 0 position
+            notesList.add(0, n)
+            setToastSuccess("Note Success Add")
+            // refreshing the list
+            mAdapter?.notifyDataSetChanged()
+            toggleEmptyNotes()
+
+
+        }
     }
 
-    override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
+    private fun updateNote(note: String,title : String, position: Int) {
+        val n = notesList[position]
+        // updating note text
+        n.note = note
+        n.title = title
 
+        // updating note in db
+        db!!.updateNote(n)
+
+        // refreshing the list
+        notesList[position] = n
+        mAdapter!!.notifyItemChanged(position)
+        toggleEmptyNotes()
     }
 }

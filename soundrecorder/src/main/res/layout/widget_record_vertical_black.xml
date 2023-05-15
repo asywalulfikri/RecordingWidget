@@ -67,15 +67,24 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
 
-            <androidx.appcompat.widget.AppCompatImageButton
+            <ImageView
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                app:srcCompat="@drawable/ic_record_black"
+                android:contentDescription="@string/app_names"
+                tools:ignore="DuplicateSpeakableTextCheck" />
+
+            <ImageView
                 android:id="@+id/recordBtn"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_marginTop="5dp"
                 android:layout_marginBottom="5dp"
-                android:background="@drawable/ic_record_black"
                 android:contentDescription="@string/app_names"
                 tools:ignore="DuplicateSpeakableTextCheck" />
+
 
             <TextView
                 android:id="@+id/recordText"

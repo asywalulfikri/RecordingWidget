@@ -41,6 +41,7 @@ import sound.recorder.widget.tools.Timer
 import sound.recorder.widget.ui.activity.ListingActivityWidgetNew
 import sound.recorder.widget.ui.bottomSheet.BottomSheet
 import sound.recorder.widget.ui.bottomSheet.BottomSheetListSong
+import sound.recorder.widget.ui.bottomSheet.BottomSheetNote
 import sound.recorder.widget.ui.bottomSheet.BottomSheetSetting
 import sound.recorder.widget.util.*
 import java.io.File
@@ -82,6 +83,8 @@ internal class VoiceRecorderFragmentWidgetVertical : BaseFragmentWidget(), Botto
     private var sharedPreferences : SharedPreferences? =null
     private var volume : Float? =null
 
+
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = WidgetRecordVerticalBinding.inflate(inflater, container, false)
         return binding.root
@@ -115,7 +118,7 @@ internal class VoiceRecorderFragmentWidgetVertical : BaseFragmentWidget(), Botto
                         else -> startPermission()
                     }
                 }else{
-                    setToast("Your device not support to record audio")
+                    setToastError("Your device not support to record audio")
                 }
             }
 
@@ -141,6 +144,11 @@ internal class VoiceRecorderFragmentWidgetVertical : BaseFragmentWidget(), Botto
 
             binding.settingBtn.setOnClickListener {
                 val bottomSheet = BottomSheetSetting()
+                bottomSheet.show(requireActivity().supportFragmentManager, LOG_TAG)
+            }
+
+            binding.noteBtn.setOnClickListener {
+                val bottomSheet = BottomSheetNote()
                 bottomSheet.show(requireActivity().supportFragmentManager, LOG_TAG)
             }
         }
@@ -271,7 +279,7 @@ internal class VoiceRecorderFragmentWidgetVertical : BaseFragmentWidget(), Botto
 
 
     private fun showAllowPermission(){
-        setToast("Allow Permission in Setting")
+        setToastInfo("Allow Permission in Setting")
     }
 
 
@@ -309,12 +317,13 @@ internal class VoiceRecorderFragmentWidgetVertical : BaseFragmentWidget(), Botto
     private fun showLayoutPauseRecord(){
         binding.recordText.visibility = View.VISIBLE
         binding.recordText.text = "Continue"
-        binding.recordBtn.setImageResource(R.drawable.ic_record)
+ //       binding.recordBtn.setImageResource(R.drawable.ic_record)
+        binding.recordBtn.setImageResource(R.drawable.transparant_bg)
         timer.pause()
     }
 
     private fun showLayoutStopRecord(){
-        binding.recordBtn.setImageResource(R.drawable.ic_record)
+        binding.recordBtn.setImageResource(R.drawable.transparant_bg)
         binding.recordText.text = "Record"
         binding.recordText.visibility = View.VISIBLE
         binding.listBtn.visibility = View.VISIBLE
@@ -327,7 +336,7 @@ internal class VoiceRecorderFragmentWidgetVertical : BaseFragmentWidget(), Botto
         try {
             timer.stop()
         }catch (e: Exception){
-            setToast(e.message.toString())
+            setToastError(e.message.toString())
         }
 
         binding.timerView.text = "00:00.00"
@@ -363,7 +372,7 @@ internal class VoiceRecorderFragmentWidgetVertical : BaseFragmentWidget(), Botto
                 start()
             } catch (e: IOException) {
                 Log.e(LOG_TAG, "prepare() failed")
-                setToast(e.message.toString())
+                setToastError(e.message.toString())
             }
 
         }
@@ -513,7 +522,15 @@ internal class VoiceRecorderFragmentWidgetVertical : BaseFragmentWidget(), Botto
             db.audioRecordDAO().insert(AudioRecord(filename, filePath, Date().time, duration))
         }
 
-        Toast.makeText(activity,"Successfully saved the recording",Toast.LENGTH_LONG).show()
+       // Toast.makeText(requireContext(),"Successfully saved the recording",Toast.LENGTH_LONG).show()
+        Toastic.toastic(
+            context = requireContext(),
+            message = "Successfully saved the recording",
+            duration = Toastic.LENGTH_SHORT,
+            type = Toastic.SUCCESS,
+            isIconAnimated = true
+        ).show()
+
         binding.recordText.visibility = View.VISIBLE
         binding.recordText.text = "Record"
         showInterstitial()

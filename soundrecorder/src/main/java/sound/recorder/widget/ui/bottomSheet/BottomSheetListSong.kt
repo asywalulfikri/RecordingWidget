@@ -1,7 +1,6 @@
 package sound.recorder.widget.ui.bottomSheet
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.content.SharedPreferences
 import android.os.Build
 import android.os.Bundle
@@ -26,7 +25,7 @@ import sound.recorder.widget.model.Song
 import sound.recorder.widget.util.DataSession
 
 
-internal class BottomSheetListSong(var showBtnStop: Boolean, private var listener: OnClickListener) : BottomSheetDialogFragment(),SharedPreferences.OnSharedPreferenceChangeListener {
+internal class BottomSheetListSong(private var showBtnStop: Boolean, private var listener: OnClickListener) : BottomSheetDialogFragment(),SharedPreferences.OnSharedPreferenceChangeListener {
 
 
     //Load Song
@@ -48,6 +47,7 @@ internal class BottomSheetListSong(var showBtnStop: Boolean, private var listene
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = BottomSheetSongBinding.inflate(layoutInflater)
+
         (dialog as? BottomSheetDialog)?.behavior?.state = STATE_EXPANDED
         (dialog as? BottomSheetDialog)?.behavior?.isDraggable = false
 
@@ -60,7 +60,7 @@ internal class BottomSheetListSong(var showBtnStop: Boolean, private var listene
 
         //dialog?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
 
-        sharedPreferences = DataSession(activity as Context).getShared()
+        sharedPreferences = DataSession(requireContext()).getShared()
         sharedPreferences?.registerOnSharedPreferenceChangeListener(this)
 
         if(showBtnStop){
@@ -81,7 +81,7 @@ internal class BottomSheetListSong(var showBtnStop: Boolean, private var listene
         listTitleSong = ArrayList()
         listLocationSong = ArrayList()
 
-        if(!RecordingSDK.isHaveSong(activity as Context)){
+        if(!RecordingSDK.isHaveSong(requireActivity())){
             getSong(lisSong)
         }
 
@@ -122,18 +122,17 @@ internal class BottomSheetListSong(var showBtnStop: Boolean, private var listene
 
     @SuppressLint("Recycle")
     private fun getAllMediaMp3Files(songList : ArrayList<Song>) {
-        //contentResolver = activity?.contentResolver
         val uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
-        val cursor = activity?.contentResolver?.query(uri,
+        val cursor = requireContext().contentResolver?.query(uri,
             null,
             null,
             null,
             null
         )
         if (cursor == null) {
-            Toast.makeText(activity, "Something Went Wrong.", Toast.LENGTH_LONG).show()
+            Toast.makeText(requireContext(), "Something Went Wrong.", Toast.LENGTH_LONG).show()
         } else if (!cursor.moveToFirst()) {
-            Toast.makeText(activity, "No Music Found on SD Card.", Toast.LENGTH_LONG).show()
+            Toast.makeText(requireContext(), "No Music Found on SD Card.", Toast.LENGTH_LONG).show()
         } else {
             val title    = cursor.getColumnIndex(MediaStore.Audio.Media.TITLE)
             val location = cursor.getColumnIndex(MediaStore.Audio.Media.DATA)
@@ -165,20 +164,12 @@ internal class BottomSheetListSong(var showBtnStop: Boolean, private var listene
                         do {
                             var songTitle = ""
                             var songLocation = ""
-                            if(title==null){
-                                //don't execute anything
-                            }else{
-                                if(cursor.getString(title)!=null){
-                                    songTitle = cursor.getString(title)
-                                }
+                            if(cursor.getString(title)!=null){
+                                songTitle = cursor.getString(title)
                             }
 
-                            if(location==null){
-                                //don't execute anything
-                            }else{
-                                if(cursor.getString(location)!=null){
-                                    songLocation = cursor.getString(location)
-                                }
+                            if(cursor.getString(location)!=null){
+                                songLocation = cursor.getString(location)
                             }
 
                             listLocationSong?.add(songLocation)
@@ -197,7 +188,7 @@ internal class BottomSheetListSong(var showBtnStop: Boolean, private var listene
 
     private fun updateView(){
         val listSong = listTitleSong!!.toTypedArray()
-        adapter = ArrayAdapter(activity as Context, android.R.layout.simple_list_item_1, listSong)
+        adapter = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, listSong)
         binding.listView.adapter = adapter
         adapter?.notifyDataSetChanged()
         binding.listView.onItemClickListener =

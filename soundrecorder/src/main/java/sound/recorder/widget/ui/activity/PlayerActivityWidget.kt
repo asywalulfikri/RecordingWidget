@@ -92,7 +92,7 @@ internal class PlayerActivityWidget : BaseActivityWidget() {
                 binding.chip.text = "x $playbackSpeed"
             }
         }else{
-            setToast("Audio not found")
+            setToastError("Audio not found")
             finish()
         }
 

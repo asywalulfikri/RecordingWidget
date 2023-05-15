@@ -41,20 +41,38 @@
             app:layout_anchor="@id/recycler_view"
             app:layout_anchorGravity="bottom|end" />
 
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <ImageView
-                android:layout_alignParentEnd="true"
-                android:id="@+id/ivClose"
-                app:srcCompat="@drawable/ic_close"
-                android:layout_width="40dp"
-                android:layout_height="40dp"/>
-
-        </RelativeLayout>
-
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
+
+
+   <!-- <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:layout_alignParentEnd="true"
+            android:id="@+id/ivClose"
+            app:srcCompat="@drawable/ic_close"
+            android:layout_width="40dp"
+            android:layout_height="40dp"/>
+
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_below="@+id/ivClose"
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scrollbars="none" />
+
+
+        <TextView
+            android:visibility="gone"
+            android:id="@+id/empty_notes_view"
+            android:layout_centerInParent="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:fontFamily="sans-serif-light"
+            android:text="Note Empty" />
+    </RelativeLayout>-->
 </RelativeLayout>

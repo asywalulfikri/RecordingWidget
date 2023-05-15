@@ -4,26 +4,33 @@ import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
-import android.net.ConnectivityManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
-import android.widget.Toast
+import android.widget.RelativeLayout
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import com.google.android.gms.ads.*
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.AdView
+import com.google.android.gms.ads.LoadAdError
+import com.google.android.gms.ads.MobileAds
 import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 import com.google.android.gms.tasks.Task
+import com.google.firebase.FirebaseApp
 import com.google.firebase.messaging.FirebaseMessaging
+import com.google.gson.Gson
+import com.unity3d.services.banners.BannerView
+import org.json.JSONObject
+import sound.recorder.widget.notes.Note
 import sound.recorder.widget.util.DataSession
 import sound.recorder.widget.util.MusicAnimationView
-import java.io.IOException
-import java.net.*
+import sound.recorder.widget.util.Toastic
 import java.util.concurrent.atomic.AtomicReference
+
 
 open class BaseActivityWidget : AppCompatActivity() {
 
@@ -35,6 +42,7 @@ open class BaseActivityWidget : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        FirebaseApp.initializeApp(this);
         MobileAds.initialize(this) {}
         dataSession = DataSession(this)
         adRequest = AdRequest.Builder().build()
@@ -46,6 +54,45 @@ open class BaseActivityWidget : AppCompatActivity() {
         musicAnimation.start()
     }
 
+
+    fun getNoteValue(note: Note) : String{
+        var valueNote = ""
+        valueNote = try {
+            val jsonObject = JSONObject(note.note.toString())
+            val value = Gson().fromJson(note.note, Note::class.java)
+            // The JSON string is valid
+            value.note.toString()
+
+        } catch (e: Exception) {
+            // The JSON string is not valid
+            note.note
+        }
+
+        return  valueNote
+    }
+
+    fun getTitleValue(note: Note) : String{
+        var valueNote = ""
+        valueNote = try {
+            val jsonObject = JSONObject(note.note.toString())
+            val value = Gson().fromJson(note.title, Note::class.java)
+            // The JSON string is valid
+            value.note.toString()
+
+        } catch (e: Exception) {
+            // The JSON string is not valid
+            "No title"
+        }
+
+        return  valueNote
+    }
+
+    open fun loadBannerUniAd(bannerView: BannerView, bannerLayout: RelativeLayout) {
+        // Request a banner ad:
+        bannerView.load()
+        // Associate the banner view object with the banner view:
+        bannerLayout.addView(bannerView)
+    }
 
     fun animation(): Boolean{
         return DataSession(this).getAnimation()
@@ -124,9 +171,47 @@ open class BaseActivityWidget : AppCompatActivity() {
         }
     }
 
-    fun setToast(message : String){
-        Toast.makeText(getActivity(),message,Toast.LENGTH_SHORT).show()
+
+    fun setToastError(message : String){
+        Toastic.toastic(
+            context = this,
+            message = message,
+            duration = Toastic.LENGTH_SHORT,
+            type = Toastic.SUCCESS,
+            isIconAnimated = true
+        ).show()
     }
+
+    fun setToastWarning(message : String){
+        Toastic.toastic(
+            context = this,
+            message = message,
+            duration = Toastic.LENGTH_SHORT,
+            type = Toastic.WARNING,
+            isIconAnimated = true
+        ).show()
+    }
+
+    fun setToastSuccess(message : String){
+        Toastic.toastic(
+            context = this,
+            message = message,
+            duration = Toastic.LENGTH_SHORT,
+            type = Toastic.SUCCESS,
+            isIconAnimated = true
+        ).show()
+    }
+
+    fun setToastInfo(message : String){
+        Toastic.toastic(
+            context = this,
+            message = message,
+            duration = Toastic.LENGTH_SHORT,
+            type = Toastic.INFO,
+            isIconAnimated = true
+        ).show()
+    }
+
 
     fun setLog(message: String){
         Log.d("response", "$message - ")

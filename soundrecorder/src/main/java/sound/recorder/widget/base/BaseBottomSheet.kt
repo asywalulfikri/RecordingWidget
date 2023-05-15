@@ -11,6 +11,7 @@ import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import sound.recorder.widget.util.DataSession
+import sound.recorder.widget.util.Toastic
 
 
 open class BaseBottomSheet : BottomSheetDialogFragment(){
@@ -24,15 +25,51 @@ open class BaseBottomSheet : BottomSheetDialogFragment(){
         dataSession = DataSession(activity as Context)
     }
 
-    fun setToast(message : String){
-        Toast.makeText(activity,message,Toast.LENGTH_SHORT).show()
-    }
-
 
     fun setLog(message : String){
         Log.d("response", "$message.")
     }
 
+
+    fun setToastError(message : String){
+        Toastic.toastic(
+            context = requireContext(),
+            message = message,
+            duration = Toastic.LENGTH_SHORT,
+            type = Toastic.SUCCESS,
+            isIconAnimated = true
+        ).show()
+    }
+
+    fun setToastWarning(message : String){
+        Toastic.toastic(
+            context = requireContext(),
+            message = message,
+            duration = Toastic.LENGTH_SHORT,
+            type = Toastic.WARNING,
+            isIconAnimated = true
+        ).show()
+    }
+
+    fun setToastSuccess(message : String){
+        Toastic.toastic(
+            context = requireContext(),
+            message = message,
+            duration = Toastic.LENGTH_SHORT,
+            type = Toastic.SUCCESS,
+            isIconAnimated = true
+        ).show()
+    }
+
+    fun setToastInfo(message : String){
+        Toastic.toastic(
+            context = requireContext(),
+            message = message,
+            duration = Toastic.LENGTH_SHORT,
+            type = Toastic.INFO,
+            isIconAnimated = true
+        ).show()
+    }
 
 
     fun setupAds() {

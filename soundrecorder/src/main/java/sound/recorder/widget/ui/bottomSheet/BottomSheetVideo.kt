@@ -90,11 +90,11 @@ open class BottomSheetVideo(var firestore: FirebaseFirestore?) : BaseBottomSheet
                         result(wrapper, loadMore)
                         mAdapter?.notifyDataSetChanged()
                     } else if (task.result!!.size() == 0) {
-                        setToast("No Data")
+                        setToastInfo("No Data")
                     }
                 } else {
                     setLog(task.result.toString())
-                    setToast("Failed get data")
+                    setToastError("Failed get data")
 
                 }
             }
@@ -105,7 +105,7 @@ open class BottomSheetVideo(var firestore: FirebaseFirestore?) : BaseBottomSheet
             Log.e("gg2", "mm")
             if (wrapper.list.size == 0) {
                 Log.e("gg3", "mm")
-                setToast("Tidak ada data")
+                setToastInfo("Tidak ada data")
             } else {
                 mVideoList = ArrayList()
                 updateList(wrapper)
@@ -119,7 +119,7 @@ open class BottomSheetVideo(var firestore: FirebaseFirestore?) : BaseBottomSheet
             }
         } else {
             Log.e("gg4", "mm")
-            setToast("Tidak ada data")
+            setToastInfo("Tidak ada data")
         }
     }
 
