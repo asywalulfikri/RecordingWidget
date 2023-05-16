@@ -20,7 +20,6 @@
         android:textSize="30sp" />
 
     <com.airbnb.lottie.LottieAnimationView
-        android:visibility="gone"
         android:id="@+id/animation_view1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -29,18 +28,6 @@
         android:scaleType="centerInside"
         app:lottie_autoPlay="true"
         app:lottie_rawRes="@raw/splash_screen_1"
-        app:lottie_loop="true" />
-
-    <com.airbnb.lottie.LottieAnimationView
-        android:visibility="gone"
-        android:id="@+id/animation_view2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:layout_marginEnd="20dp"
-        android:scaleType="centerInside"
-        app:lottie_rawRes="@raw/splash_screen_2"
-        app:lottie_autoPlay="true"
         app:lottie_loop="true" />
 
 </RelativeLayout>
