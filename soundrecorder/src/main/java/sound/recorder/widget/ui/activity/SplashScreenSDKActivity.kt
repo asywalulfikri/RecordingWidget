@@ -43,13 +43,9 @@ class SplashScreenSDKActivity : BaseActivityWidget() {
         dataSession = DataSession(this)
         jsonName = dataSession?.getJsonName().toString()
 
-        if(dataSession?.getSplashScreenType()=="1"){
-            binding.backgroundSplash.setBackgroundColor(Color.parseColor("#f8a424"))
-            binding.animationView1.visibility = View.VISIBLE
-        }else{
-            binding.backgroundSplash.setBackgroundColor(Color.parseColor("#3490dc"))
-            binding.animationView2.visibility =  View.VISIBLE
-        }
+
+        binding.backgroundSplash.setBackgroundColor(Color.parseColor(dataSession?.getSplashScreenColor()))
+        binding.animationView2.visibility =  View.VISIBLE
 
         binding.tvTitle.text = dataSession?.getAppName()
         currentVersionCode = dataSession?.getVersionCode()
