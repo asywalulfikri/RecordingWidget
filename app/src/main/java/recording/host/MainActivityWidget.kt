@@ -146,7 +146,6 @@ class MainActivityWidget : BaseActivityWidget(),SharedPreferences.OnSharedPrefer
     }
 
     override fun onCallback(note: Note) {
-       // setToastSuccess(getNoteValue(note))
         binding.runningText.text = getNoteValue(note)
         binding.runningText.isSelected = true
     }
