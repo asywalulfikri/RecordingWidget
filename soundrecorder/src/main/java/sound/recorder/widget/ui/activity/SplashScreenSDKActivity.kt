@@ -63,8 +63,7 @@ class SplashScreenSDKActivity : BaseActivityWidget() {
             .build()
         mFirebaseRemoteConfig.setConfigSettingsAsync(configSettings)
         mFirebaseRemoteConfig.fetchAndActivate()
-            .addOnCompleteListener(this
-            ) { task: Task<Boolean?> ->
+            .addOnCompleteListener(this) { task: Task<Boolean?> ->
                 if (task.isSuccessful) {
                     val json = mFirebaseRemoteConfig.getString(jsonName)
                     val menuConfig = Gson().fromJson(json, MenuConfig::class.java)
@@ -166,6 +165,7 @@ class SplashScreenSDKActivity : BaseActivityWidget() {
 
     private fun goToNextPage(){
         val intent = Intent()
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
         setResult(RESULT_OK,intent)
         finish()
 

@@ -5,13 +5,7 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:statusBarColor" tools:ignore="NewApi">@color/colorBackground</item>
-        <item name="android:textColor">@color/colorText</item>
-        <item name="android:homeAsUpIndicator">@drawable/ic_back</item>
-
     </style>
-
-
 
     <style name="TextAppearance.App.CollapsingToolbar.Expanded" parent="TextAppearance.MaterialComponents.Headline5">
         <item name="android:textColor">@color/colorText</item>
