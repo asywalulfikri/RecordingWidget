@@ -11,6 +11,7 @@ import android.util.Log
 import android.view.View
 import android.view.Window
 import android.widget.Button
+import android.widget.RelativeLayout
 import android.widget.TextView
 import com.google.android.gms.tasks.Task
 import com.google.firebase.FirebaseApp
@@ -19,7 +20,7 @@ import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings
 import com.google.gson.Gson
 import sound.recorder.widget.R
 import sound.recorder.widget.base.BaseActivityWidget
-import sound.recorder.widget.databinding.ActivitySplashSdkBinding
+//import sound.recorder.widget.databinding.ActivitySplashSdkBinding
 import sound.recorder.widget.model.MenuConfig
 import sound.recorder.widget.util.DataSession
 
@@ -27,7 +28,7 @@ import sound.recorder.widget.util.DataSession
 @SuppressLint("CustomSplashScreen")
 class SplashScreenSDKActivity : BaseActivityWidget() {
 
-    private lateinit var binding: ActivitySplashSdkBinding
+    //private lateinit var binding: ActivitySplashSdkBinding
     private var jsonName = ""
     private var currentVersionCode : Int? =null
     private var dataSession : DataSession? =null
@@ -35,8 +36,8 @@ class SplashScreenSDKActivity : BaseActivityWidget() {
     @SuppressLint("NotifyDataSetChanged")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivitySplashSdkBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+       // binding = ActivitySplashSdkBinding.inflate(layoutInflater)
+        setContentView(R.layout.activity_splash_sdk)
 
         FirebaseApp.initializeApp(this)
 
@@ -44,9 +45,11 @@ class SplashScreenSDKActivity : BaseActivityWidget() {
         jsonName = dataSession?.getJsonName().toString()
 
 
-        binding.backgroundSplash.setBackgroundColor(Color.parseColor(dataSession?.getSplashScreenColor()))
+        val backgroundSplash = findViewById<RelativeLayout>(R.id.backgroundSplash)
+        backgroundSplash.setBackgroundColor(Color.parseColor(dataSession?.getSplashScreenColor()))
 
-        binding.tvTitle.text = dataSession?.getAppName()
+        val tvTitle = findViewById<TextView>(R.id.tvTitle)
+        tvTitle.text = dataSession?.getAppName()
         currentVersionCode = dataSession?.getVersionCode()
 
         checkVersion()
