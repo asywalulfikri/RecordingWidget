@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetBehavior.STATE_EXPANDED
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.gson.Gson
+import org.json.JSONObject
 import sound.recorder.widget.R
 import sound.recorder.widget.base.BaseBottomSheet
 import sound.recorder.widget.databinding.BottomSheetNotesBinding
@@ -157,8 +158,20 @@ internal class BottomSheetNote() : BaseBottomSheet() {
         dialogTitle.text = if (!shouldUpdate) getString(R.string.lbl_new_note_title) else getString(R.string.lbl_edit_note_title)
 
         if (shouldUpdate && note != null) {
-            inputNote.setText(note.note)
-            inputTitle.setText(note.title)
+
+            try {
+                val jsonObject = JSONObject(note.note.toString())
+                val value = Gson().fromJson(note.note,Note::class.java)
+                // The JSON string is valid
+                inputNote.setText(value.note)
+                inputTitle.setText(value.title)
+
+            } catch (e: Exception) {
+                // The JSON string is not valid
+                inputNote.setText(note.note)
+                inputTitle.setText(note.title)
+            }
+
         }
         alertDialogBuilderUserInput
             .setCancelable(false)
