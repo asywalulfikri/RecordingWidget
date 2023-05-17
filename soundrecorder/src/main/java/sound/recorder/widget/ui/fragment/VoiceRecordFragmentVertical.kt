@@ -82,6 +82,7 @@ internal class VoiceRecorderFragmentWidgetVertical : BaseFragmentWidget(), Botto
     var pauseRecordScreen = false
     private var sharedPreferences : SharedPreferences? =null
     private var volume : Float? =null
+    private var showNote : Boolean? =null
 
 
 
@@ -98,6 +99,7 @@ internal class VoiceRecorderFragmentWidgetVertical : BaseFragmentWidget(), Botto
 
             sharedPreferences = DataSession(requireContext()).getShared()
             sharedPreferences?.registerOnSharedPreferenceChangeListener(this)
+            showNote = DataSession(requireContext()).getShowNote()
 
             mp = MediaPlayer()
             val progress = sharedPreferences?.getInt(Constant.keyShared.volume,100)
@@ -105,6 +107,14 @@ internal class VoiceRecorderFragmentWidgetVertical : BaseFragmentWidget(), Botto
                 ToneGenerator.MAX_VOLUME.toDouble())).toFloat()
 
             setupAds()
+
+            if(showNote==true){
+                binding.noteBtn.visibility = View.VISIBLE
+            }else{
+                binding.noteBtn.visibility = View.GONE
+            }
+
+
 
             //setupScreenRecorder()
 

@@ -22,6 +22,7 @@ object RecordingSDK {
         DataSession(ctx).initiateSong(false)
     }
 
+
     fun initSdkColor(context: Context,colorWidget : Int,colorRunningText: Int) {
         DataSession(context).addColor(colorWidget,colorRunningText)
     }
@@ -44,8 +45,8 @@ object RecordingSDK {
         EventBus.getDefault().postSticky(listSong)
     }
 
-    fun addInfo(context: Context,versionCode : Int, appName : String,jsonName : String,backgroundSplashScreen : String){
-        DataSession(context).setInfoApp(versionCode,appName,jsonName,backgroundSplashScreen)
+    fun addInfo(context: Context,versionCode : Int, appName : String,jsonName : String,backgroundSplashScreen : String, isNote : Boolean){
+        DataSession(context).setInfoApp(versionCode,appName,jsonName,backgroundSplashScreen,isNote)
     }
 
     fun isHaveSong(context: Context): Boolean{

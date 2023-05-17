@@ -141,6 +141,7 @@ internal class BottomSheetNote() : BaseBottomSheet() {
 
     private fun useNote(note: Note) {
         MyEventBus.postActionCompleted(note)
+        dismiss()
     }
 
 

@@ -44,6 +44,10 @@ open class DataSession(private val mContext: Context) {
         return sharedPref.getString("appName","")
     }
 
+    fun getShowNote(): Boolean{
+        return sharedPref.getBoolean("showNote",false)
+    }
+
     fun getJsonName(): String?{
         return sharedPref.getString("jsonName","")
     }
@@ -61,12 +65,13 @@ open class DataSession(private val mContext: Context) {
         editor.apply()
     }
 
-    fun setInfoApp(versionCode : Int,appName: String, jsonName : String,splashScreenType: String){
+    fun setInfoApp(versionCode : Int,appName: String, jsonName : String,splashScreenType: String,showNote: Boolean){
         val editor = sharedPref.edit()
         editor.putInt("versionCode", versionCode)
         editor.putString("backgroundSplashScreen", splashScreenType)
         editor.putString("appName",appName)
         editor.putString("jsonName",jsonName)
+        editor.putBoolean("showNote",showNote)
 
         editor.apply()
     }
