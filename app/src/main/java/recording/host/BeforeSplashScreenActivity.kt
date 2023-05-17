@@ -2,7 +2,6 @@ package recording.host
 
 import android.content.Intent
 import android.os.Bundle
-import com.google.firebase.FirebaseApp
 import sound.recorder.widget.RecordingSDK
 import sound.recorder.widget.base.BaseActivityWidget
 import sound.recorder.widget.ui.activity.SplashScreenSDKActivity
@@ -14,6 +13,8 @@ class BeforeSplashScreenActivity : BaseActivityWidget() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         RecordingSDK.addInfo(this,BuildConfig.VERSION_CODE,getString(R.string.app_name),"recording_json","#000000")
+       // RecordingSDK.adsInfo(this,"123456","banner_id")
+
 
         val intent = Intent(this, SplashScreenSDKActivity::class.java)
         startActivityForResult(intent,1212)

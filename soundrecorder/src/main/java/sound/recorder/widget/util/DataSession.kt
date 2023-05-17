@@ -44,6 +44,15 @@ open class DataSession(private val mContext: Context) {
         return sharedPref.getString("appName","")
     }
 
+    fun getUnId(): String?{
+        return sharedPref.getString("unI","")
+    }
+
+
+    fun getBannerUnit(): String?{
+        return sharedPref.getString("bannerUnit","")
+    }
+
 
     fun getJsonName(): String?{
         return sharedPref.getString("jsonName","")
@@ -64,6 +73,13 @@ open class DataSession(private val mContext: Context) {
         editor.apply()
     }
 
+    fun setAdsUnit(unId: String,bannerId: String){
+        val editor = sharedPref.edit()
+        editor.putString("unId",unId)
+        editor.putString("bannerUnit",bannerId)
+        editor.apply()
+    }
+
     fun setInfoApp(versionCode : Int,appName: String, jsonName : String,splashScreenType: String){
         val editor = sharedPref.edit()
         editor.putInt("versionCode", versionCode)
@@ -73,6 +89,7 @@ open class DataSession(private val mContext: Context) {
 
         editor.apply()
     }
+
 
     fun addColor(colorWidget : Int, colorRunningText: Int){
         val editor = sharedPref.edit()
