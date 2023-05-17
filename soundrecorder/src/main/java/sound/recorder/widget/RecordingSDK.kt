@@ -48,10 +48,6 @@ object RecordingSDK {
         DataSession(context).setInfoApp(versionCode,appName,jsonName,backgroundSplashScreen)
     }
 
-    fun adsInfo(context : Context,unId : String,bannerId: String){
-        DataSession(context).setAdsUnit(unId,bannerId)
-    }
-
     fun isHaveSong(context: Context): Boolean{
         return DataSession(context).isContainSong()
     }

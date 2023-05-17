@@ -44,21 +44,9 @@ open class DataSession(private val mContext: Context) {
         return sharedPref.getString("appName","")
     }
 
-    fun getUnId(): String?{
-        return sharedPref.getString("unI","")
-    }
-
-
-    fun getBannerUnit(): String?{
-        return sharedPref.getString("bannerUnit","")
-    }
-
-
     fun getJsonName(): String?{
         return sharedPref.getString("jsonName","")
     }
-
-
 
     fun getVolume(): Int{
         return sharedPref.getInt(Constant.keyShared.volume, 100)
@@ -70,13 +58,6 @@ open class DataSession(private val mContext: Context) {
         editor.putString(admobIdName, admobId)
         editor.putString(bannerIdName, bannerId)
         editor.putString(interstitialIdName, interstitialId)
-        editor.apply()
-    }
-
-    fun setAdsUnit(unId: String,bannerId: String){
-        val editor = sharedPref.edit()
-        editor.putString("unId",unId)
-        editor.putString("bannerUnit",bannerId)
         editor.apply()
     }
 

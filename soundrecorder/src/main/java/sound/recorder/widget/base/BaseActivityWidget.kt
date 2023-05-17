@@ -10,7 +10,6 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
-import android.widget.RelativeLayout
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.ads.AdRequest
@@ -23,7 +22,6 @@ import com.google.android.gms.tasks.Task
 import com.google.firebase.FirebaseApp
 import com.google.firebase.messaging.FirebaseMessaging
 import com.google.gson.Gson
-import com.unity3d.services.banners.BannerView
 import org.json.JSONObject
 import sound.recorder.widget.notes.Note
 import sound.recorder.widget.util.DataSession
@@ -85,17 +83,6 @@ open class BaseActivityWidget : AppCompatActivity() {
         }
 
         return  valueNote
-    }
-
-    open fun loadBannerUniAd(bannerView: BannerView, bannerLayout: RelativeLayout) {
-        // Request a banner ad:
-        bannerView.load()
-        // Associate the banner view object with the banner view:
-        bannerLayout.addView(bannerView)
-    }
-
-    fun animation(): Boolean{
-        return DataSession(this).getAnimation()
     }
 
     fun setupAds(mAdView: AdView) {

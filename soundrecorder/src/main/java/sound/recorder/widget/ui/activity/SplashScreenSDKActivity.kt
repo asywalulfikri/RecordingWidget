@@ -20,6 +20,7 @@ import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings
 import com.google.gson.Gson
 import sound.recorder.widget.R
 import sound.recorder.widget.base.BaseActivityWidget
+import sound.recorder.widget.databinding.ActivitySplashSdkBinding
 //import sound.recorder.widget.databinding.ActivitySplashSdkBinding
 import sound.recorder.widget.model.MenuConfig
 import sound.recorder.widget.util.DataSession
@@ -28,7 +29,7 @@ import sound.recorder.widget.util.DataSession
 @SuppressLint("CustomSplashScreen")
 class SplashScreenSDKActivity : BaseActivityWidget() {
 
-    //private lateinit var binding: ActivitySplashSdkBinding
+    private lateinit var binding: ActivitySplashSdkBinding
     private var jsonName = ""
     private var currentVersionCode : Int? =null
     private var dataSession : DataSession? =null
@@ -36,8 +37,8 @@ class SplashScreenSDKActivity : BaseActivityWidget() {
     @SuppressLint("NotifyDataSetChanged")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-       // binding = ActivitySplashSdkBinding.inflate(layoutInflater)
-        setContentView(R.layout.activity_splash_sdk)
+        binding = ActivitySplashSdkBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         FirebaseApp.initializeApp(this)
 
@@ -45,11 +46,8 @@ class SplashScreenSDKActivity : BaseActivityWidget() {
         jsonName = dataSession?.getJsonName().toString()
 
 
-        /*val backgroundSplash = findViewById<RelativeLayout>(R.id.backgroundSplash)
-        backgroundSplash.setBackgroundColor(Color.parseColor(dataSession?.getSplashScreenColor()))
-
-        val tvTitle = findViewById<TextView>(R.id.tvTitle)
-        tvTitle.text = dataSession?.getAppName()*/
+        binding.backgroundSplash.setBackgroundColor(Color.parseColor(dataSession?.getSplashScreenColor()))
+        binding.tvTitle.text = dataSession?.getAppName()
         currentVersionCode = dataSession?.getVersionCode()
 
         checkVersion()
