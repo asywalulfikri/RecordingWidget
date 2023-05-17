@@ -45,11 +45,11 @@ class SplashScreenSDKActivity : BaseActivityWidget() {
         jsonName = dataSession?.getJsonName().toString()
 
 
-        val backgroundSplash = findViewById<RelativeLayout>(R.id.backgroundSplash)
+        /*val backgroundSplash = findViewById<RelativeLayout>(R.id.backgroundSplash)
         backgroundSplash.setBackgroundColor(Color.parseColor(dataSession?.getSplashScreenColor()))
 
         val tvTitle = findViewById<TextView>(R.id.tvTitle)
-        tvTitle.text = dataSession?.getAppName()
+        tvTitle.text = dataSession?.getAppName()*/
         currentVersionCode = dataSession?.getVersionCode()
 
         checkVersion()
