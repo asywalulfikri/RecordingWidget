@@ -11,7 +11,6 @@ import android.util.Log
 import android.view.View
 import android.view.Window
 import android.widget.Button
-import android.widget.RelativeLayout
 import android.widget.TextView
 import com.google.android.gms.tasks.Task
 import com.google.firebase.FirebaseApp
@@ -21,7 +20,6 @@ import com.google.gson.Gson
 import sound.recorder.widget.R
 import sound.recorder.widget.base.BaseActivityWidget
 import sound.recorder.widget.databinding.ActivitySplashSdkBinding
-//import sound.recorder.widget.databinding.ActivitySplashSdkBinding
 import sound.recorder.widget.model.MenuConfig
 import sound.recorder.widget.util.DataSession
 
@@ -46,11 +44,25 @@ class SplashScreenSDKActivity : BaseActivityWidget() {
         jsonName = dataSession?.getJsonName().toString()
 
 
-        binding.backgroundSplash.setBackgroundColor(Color.parseColor(dataSession?.getSplashScreenColor()))
-        binding.tvTitle.text = dataSession?.getAppName()
+        if(dataSession?.getSplashScreenColor().toString().isNotEmpty()){
+            binding.backgroundSplash.setBackgroundColor(Color.parseColor(dataSession?.getSplashScreenColor()))
+        }
+
+        if(dataSession?.getAppName().toString().isNotEmpty()){
+            binding.tvTitle.text = dataSession?.getAppName()
+        }
+
         currentVersionCode = dataSession?.getVersionCode()
 
-        checkVersion()
+        if(dataSession?.getJsonName().toString().isNotEmpty()){
+            if(dataSession?.getVersionCode()!=0||dataSession?.getVersionCode()!=null){
+                checkVersion()
+            }else{
+                goToNextPage()
+            }
+        }else{
+            goToNextPage()
+        }
 
     }
 
@@ -67,8 +79,13 @@ class SplashScreenSDKActivity : BaseActivityWidget() {
                 if (task.isSuccessful) {
                     val json = mFirebaseRemoteConfig.getString(jsonName)
                     val menuConfig = Gson().fromJson(json, MenuConfig::class.java)
-                    Log.d("value_json", Gson().toJson(menuConfig) + "---"+jsonName)
-                    checkVersionSuccess(menuConfig)
+                    if(menuConfig!=null){
+                        Log.d("value_json", Gson().toJson(menuConfig) + "---"+jsonName)
+                        checkVersionSuccess(menuConfig)
+                    }else{
+                        Log.d("value_json", "empty")
+                        goToNextPage()
+                    }
                 }else{
                     Log.d("value_json", task.exception?.message.toString() +"---"+jsonName)
                     goToNextPage()
