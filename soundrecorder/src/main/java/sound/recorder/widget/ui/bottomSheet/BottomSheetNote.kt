@@ -1,7 +1,6 @@
 package sound.recorder.widget.ui.bottomSheet
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.os.Build
 import android.os.Bundle
 import android.text.TextUtils
@@ -28,7 +27,7 @@ import sound.recorder.widget.notes.utils.MyDividerItemDecoration
 import sound.recorder.widget.notes.utils.RecyclerTouchListener
 
 
-internal class BottomSheetNote() : BaseBottomSheet() {
+class BottomSheetNote : BaseBottomSheet() {
 
     private lateinit var binding : BottomSheetNotesBinding
 
@@ -38,10 +37,6 @@ internal class BottomSheetNote() : BaseBottomSheet() {
     var callback: MyListener? = null
     var valueNote : String? =null
 
-
-    constructor(context: Context) : this() {
-
-    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = BottomSheetNotesBinding.inflate(layoutInflater)
