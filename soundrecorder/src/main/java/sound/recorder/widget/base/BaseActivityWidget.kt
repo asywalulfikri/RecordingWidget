@@ -10,8 +10,13 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import android.widget.LinearLayout
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import com.facebook.ads.Ad
+import com.facebook.ads.AdError
+import com.facebook.ads.AdListener
+import com.facebook.ads.AdSize
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.LoadAdError
@@ -37,6 +42,7 @@ open class BaseActivityWidget : AppCompatActivity() {
     var id: String? = null
     private var isLoad = false
     private var adRequest : AdRequest? =null
+    private var adView : com.facebook.ads.AdView? =null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -85,7 +91,7 @@ open class BaseActivityWidget : AppCompatActivity() {
         return  valueNote
     }
 
-    fun setupAds(mAdView: AdView) {
+    fun setupAds(mAdView: AdView){
         adRequest?.let { mAdView.loadAd(it) }
         adRequest?.let {
             InterstitialAd.load(this, dataSession?.getInterstitialId().toString(), it,
@@ -102,6 +108,32 @@ open class BaseActivityWidget : AppCompatActivity() {
         }
     }
 
+    fun audienceNetworkAds(bannerId : String,bannerContainer : LinearLayout){
+        adView = com.facebook.ads.AdView(this, bannerId, AdSize.BANNER_HEIGHT_50);
+        val adListener: AdListener = object : AdListener {
+            override fun onError(ad: Ad?, adError: AdError) {
+                Log.d("facebookAds",adError.errorMessage.toString())
+            }
+
+            override fun onAdLoaded(ad: Ad?) {
+            }
+
+            override fun onAdClicked(ad: Ad?) {
+            }
+
+            override fun onLoggingImpression(ad: Ad?) {
+
+            }
+        }
+        bannerContainer.addView(adView)
+        adView?.loadAd(adView?.buildLoadAdConfig()?.withAdListener(adListener)?.build());
+    }
+
+    fun destroyAudienceNetwork(){
+        if(adView!=null){
+            adView?.destroy()
+        }
+    }
 
 
     private fun permissionNotification(){

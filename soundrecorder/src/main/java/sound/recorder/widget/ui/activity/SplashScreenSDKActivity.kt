@@ -32,7 +32,7 @@ class SplashScreenSDKActivity : BaseActivityWidget() {
     private var currentVersionCode : Int? =null
     private var dataSession : DataSession? =null
 
-    @SuppressLint("NotifyDataSetChanged")
+    @SuppressLint("NotifyDataSetChanged", "SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySplashSdkBinding.inflate(layoutInflater)
@@ -49,7 +49,7 @@ class SplashScreenSDKActivity : BaseActivityWidget() {
         }
 
         if(dataSession?.getAppName().toString().isNotEmpty()){
-            binding.tvTitle.text = dataSession?.getAppName()
+            binding.tvTitle.text = dataSession?.getAppName() + " "+ dataSession?.getVersionName().toString()
         }
 
         currentVersionCode = dataSession?.getVersionCode()
@@ -79,12 +79,12 @@ class SplashScreenSDKActivity : BaseActivityWidget() {
                 if (task.isSuccessful) {
                     val json = mFirebaseRemoteConfig.getString(jsonName)
                     val menuConfig = Gson().fromJson(json, MenuConfig::class.java)
-                    if(menuConfig!=null){
-                        Log.d("value_json", Gson().toJson(menuConfig) + "---"+jsonName)
-                        checkVersionSuccess(menuConfig)
-                    }else{
+                    if(menuConfig==null){
                         Log.d("value_json", "empty")
                         goToNextPage()
+                    }else{
+                        Log.d("value_json", Gson().toJson(menuConfig) + "---"+jsonName)
+                        checkVersionSuccess(menuConfig)
                     }
                 }else{
                     Log.d("value_json", task.exception?.message.toString() +"---"+jsonName)
@@ -185,6 +185,5 @@ class SplashScreenSDKActivity : BaseActivityWidget() {
         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
         setResult(RESULT_OK,intent)
         finish()
-
     }
 }

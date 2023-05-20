@@ -45,8 +45,8 @@ object RecordingSDK {
         EventBus.getDefault().postSticky(listSong)
     }
 
-    fun addInfo(context: Context,versionCode : Int, appName : String,jsonName : String,backgroundSplashScreen : String, isNote : Boolean){
-        DataSession(context).setInfoApp(versionCode,appName,jsonName,backgroundSplashScreen,isNote)
+    fun addInfo(context: Context,versionCode : Int,versionName : String, appName : String,jsonName : String,backgroundSplashScreen : String, isNote : Boolean){
+        DataSession(context).setInfoApp(versionCode,versionName,appName,jsonName,backgroundSplashScreen,isNote)
     }
 
     fun isHaveSong(context: Context): Boolean{
