@@ -11,16 +11,13 @@ import com.google.firebase.firestore.FirebaseFirestore
 import recording.host.databinding.ActivityMainBinding
 import sound.recorder.widget.*
 import sound.recorder.widget.base.BaseActivityWidget
-import sound.recorder.widget.model.MyEventBus
-import sound.recorder.widget.model.MyListener
 import sound.recorder.widget.model.Song
-import sound.recorder.widget.notes.Note
 import sound.recorder.widget.ui.bottomSheet.BottomSheetVideo
 import sound.recorder.widget.util.Constant
 import sound.recorder.widget.util.DataSession
 
 
-class MainActivityWidget : BaseActivityWidget(),SharedPreferences.OnSharedPreferenceChangeListener,MyListener{
+class MainActivityWidget : BaseActivityWidget(),SharedPreferences.OnSharedPreferenceChangeListener{
 
 
     private var recordWidgetHN : RecordWidgetHN? =null
@@ -46,15 +43,11 @@ class MainActivityWidget : BaseActivityWidget(),SharedPreferences.OnSharedPrefer
     private var firebaseFirestore: FirebaseFirestore? = null
 
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         setContentView(binding.root)
-
-        MyEventBus.setMyListener(this)
-
 
         firebaseFirestore = FirebaseFirestore.getInstance()
 
@@ -86,19 +79,24 @@ class MainActivityWidget : BaseActivityWidget(),SharedPreferences.OnSharedPrefer
 
         setSupportActionBar(binding.toolbar)
 
-      /*  recordWidgetHN = RecordWidgetHN(this)
+        recordWidgetHN = RecordWidgetHN(this)
+        recordWidgetHN?.loadData()
 
         recordWidgetHB = RecordWidgetHB(this)
+        recordWidgetHB?.loadData()
+
 
         recordWidgetH = RecordWidgetH(this)
+        recordWidgetH?.loadData()
 
-        recordWidgetVN = RecordWidgetVN(this)*/
+        recordWidgetVN = RecordWidgetVN(this)
+        recordWidgetVN?.loadData()
 
         binding.btnKlik.setOnClickListener {
             val bottomSheet = BottomSheetVideo(firebaseFirestore)
             bottomSheet.show(this.supportFragmentManager, "")
             //RecordingSDK.showDialogColorPicker(this,"background")
-           // val intent = Intent(this,ListVideoActivity::class.java)
+            // val intent = Intent(this,ListVideoActivity::class.java)
             //startActivity(intent)
         }
 
@@ -133,21 +131,16 @@ class MainActivityWidget : BaseActivityWidget(),SharedPreferences.OnSharedPrefer
     }
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
-       if(key==Constant.keyShared.backgroundColor){
-          binding.rlBackground.setBackgroundColor(getSharedPreferenceUpdate().getInt(Constant.keyShared.backgroundColor,-1))
-       }else if(key==Constant.keyShared.animation){
-           val animation = getSharedPreferenceUpdate().getBoolean(Constant.keyShared.animation,false)
-           if(!animation){
-              binding.musicView.visibility =View.INVISIBLE
-           }else{
-              binding.musicView.visibility =View.VISIBLE
-           }
-       }
-    }
-
-    override fun onCallback(note: Note) {
-        binding.runningText.text = getNoteValue(note)
-        binding.runningText.isSelected = true
+        if(key==Constant.keyShared.backgroundColor){
+            binding.rlBackground.setBackgroundColor(getSharedPreferenceUpdate().getInt(Constant.keyShared.backgroundColor,-1))
+        }else if(key==Constant.keyShared.animation){
+            val animation = getSharedPreferenceUpdate().getBoolean(Constant.keyShared.animation,false)
+            if(!animation){
+                binding.musicView.visibility =View.INVISIBLE
+            }else{
+                binding.musicView.visibility =View.VISIBLE
+            }
+        }
     }
 
 
