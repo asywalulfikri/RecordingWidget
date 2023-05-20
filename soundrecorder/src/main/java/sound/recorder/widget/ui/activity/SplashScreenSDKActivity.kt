@@ -17,6 +17,7 @@ import com.google.firebase.FirebaseApp
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings
 import com.google.gson.Gson
+import org.json.JSONObject
 import sound.recorder.widget.R
 import sound.recorder.widget.base.BaseActivityWidget
 import sound.recorder.widget.databinding.ActivitySplashSdkBinding
@@ -49,7 +50,7 @@ class SplashScreenSDKActivity : BaseActivityWidget() {
         }
 
         if(dataSession?.getAppName().toString().isNotEmpty()){
-            binding.tvTitle.text = dataSession?.getAppName() + " "+ dataSession?.getVersionName().toString()
+            binding.tvTitle.text = dataSession?.getAppName() + "\n"+ "v "+ dataSession?.getVersionName().toString()
         }
 
         currentVersionCode = dataSession?.getVersionCode()
@@ -78,14 +79,21 @@ class SplashScreenSDKActivity : BaseActivityWidget() {
             .addOnCompleteListener(this) { task: Task<Boolean?> ->
                 if (task.isSuccessful) {
                     val json = mFirebaseRemoteConfig.getString(jsonName)
-                    val menuConfig = Gson().fromJson(json, MenuConfig::class.java)
-                    if(menuConfig==null){
-                        Log.d("value_json", "empty")
+                    try {
+                        JSONObject(json)
+                        val menuConfig = Gson().fromJson(json, MenuConfig::class.java)
+                        if(menuConfig==null){
+                            Log.d("value_json", "empty")
+                            goToNextPage()
+                        }else{
+                            Log.d("value_json", Gson().toJson(menuConfig) + "---"+jsonName)
+                            checkVersionSuccess(menuConfig)
+                        }
+
+                    } catch (e: Exception) {
                         goToNextPage()
-                    }else{
-                        Log.d("value_json", Gson().toJson(menuConfig) + "---"+jsonName)
-                        checkVersionSuccess(menuConfig)
                     }
+
                 }else{
                     Log.d("value_json", task.exception?.message.toString() +"---"+jsonName)
                     goToNextPage()
