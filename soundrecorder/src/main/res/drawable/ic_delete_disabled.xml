@@ -41,8 +41,8 @@
         android:fillColor="#fff"/>
     <path
         android:pathData="M86.19,53.9m-4.94,0a4.94,4.94 0,1 1,9.88 0a4.94,4.94 0,1 1,-9.88 0"
-        android:fillColor="#fff"/>
+        android:fillColor="#ffffff"/>
     <path
         android:pathData="M80.42,60.49m-2.47,0a2.47,2.47 0,1 1,4.94 0a2.47,2.47 0,1 1,-4.94 0"
-        android:fillColor="#fff"/>
+        android:fillColor="#ffffff"/>
 </vector>

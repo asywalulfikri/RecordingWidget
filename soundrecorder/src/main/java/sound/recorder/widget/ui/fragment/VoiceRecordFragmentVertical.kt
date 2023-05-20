@@ -340,7 +340,6 @@ internal class VoiceRecorderFragmentWidgetVertical : BaseFragmentWidget(), Botto
         binding.doneBtn.visibility = View.GONE
         binding.deleteBtn.isClickable = false
         binding.deleteBtn.visibility = View.GONE
-        binding.deleteBtn.setImageResource(R.drawable.ic_delete_disabled)
 
         binding.playerView.reset()
         try {
