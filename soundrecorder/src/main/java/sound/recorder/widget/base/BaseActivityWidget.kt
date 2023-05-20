@@ -10,9 +10,9 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
-import android.widget.LinearLayout
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.LoadAdError
@@ -37,12 +37,11 @@ open class BaseActivityWidget : AppCompatActivity() {
     private var mInterstitialAd: InterstitialAd? = null
     var id: String? = null
     private var isLoad = false
-    private var adRequest : AdRequest? =null
-    //private var adView : com.facebook.ads.AdView? =null
+    private lateinit var adRequest : AdRequest
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        FirebaseApp.initializeApp(this);
+        FirebaseApp.initializeApp(this)
         MobileAds.initialize(this) {}
         dataSession = DataSession(this)
         adRequest = AdRequest.Builder().build()
@@ -56,8 +55,7 @@ open class BaseActivityWidget : AppCompatActivity() {
 
 
     fun getNoteValue(note: Note) : String{
-        var valueNote = ""
-        valueNote = try {
+        val valueNote = try {
             val jsonObject = JSONObject(note.note.toString())
             val value = Gson().fromJson(note.note, Note::class.java)
             // The JSON string is valid
@@ -88,8 +86,31 @@ open class BaseActivityWidget : AppCompatActivity() {
     }
 
     fun setupAds(mAdView: AdView){
-        adRequest?.let { mAdView.loadAd(it) }
-        adRequest?.let {
+
+        mAdView.adListener = object : AdListener() {
+            override fun onAdLoaded() {
+                Log.d("AdMob", "Ad loaded successfully")
+            }
+
+            override fun onAdFailedToLoad(p0: LoadAdError) {
+                Log.d("AdMob", "Ad failed to load:"+ p0.message)
+            }
+
+            override fun onAdOpened() {
+                Log.d("AdMob", "Ad opened")
+            }
+
+            override fun onAdClicked() {
+                Log.d("AdMob", "Ad clicked")
+            }
+
+            override fun onAdClosed() {
+                Log.d("AdMob", "Ad closed")
+            }
+        }
+
+        mAdView.loadAd(adRequest)
+        adRequest.let {
             InterstitialAd.load(this, dataSession?.getInterstitialId().toString(), it,
                 object : InterstitialAdLoadCallback() {
                     override fun onAdLoaded(interstitialAd: InterstitialAd) {
@@ -104,28 +125,6 @@ open class BaseActivityWidget : AppCompatActivity() {
         }
     }
 
-    fun audienceNetworkAds(bannerId : String,bannerContainer : LinearLayout){
-        /*adView = com.facebook.ads.AdView(this, bannerId, AdSize.BANNER_HEIGHT_50);
-        val adListener: AdListener = object : AdListener {
-            override fun onError(ad: Ad?, adError: AdError) {
-                Log.d("facebookAds",adError.errorMessage.toString())
-            }
-
-            override fun onAdLoaded(ad: Ad?) {
-            }
-
-            override fun onAdClicked(ad: Ad?) {
-            }
-
-            override fun onLoggingImpression(ad: Ad?) {
-
-            }
-        }
-        bannerContainer.addView(adView)
-        adView?.loadAd(adView?.buildLoadAdConfig()?.withAdListener(adListener)?.build());*/
-    }
-
-
     private fun permissionNotification(){
         if (Build.VERSION.SDK_INT >= 33) {
             /*if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
@@ -139,7 +138,7 @@ open class BaseActivityWidget : AppCompatActivity() {
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { _ -> }
 
     fun setupInterstitial() {
-        adRequest?.let {
+        adRequest.let {
             InterstitialAd.load(this, dataSession?.getInterstitialId().toString(), it,
                 object : InterstitialAdLoadCallback() {
                     override fun onAdLoaded(interstitialAd: InterstitialAd) {

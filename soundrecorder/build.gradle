@@ -93,7 +93,6 @@ dependencies {
     implementation 'androidx.work:work-runtime-ktx:2.8.1'
     implementation 'com.google.code.gson:gson:2.10.1'
     implementation 'com.squareup.retrofit2:converter-jackson:2.4.0' // Jackson as parser engine for retrofit
-    //implementation 'com.facebook.android:audience-network-sdk:6.14.0'
 
 }
 
