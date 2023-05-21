@@ -37,24 +37,17 @@
             app:srcCompat="@drawable/baseline_note_add_24"
             tools:ignore="DuplicateSpeakableTextCheck" />
 
-        <RelativeLayout
+        <ImageView
             android:layout_weight="1"
+            android:id="@+id/songBtn"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <ImageView
-                android:id="@+id/songBtn"
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:layout_centerInParent="true"
-                android:layout_marginTop="3dp"
-                android:layout_marginBottom="3dp"
-                android:contentDescription="@string/app_names"
-                app:srcCompat="@drawable/ic_song1"
-                tools:ignore="DuplicateSpeakableTextCheck" />
-
-        </RelativeLayout>
-
+            android:layout_height="40dp"
+            android:layout_centerInParent="true"
+            android:layout_marginTop="3dp"
+            android:layout_marginBottom="3dp"
+            android:contentDescription="@string/app_names"
+            app:srcCompat="@drawable/ic_song1"
+            tools:ignore="DuplicateSpeakableTextCheck" />
 
         <RelativeLayout
             android:layout_weight="1"
@@ -81,8 +74,8 @@
 
             <ImageView
                 android:layout_centerInParent="true"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
+                android:layout_width="47dp"
+                android:layout_height="47dp"
                 android:layout_marginTop="5dp"
                 android:layout_marginBottom="5dp"
                 app:srcCompat="@drawable/ic_record"
@@ -91,8 +84,8 @@
 
             <ImageView
                 android:id="@+id/recordBtn"
-                android:layout_width="45dp"
-                android:layout_height="45dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:layout_centerInParent="true"
                 android:layout_marginTop="3dp"
                 android:layout_marginBottom="3dp"
@@ -107,24 +100,18 @@
                 android:fontFamily="@font/rimouski"
                 android:text="Record"
                 android:textColor="#FFFFFF"
-                android:textSize="9sp"
+                android:textSize="8sp"
                 tools:ignore="HardcodedText,SmallSp" />
 
         </RelativeLayout>
 
-        <RelativeLayout
-            android:layout_weight="1"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <ImageView
-                android:id="@+id/listBtn"
-                android:layout_width="wrap_content"
-                android:layout_height="40dp"
-                android:layout_centerInParent="true"
-                android:contentDescription="@string/appbar_scrolling_view_behavior"
-                app:srcCompat="@drawable/ic_menu" />
-        </RelativeLayout>
+        <ImageView
+            android:id="@+id/listBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_centerInParent="true"
+            android:contentDescription="@string/appbar_scrolling_view_behavior"
+            app:srcCompat="@drawable/ic_menu" />
 
         <RelativeLayout
             android:layout_weight="1"
@@ -153,21 +140,16 @@
             android:text="00:00.0"/>
 
 
-        <RelativeLayout
+        <ImageView
             android:layout_weight="1"
+            android:contentDescription="@string/app_name"
+            android:id="@+id/settingBtn"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_centerInParent="true"
             android:layout_marginBottom="5dp"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            app:srcCompat="@drawable/ic_baseline_settings_24" />
 
-            <ImageView
-                android:id="@+id/settingBtn"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_centerInParent="true"
-                app:srcCompat="@drawable/ic_baseline_settings_24" />
-
-
-        </RelativeLayout>
         <sound.recorder.widget.tools.RecorderWaveformView
             android:layout_marginTop="10dp"
             android:visibility="gone"

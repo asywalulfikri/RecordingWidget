@@ -8,12 +8,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 import sound.recorder.widget.R
 import sound.recorder.widget.model.Video
 
-internal class VideoListAdapter(var context : Context , private var videoList: List<Video>, private val listener: OnItemClickListener) : RecyclerView.Adapter<VideoListAdapter.ViewHolder>() {
+internal class VideoListAdapter(var context : FragmentActivity , private var videoList: List<Video>, private val listener: OnItemClickListener) : RecyclerView.Adapter<VideoListAdapter.ViewHolder>() {
 
 
     interface OnItemClickListener {
@@ -65,7 +66,7 @@ internal class VideoListAdapter(var context : Context , private var videoList: L
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    fun setData(context : Context, videoList: ArrayList<Video>){
+    fun setData(context : FragmentActivity, videoList: ArrayList<Video>){
         this.videoList = videoList
         this.context = context
         notifyDataSetChanged()

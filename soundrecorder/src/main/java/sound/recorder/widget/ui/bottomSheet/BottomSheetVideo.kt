@@ -36,23 +36,26 @@ open class BottomSheetVideo(var firestore: FirebaseFirestore?) : BaseBottomSheet
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = ActivityListVideoBinding.inflate(layoutInflater)
-        (dialog as? BottomSheetDialog)?.behavior?.state = STATE_EXPANDED
-        (dialog as? BottomSheetDialog)?.behavior?.isDraggable = false
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            dialog?.window?.let { WindowCompat.setDecorFitsSystemWindows(it, false) }
-        } else {
-            @Suppress("DEPRECATION")
-            dialog?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
+        if(activity!==null){
+            (dialog as? BottomSheetDialog)?.behavior?.state = STATE_EXPANDED
+            (dialog as? BottomSheetDialog)?.behavior?.isDraggable = false
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                dialog?.window?.let { WindowCompat.setDecorFitsSystemWindows(it, false) }
+            } else {
+                @Suppress("DEPRECATION")
+                dialog?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
+            }
+
+            binding.ivClose.setOnClickListener {
+                dismiss()
+            }
+
+
+            setupRecyclerView()
+            load(false)
         }
-
-        binding.ivClose.setOnClickListener {
-            dismiss()
-        }
-
-
-        setupRecyclerView()
-        load(false)
 
         return binding.root
 
@@ -124,16 +127,20 @@ open class BottomSheetVideo(var firestore: FirebaseFirestore?) : BaseBottomSheet
     }
 
     private fun showList() {
-        binding.recyclerView?.visibility = View.VISIBLE
+        binding.recyclerView.visibility = View.VISIBLE
     }
 
 
     private fun updateList(wrapper: VideoWrapper) {
         showList()
-        mAdapter = VideoListAdapter(requireContext(),wrapper.list,this)
-        mAdapter?.setData(requireContext(),wrapper.list)
-        binding.recyclerView.adapter = mAdapter
-        mAdapter?.notifyDataSetChanged()
+        if(activity==null){
+            //nothing to do
+        }else{
+            mAdapter = VideoListAdapter(requireActivity(),wrapper.list,this)
+            mAdapter?.setData(requireActivity(),wrapper.list)
+            binding.recyclerView.adapter = mAdapter
+            mAdapter?.notifyDataSetChanged()
+        }
     }
 
     override fun onItemClick(position: Int) {

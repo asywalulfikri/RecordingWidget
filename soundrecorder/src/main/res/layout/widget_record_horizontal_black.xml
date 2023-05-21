@@ -18,24 +18,24 @@
         app:layout_constraintStart_toStartOf="parent">
 
         <RelativeLayout
-            android:visibility="gone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
 
             <androidx.appcompat.widget.AppCompatImageButton
-                android:id="@+id/colorBtn"
+                android:id="@+id/noteBtn"
+                android:visibility="gone"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_marginTop="5dp"
                 android:layout_marginBottom="5dp"
-                android:background="@drawable/ic_note"
+                android:background="@drawable/baseline_note_add_black"
                 android:contentDescription="@string/app_names"
                 tools:ignore="DuplicateSpeakableTextCheck" />
 
         </RelativeLayout>
 
         <RelativeLayout
-            android:layout_marginStart="10dp"
+            android:layout_marginStart="5dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
 

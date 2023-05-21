@@ -41,6 +41,7 @@ import sound.recorder.widget.tools.Timer
 import sound.recorder.widget.ui.activity.ListingActivityWidgetNew
 import sound.recorder.widget.ui.bottomSheet.BottomSheet
 import sound.recorder.widget.ui.bottomSheet.BottomSheetListSong
+import sound.recorder.widget.ui.bottomSheet.BottomSheetNote
 import sound.recorder.widget.ui.bottomSheet.BottomSheetSetting
 import sound.recorder.widget.util.*
 import java.io.File
@@ -81,6 +82,9 @@ internal class VoiceRecorderFragmentWidgetHorizontal : BaseFragmentWidget(), Bot
     var pauseRecordScreen = false
     private var sharedPreferences : SharedPreferences? =null
     private var volume : Float? =null
+    private var showNote : Boolean? =null
+
+
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = WidgetRecordHorizontalBinding.inflate(inflater, container, false)
@@ -95,6 +99,7 @@ internal class VoiceRecorderFragmentWidgetHorizontal : BaseFragmentWidget(), Bot
 
             sharedPreferences = DataSession(requireContext()).getShared()
             sharedPreferences?.registerOnSharedPreferenceChangeListener(this)
+            showNote = DataSession(requireContext()).getShowNote()
 
             mp = MediaPlayer()
             val progress = sharedPreferences?.getInt(Constant.keyShared.volume,100)
@@ -102,6 +107,14 @@ internal class VoiceRecorderFragmentWidgetHorizontal : BaseFragmentWidget(), Bot
                 ToneGenerator.MAX_VOLUME.toDouble())).toFloat()
 
             setupAds()
+
+            if(showNote==true){
+                binding.noteBtn.visibility = View.VISIBLE
+            }else{
+                binding.noteBtn.visibility = View.GONE
+            }
+
+
 
             //setupScreenRecorder()
 
@@ -120,7 +133,7 @@ internal class VoiceRecorderFragmentWidgetHorizontal : BaseFragmentWidget(), Bot
             }
 
             binding.doneBtn.setOnClickListener {
-                stopRecordingAudio()
+                stopRecordingAudio("")
                 showBottomSheet()
             }
 
@@ -129,7 +142,7 @@ internal class VoiceRecorderFragmentWidgetHorizontal : BaseFragmentWidget(), Bot
             }
 
             binding.deleteBtn.setOnClickListener {
-                stopRecordingAudio()
+                stopRecordingAudio("The recording has been cancelled")
                 File(dirPath+fileName).delete()
             }
 
@@ -141,6 +154,11 @@ internal class VoiceRecorderFragmentWidgetHorizontal : BaseFragmentWidget(), Bot
 
             binding.settingBtn.setOnClickListener {
                 val bottomSheet = BottomSheetSetting()
+                bottomSheet.show(requireActivity().supportFragmentManager, LOG_TAG)
+            }
+
+            binding.noteBtn.setOnClickListener {
+                val bottomSheet = BottomSheetNote()
                 bottomSheet.show(requireActivity().supportFragmentManager, LOG_TAG)
             }
         }
@@ -299,7 +317,6 @@ internal class VoiceRecorderFragmentWidgetHorizontal : BaseFragmentWidget(), Bot
         binding.recordText.visibility = View.GONE
         binding.deleteBtn.visibility = View.VISIBLE
         binding.deleteBtn.isClickable = true
-       // binding.deleteBtn.setImageResource(R.drawable.ic_delete_enabled)
         binding.recordBtn.setImageResource(R.drawable.ic_pause)
 
         timer = Timer(this)
@@ -310,12 +327,24 @@ internal class VoiceRecorderFragmentWidgetHorizontal : BaseFragmentWidget(), Bot
     private fun showLayoutPauseRecord(){
         binding.recordText.visibility = View.VISIBLE
         binding.recordText.text = "Continue"
-        binding.recordBtn.setImageResource(R.drawable.ic_record)
+        /*if(binding.recordText.text.toString() == "Continue"){
+            val spTextSize = 2f
+            val textSize = spTextSize * resources.displayMetrics.scaledDensity
+
+            binding.recordText.textSize = textSize
+        }else{
+            val spTextSize = 9f
+            val textSize = spTextSize * resources.displayMetrics.scaledDensity
+
+            binding.recordText.textSize = textSize
+        }*/
+
+        binding.recordBtn.setImageResource(R.drawable.transparant_bg)
         timer.pause()
     }
 
     private fun showLayoutStopRecord(){
-        binding.recordBtn.setImageResource(R.drawable.ic_record)
+        binding.recordBtn.setImageResource(R.drawable.transparant_bg)
         binding.recordText.text = "Record"
         binding.recordText.visibility = View.VISIBLE
         binding.listBtn.visibility = View.VISIBLE
@@ -352,8 +381,8 @@ internal class VoiceRecorderFragmentWidgetHorizontal : BaseFragmentWidget(), Bot
             /** START COMMENT
              * These two together enable saving file into mp3 format
              * because android doesn't support mp3 saving explicitly **/
-            setOutputFormat(MediaRecorder.OutputFormat.MPEG_4)
-            setAudioEncoder(MediaRecorder.AudioEncoder.AAC)
+            setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP)
+            setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB)
             setAudioSamplingRate(16000)
             /** END COMMENT **/
 
@@ -396,41 +425,66 @@ internal class VoiceRecorderFragmentWidgetHorizontal : BaseFragmentWidget(), Bot
 
     private fun pauseRecordingAudio(){
         if(recorder!=null&&recordingAudio){
-            showLayoutPauseRecord()
-            pauseRecordAudio = true
-            recorder?.apply {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    pause()
+            try {
+                recorder?.apply {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                        pause()
+                    }
                 }
+                showLayoutPauseRecord()
+                pauseRecordAudio = true
+                setToastInfo("Recording Paused")
+            } catch (e: java.lang.IllegalStateException) {
+                e.printStackTrace()
+                setToastError("Failed Pause Recording")
             }
         }
     }
 
     private fun resumeRecordingAudio(){
         if(recorder!=null&&pauseRecordAudio){
-            binding.recordText.visibility = View.GONE
-            pauseRecordAudio = false
-            recorder?.apply {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    resume()
+            try {
+                recorder?.apply {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                        resume()
+                    }
                 }
+                setToastInfo("Recording Resumed")
+                binding.recordText.visibility = View.GONE
+                pauseRecordAudio = false
+
+                binding.recordBtn.setImageResource(R.drawable.ic_pause)
+                animatePlayerView()
+                timer.start()
+
+
+            } catch (e: IllegalStateException) {
+                e.printStackTrace()
+                setToastError("Failed Resume Recording")
             }
-            binding.recordBtn.setImageResource(R.drawable.ic_pause)
-            animatePlayerView()
-            timer.start()
+
         }
     }
 
-    private fun stopRecordingAudio(){
+    private fun stopRecordingAudio(message : String){
         if(recorder!=null&&recordingAudio){
-            recordingAudio = false
-            pauseRecordAudio= false
-            recorder?.apply {
-                stop()
-                release()
-                recorder = null
+            try {
+                recorder?.apply {
+                    stop()
+                    release()
+                    recorder = null
+                }
+                recordingAudio = false
+                pauseRecordAudio= false
+                showLayoutStopRecord()
+                if(message.isNotEmpty()){
+                    setToastInfo(message)
+                }
+
+            } catch (e: IllegalStateException) {
+                e.printStackTrace()
+                setToastError("Failed Stop Recording")
             }
-            showLayoutStopRecord()
 
         }
     }
@@ -467,7 +521,7 @@ internal class VoiceRecorderFragmentWidgetHorizontal : BaseFragmentWidget(), Bot
 
     @SuppressLint("SetTextI18n")
     private fun stopRecordingScreen(){
-        if(screenRecorder!=null&&screenRecorder?.isRecording==true){
+        /*if(screenRecorder!=null&&screenRecorder?.isRecording==true){
             recordingScreen = false
             pauseRecordScreen= false
             screenRecorder?.apply {
@@ -477,7 +531,7 @@ internal class VoiceRecorderFragmentWidgetHorizontal : BaseFragmentWidget(), Bot
             recorder = null
             showLayoutStopRecord()
 
-        }
+        }*/
     }
 
     private fun showBottomSheet(){
@@ -489,11 +543,12 @@ internal class VoiceRecorderFragmentWidgetHorizontal : BaseFragmentWidget(), Bot
 
     @SuppressLint("SetTextI18n")
     override fun onCancelClicked() {
-        Toast.makeText(activity, "Audio record deleted", Toast.LENGTH_SHORT).show()
+        /*Toast.makeText(activity, "Audio record deleted", Toast.LENGTH_SHORT).show()*/
+        setToastSuccess("The recording has been cancelled")
         binding.recordText.text = "Record"
         binding.recordText.visibility = View.VISIBLE
 
-        stopRecordingAudio()
+        stopRecordingAudio("")
     }
 
     @SuppressLint("SetTextI18n")
@@ -503,7 +558,7 @@ internal class VoiceRecorderFragmentWidgetHorizontal : BaseFragmentWidget(), Bot
 
         val duration = timer.format().split(".")[0]
 
-        stopRecordingAudio()
+        stopRecordingAudio("")
 
         if(isChange){
             val newFile = File("$dirPath$filename.mp3")
@@ -514,7 +569,15 @@ internal class VoiceRecorderFragmentWidgetHorizontal : BaseFragmentWidget(), Bot
             db.audioRecordDAO().insert(AudioRecord(filename, filePath, Date().time, duration))
         }
 
-        Toast.makeText(activity,"Successfully saved the recording",Toast.LENGTH_LONG).show()
+       // Toast.makeText(requireContext(),"Successfully saved the recording",Toast.LENGTH_LONG).show()
+        Toastic.toastic(
+            context = requireContext(),
+            message = "Successfully saved the recording",
+            duration = Toastic.LENGTH_SHORT,
+            type = Toastic.SUCCESS,
+            isIconAnimated = true
+        ).show()
+
         binding.recordText.visibility = View.VISIBLE
         binding.recordText.text = "Record"
         showInterstitial()

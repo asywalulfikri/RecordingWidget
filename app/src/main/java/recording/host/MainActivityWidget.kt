@@ -23,7 +23,7 @@ class MainActivityWidget : BaseActivityWidget(),SharedPreferences.OnSharedPrefer
     private var recordWidgetHN : RecordWidgetHN? =null
     private var recordWidgetHB : RecordWidgetHB? =null
     private var recordWidgetH : RecordWidgetH? =null
-    private var recordWidgetVN : RecordWidgetVN? =null
+    private var recordWidgetVB : RecordWidgetVB? =null
 
     private lateinit var binding: ActivityMainBinding
     private val listTitle = arrayOf(
@@ -89,8 +89,12 @@ class MainActivityWidget : BaseActivityWidget(),SharedPreferences.OnSharedPrefer
         recordWidgetH = RecordWidgetH(this)
         recordWidgetH?.loadData()
 
-        recordWidgetVN = RecordWidgetVN(this)
-        recordWidgetVN?.loadData()
+        recordWidgetVB = RecordWidgetVB(this)
+        recordWidgetVB?.loadData()
+
+
+        val recordWidgetV = RecordWidgetV(this)
+        recordWidgetV.loadData()
 
         binding.btnKlik.setOnClickListener {
             val bottomSheet = BottomSheetVideo(firebaseFirestore)

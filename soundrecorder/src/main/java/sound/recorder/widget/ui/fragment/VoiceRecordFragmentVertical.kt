@@ -133,7 +133,7 @@ internal class VoiceRecorderFragmentWidgetVertical : BaseFragmentWidget(), Botto
             }
 
             binding.doneBtn.setOnClickListener {
-                stopRecordingAudio()
+                stopRecordingAudio("")
                 showBottomSheet()
             }
 
@@ -142,7 +142,7 @@ internal class VoiceRecorderFragmentWidgetVertical : BaseFragmentWidget(), Botto
             }
 
             binding.deleteBtn.setOnClickListener {
-                stopRecordingAudio()
+                stopRecordingAudio("The recording has been cancelled")
                 File(dirPath+fileName).delete()
             }
 
@@ -327,7 +327,18 @@ internal class VoiceRecorderFragmentWidgetVertical : BaseFragmentWidget(), Botto
     private fun showLayoutPauseRecord(){
         binding.recordText.visibility = View.VISIBLE
         binding.recordText.text = "Continue"
- //       binding.recordBtn.setImageResource(R.drawable.ic_record)
+        /*if(binding.recordText.text.toString() == "Continue"){
+            val spTextSize = 2f
+            val textSize = spTextSize * resources.displayMetrics.scaledDensity
+
+            binding.recordText.textSize = textSize
+        }else{
+            val spTextSize = 9f
+            val textSize = spTextSize * resources.displayMetrics.scaledDensity
+
+            binding.recordText.textSize = textSize
+        }*/
+
         binding.recordBtn.setImageResource(R.drawable.transparant_bg)
         timer.pause()
     }
@@ -370,8 +381,8 @@ internal class VoiceRecorderFragmentWidgetVertical : BaseFragmentWidget(), Botto
             /** START COMMENT
              * These two together enable saving file into mp3 format
              * because android doesn't support mp3 saving explicitly **/
-            setOutputFormat(MediaRecorder.OutputFormat.MPEG_4)
-            setAudioEncoder(MediaRecorder.AudioEncoder.AAC)
+            setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP)
+            setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB)
             setAudioSamplingRate(16000)
             /** END COMMENT **/
 
@@ -414,41 +425,63 @@ internal class VoiceRecorderFragmentWidgetVertical : BaseFragmentWidget(), Botto
 
     private fun pauseRecordingAudio(){
         if(recorder!=null&&recordingAudio){
-            showLayoutPauseRecord()
-            pauseRecordAudio = true
-            recorder?.apply {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            try {
+                recorder?.apply {
                     pause()
                 }
+                showLayoutPauseRecord()
+                pauseRecordAudio = true
+                setToastInfo("Recording Paused")
+            } catch (e: java.lang.IllegalStateException) {
+                e.printStackTrace()
+                setToastError("Failed Pause Recording")
             }
         }
     }
 
     private fun resumeRecordingAudio(){
         if(recorder!=null&&pauseRecordAudio){
-            binding.recordText.visibility = View.GONE
-            pauseRecordAudio = false
-            recorder?.apply {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            try {
+                recorder?.apply {
                     resume()
                 }
+                setToastInfo("Recording Resumed")
+                binding.recordText.visibility = View.GONE
+                pauseRecordAudio = false
+
+                binding.recordBtn.setImageResource(R.drawable.ic_pause)
+                animatePlayerView()
+                timer.start()
+
+
+            } catch (e: IllegalStateException) {
+                e.printStackTrace()
+                setToastError("Failed Resume Recording")
             }
-            binding.recordBtn.setImageResource(R.drawable.ic_pause)
-            animatePlayerView()
-            timer.start()
+
         }
     }
 
-    private fun stopRecordingAudio(){
+    private fun stopRecordingAudio(message : String){
         if(recorder!=null&&recordingAudio){
-            recordingAudio = false
-            pauseRecordAudio= false
-            recorder?.apply {
-                stop()
-                release()
-                recorder = null
+            try {
+                recorder?.apply {
+                    stop()
+                    release()
+                    recorder = null
+                }
+                recordingAudio = false
+                pauseRecordAudio= false
+                showLayoutStopRecord()
+                if(message.isNotEmpty()){
+                    setToastInfo(message)
+                }
+
+            } catch (e: IllegalStateException) {
+                e.printStackTrace()
+                setToastError("Failed Stop Recording")
             }
-            showLayoutStopRecord()
+
         }
     }
 
@@ -484,7 +517,7 @@ internal class VoiceRecorderFragmentWidgetVertical : BaseFragmentWidget(), Botto
 
     @SuppressLint("SetTextI18n")
     private fun stopRecordingScreen(){
-        if(screenRecorder!=null&&screenRecorder?.isRecording==true){
+        /*if(screenRecorder!=null&&screenRecorder?.isRecording==true){
             recordingScreen = false
             pauseRecordScreen= false
             screenRecorder?.apply {
@@ -494,7 +527,7 @@ internal class VoiceRecorderFragmentWidgetVertical : BaseFragmentWidget(), Botto
             recorder = null
             showLayoutStopRecord()
 
-        }
+        }*/
     }
 
     private fun showBottomSheet(){
@@ -506,11 +539,12 @@ internal class VoiceRecorderFragmentWidgetVertical : BaseFragmentWidget(), Botto
 
     @SuppressLint("SetTextI18n")
     override fun onCancelClicked() {
-        Toast.makeText(activity, "Audio record deleted", Toast.LENGTH_SHORT).show()
+        /*Toast.makeText(activity, "Audio record deleted", Toast.LENGTH_SHORT).show()*/
+        setToastSuccess("The recording has been cancelled")
         binding.recordText.text = "Record"
         binding.recordText.visibility = View.VISIBLE
 
-        stopRecordingAudio()
+        stopRecordingAudio("")
     }
 
     @SuppressLint("SetTextI18n")
@@ -520,7 +554,7 @@ internal class VoiceRecorderFragmentWidgetVertical : BaseFragmentWidget(), Botto
 
         val duration = timer.format().split(".")[0]
 
-        stopRecordingAudio()
+        stopRecordingAudio("")
 
         if(isChange){
             val newFile = File("$dirPath$filename.mp3")

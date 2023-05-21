@@ -8,25 +8,25 @@ import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
-import sound.recorder.widget.databinding.LayoutEmptyVerticalBinding
-import sound.recorder.widget.ui.fragment.VoiceRecorderFragmentWidgetVerticalNew
+import sound.recorder.widget.databinding.LayoutEmptyVerticalBlackBinding
+import sound.recorder.widget.ui.fragment.VoiceRecorderFragmentWidgetVerticalBlack
 
-class RecordWidgetVN : LinearLayout {
+class RecordWidgetVB : LinearLayout {
 
     private var fragmentManagers: FragmentManager? =null
-    private val imkasFragment = VoiceRecorderFragmentWidgetVerticalNew()
+    private val imkasFragment = VoiceRecorderFragmentWidgetVerticalBlack()
     private var isAdd = false
-    private var binding: LayoutEmptyVerticalBinding
+    private var binding: LayoutEmptyVerticalBlackBinding
 
 
     constructor(_context: Context) : super(_context) {
         fragmentManagers = (_context as FragmentActivity).supportFragmentManager
-        binding = LayoutEmptyVerticalBinding.inflate(LayoutInflater.from(context))
+        binding = LayoutEmptyVerticalBlackBinding.inflate(LayoutInflater.from(context))
     }
 
     constructor(_context: Context, attributeSet: AttributeSet?) : super(_context, attributeSet) {
         fragmentManagers = (_context as FragmentActivity).supportFragmentManager
-        binding = LayoutEmptyVerticalBinding.inflate(LayoutInflater.from(context))
+        binding = LayoutEmptyVerticalBlackBinding.inflate(LayoutInflater.from(context))
         addView(binding.root)
     }
 
@@ -41,15 +41,15 @@ class RecordWidgetVN : LinearLayout {
 
     private fun setupViewsAgain(){
         isAdd = true
-        fragmentManagers?.beginTransaction()?.replace(binding.recordWidgetVertical.id, imkasFragment)?.commit()
+        fragmentManagers?.beginTransaction()?.replace(binding.recordWidgetVerticalBlack.id, imkasFragment)?.commit()
         addView(binding.root)
     }
 
 
     private fun setupViews(){
-        fragmentManagers?.beginTransaction()?.replace(binding.recordWidgetVertical.id, imkasFragment)?.commitAllowingStateLoss()
+        fragmentManagers?.beginTransaction()?.replace(binding.recordWidgetVerticalBlack.id, imkasFragment)?.commitAllowingStateLoss()
         if(!imkasFragment.isAdded){
-            addView(binding.recordWidgetVertical)
+            addView(binding.recordWidgetVerticalBlack)
             isAdd = true
         }else{
             removeAllViews()
@@ -64,7 +64,7 @@ class RecordWidgetVN : LinearLayout {
         } else {
             fragmentManagers?.beginTransaction()?.detach(imkasFragment)?.attach(imkasFragment)?.commitAllowingStateLoss()
         }
-        addView(binding.recordWidgetVertical)
+        addView(binding.recordWidgetVerticalBlack)
     }
 
     fun setToast(message : String){
