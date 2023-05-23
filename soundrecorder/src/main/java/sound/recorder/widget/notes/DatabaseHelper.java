@@ -1,6 +1,7 @@
 package sound.recorder.widget.notes;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -23,7 +24,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "notes_db";
 
 
-    public DatabaseHelper(Context context) {
+    public DatabaseHelper(Activity context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 

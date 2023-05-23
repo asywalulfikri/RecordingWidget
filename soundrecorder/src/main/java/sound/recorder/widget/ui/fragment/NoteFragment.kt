@@ -41,8 +41,6 @@ internal class NoteFragment : BottomSheetDialogFragment() {
         // Record to the external cache directory for visibility
         if(activity!=null){
             val displayMetrics = DisplayMetrics()
-            requireActivity().windowManager.defaultDisplay.getMetrics(displayMetrics)
-            val screenHeight = displayMetrics.heightPixels
             val screenWidth = displayMetrics.widthPixels
 
             (dialog as? BottomSheetDialog)?.behavior?.state = STATE_EXPANDED
@@ -64,9 +62,8 @@ internal class NoteFragment : BottomSheetDialogFragment() {
 
 
     private fun songNote() {
-        db = DatabaseHelper(requireContext())
-        notesList?.addAll(db!!.allNotes)
-
+        db = DatabaseHelper(activity)
+        notesList.addAll(db!!.allNotes)
         val mAdapter = NotesAdapter(notesList)
         val mLayoutManager: RecyclerView.LayoutManager = LinearLayoutManager(requireContext())
         binding.recyclerView.layoutManager = mLayoutManager

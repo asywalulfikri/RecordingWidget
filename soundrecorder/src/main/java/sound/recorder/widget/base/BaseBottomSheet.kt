@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
-import android.widget.Toast
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.interstitial.InterstitialAd
@@ -31,71 +30,77 @@ open class BaseBottomSheet : BottomSheetDialogFragment(){
     }
 
 
-    fun setToastError(message : String){
-        Toastic.toastic(
-            context = requireContext(),
-            message = message,
-            duration = Toastic.LENGTH_SHORT,
-            type = Toastic.SUCCESS,
-            isIconAnimated = true
-        ).show()
+
+    fun setToastError(activity: Activity?,message : String){
+        if(activity!=null){
+            Toastic.toastic(activity,
+                message = message,
+                duration = Toastic.LENGTH_SHORT,
+                type = Toastic.SUCCESS,
+                isIconAnimated = true
+            ).show()
+        }
     }
 
-    fun setToastWarning(message : String){
-        Toastic.toastic(
-            context = requireContext(),
-            message = message,
-            duration = Toastic.LENGTH_SHORT,
-            type = Toastic.WARNING,
-            isIconAnimated = true
-        ).show()
+    fun setToastWarning(activity: Activity?,message : String){
+        if(activity!=null){
+            Toastic.toastic(activity,
+                message = message,
+                duration = Toastic.LENGTH_SHORT,
+                type = Toastic.WARNING,
+                isIconAnimated = true
+            ).show()
+        }
+
     }
 
-    fun setToastSuccess(message : String){
-        Toastic.toastic(
-            context = requireContext(),
-            message = message,
-            duration = Toastic.LENGTH_SHORT,
-            type = Toastic.SUCCESS,
-            isIconAnimated = true
-        ).show()
+    fun setToastSuccess(activity: Activity?,message : String){
+        if(activity!=null){
+            Toastic.toastic(
+                activity,
+                message = message,
+                duration = Toastic.LENGTH_SHORT,
+                type = Toastic.SUCCESS,
+                isIconAnimated = true
+            ).show()
+        }
     }
 
-    fun setToastInfo(message : String){
-        Toastic.toastic(
-            context = requireContext(),
-            message = message,
-            duration = Toastic.LENGTH_SHORT,
-            type = Toastic.INFO,
-            isIconAnimated = true
-        ).show()
+    fun setToastInfo(activity: Activity?,message : String){
+        if(activity!=null){
+            Toastic.toastic(activity,
+                message = message,
+                duration = Toastic.LENGTH_SHORT,
+                type = Toastic.INFO,
+                isIconAnimated = true
+            ).show()
+        }
     }
 
 
-    fun setupAds() {
-        val adRequestInterstitial = AdRequest.Builder().build()
-        adRequestInterstitial.isTestDevice(activity as Context)
-        InterstitialAd.load(activity as Context,dataSession?.getInterstitialId().toString(), adRequestInterstitial,
-            object : InterstitialAdLoadCallback() {
-                override fun onAdLoaded(interstitialAd: InterstitialAd) {
-                    // The mInterstitialAd reference will be null until
-                    // an ad is loaded.
-                    Log.d("valueShow", "show");
-                    mInterstitialAd = interstitialAd
-                    isLoad = true
-                }
+    fun setupAds(activity: Activity?) {
+        if(activity!=null){
+            val adRequestInterstitial = AdRequest.Builder().build()
+            adRequestInterstitial.isTestDevice(activity)
+            InterstitialAd.load(activity as Context,dataSession?.getInterstitialId().toString(), adRequestInterstitial,
+                object : InterstitialAdLoadCallback() {
+                    override fun onAdLoaded(interstitialAd: InterstitialAd) {
+                        mInterstitialAd = interstitialAd
+                        isLoad = true
+                    }
 
-                override fun onAdFailedToLoad(loadAdError: LoadAdError) {
-                    // Handle the error
-                    Log.d("valueShow", loadAdError.message+"+");
-                    mInterstitialAd = null
-                }
-            })
+                    override fun onAdFailedToLoad(loadAdError: LoadAdError) {
+                        mInterstitialAd = null
+                    }
+                })
+        }
     }
 
-    fun showInterstitial(){
-        if(isLoad){
-            mInterstitialAd?.show(activity as Activity)
+    fun showInterstitial(activity: Activity?){
+        if(activity!=null){
+            if(isLoad){
+                mInterstitialAd?.show(activity)
+            }
         }
     }
 

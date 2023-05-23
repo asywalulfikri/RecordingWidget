@@ -1,7 +1,6 @@
 package sound.recorder.widget.adapter
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -14,7 +13,7 @@ import com.squareup.picasso.Picasso
 import sound.recorder.widget.R
 import sound.recorder.widget.model.Video
 
-internal class VideoListAdapter(var context : FragmentActivity , private var videoList: List<Video>, private val listener: OnItemClickListener) : RecyclerView.Adapter<VideoListAdapter.ViewHolder>() {
+internal class VideoListAdapter(var context : FragmentActivity? , private var videoList: List<Video>, private val listener: OnItemClickListener) : RecyclerView.Adapter<VideoListAdapter.ViewHolder>() {
 
 
     interface OnItemClickListener {
@@ -66,7 +65,7 @@ internal class VideoListAdapter(var context : FragmentActivity , private var vid
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    fun setData(context : FragmentActivity, videoList: ArrayList<Video>){
+    fun setData(context : FragmentActivity?, videoList: ArrayList<Video>){
         this.videoList = videoList
         this.context = context
         notifyDataSetChanged()

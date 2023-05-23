@@ -19,7 +19,6 @@ import sound.recorder.widget.R
 import sound.recorder.widget.base.BaseBottomSheet
 import sound.recorder.widget.databinding.BottomSheetNotesBinding
 import sound.recorder.widget.model.MyEventBus
-import sound.recorder.widget.model.MyListener
 import sound.recorder.widget.notes.DatabaseHelper
 import sound.recorder.widget.notes.Note
 import sound.recorder.widget.notes.NotesAdapter
@@ -34,33 +33,30 @@ class BottomSheetNote : BaseBottomSheet() {
     private val notesList: ArrayList<Note> = ArrayList()
     private var db: DatabaseHelper? = null
     private var mAdapter: NotesAdapter? = null
-    var callback: MyListener? = null
-    var valueNote : String? =null
-
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = BottomSheetNotesBinding.inflate(layoutInflater)
-        (dialog as? BottomSheetDialog)?.behavior?.state = STATE_EXPANDED
-        (dialog as? BottomSheetDialog)?.behavior?.isDraggable = false
+        if(activity!=null){
+            (dialog as? BottomSheetDialog)?.behavior?.state = STATE_EXPANDED
+            (dialog as? BottomSheetDialog)?.behavior?.isDraggable = false
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            dialog?.window?.let { WindowCompat.setDecorFitsSystemWindows(it, false) }
-        } else {
-            @Suppress("DEPRECATION")
-            dialog?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                dialog?.window?.let { WindowCompat.setDecorFitsSystemWindows(it, false) }
+            } else {
+                @Suppress("DEPRECATION")
+                dialog?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
+            }
+
+            songNote()
+
+            binding.fab.setOnClickListener {
+                showNoteDialog(false, null, -1)
+            }
+
+            binding.ivClose.setOnClickListener {
+                dismiss()
+            }
         }
-
-        songNote()
-
-        binding.fab.setOnClickListener {
-            showNoteDialog(false, null, -1)
-        }
-
-        binding.ivClose.setOnClickListener {
-            dismiss()
-        }
-
-
         return binding.root
 
     }
@@ -75,11 +71,11 @@ class BottomSheetNote : BaseBottomSheet() {
     }
 
     private fun songNote() {
-        db = DatabaseHelper(requireContext())
+        db = DatabaseHelper(activity)
         notesList.addAll(db!!.allNotes)
 
         mAdapter = NotesAdapter(notesList)
-        val mLayoutManager: RecyclerView.LayoutManager = LinearLayoutManager(requireContext())
+        val mLayoutManager: RecyclerView.LayoutManager = LinearLayoutManager(requireActivity())
         binding.recyclerView.layoutManager = mLayoutManager
         binding.recyclerView.itemAnimator = DefaultItemAnimator()
         binding.recyclerView.addItemDecoration(
@@ -92,7 +88,7 @@ class BottomSheetNote : BaseBottomSheet() {
         binding.recyclerView.adapter = mAdapter
         toggleEmptyNotes()
         binding.recyclerView.addOnItemTouchListener(
-            RecyclerTouchListener(requireContext(),
+            RecyclerTouchListener(requireActivity(),
                 binding.recyclerView, object : RecyclerTouchListener.ClickListener {
                     override fun onClick(view: View?, position: Int) {
                         showActionsDialog(position)
@@ -107,9 +103,9 @@ class BottomSheetNote : BaseBottomSheet() {
 
     private fun showActionsDialog(position: Int) {
         val colors = arrayOf<CharSequence>("1. Use Note", "2. Edit Note", "3. Delete Note")
-        val builder = AlertDialog.Builder(requireContext())
+        val builder = AlertDialog.Builder(requireActivity())
         builder.setTitle("Choose option")
-        builder.setItems(colors) { dialog, which ->
+        builder.setItems(colors) { _, which ->
             when (which) {
                 0 -> {
                     useNote(notesList[position])
@@ -142,10 +138,10 @@ class BottomSheetNote : BaseBottomSheet() {
 
 
     private fun showNoteDialog(shouldUpdate: Boolean, note: Note?, position: Int) {
-        val layoutInflaterAndroid = LayoutInflater.from(requireContext())
+        val layoutInflaterAndroid = LayoutInflater.from(requireActivity())
         @SuppressLint("InflateParams") val view =
             layoutInflaterAndroid.inflate(R.layout.note_dialog, null)
-        val alertDialogBuilderUserInput = AlertDialog.Builder(requireContext())
+        val alertDialogBuilderUserInput = AlertDialog.Builder(requireActivity())
         alertDialogBuilderUserInput.setView(view)
         val inputNote = view.findViewById<EditText>(R.id.note)
         val inputTitle = view.findViewById<EditText>(R.id.title)
@@ -155,7 +151,7 @@ class BottomSheetNote : BaseBottomSheet() {
         if (shouldUpdate && note != null) {
 
             try {
-                val jsonObject = JSONObject(note.note.toString())
+                JSONObject(note.note.toString())
                 val value = Gson().fromJson(note.note,Note::class.java)
                 // The JSON string is valid
                 inputNote.setText(value.note)
@@ -172,20 +168,20 @@ class BottomSheetNote : BaseBottomSheet() {
             .setCancelable(false)
             .setPositiveButton(
                 if (shouldUpdate) "update" else "save"
-            ) { dialogBox, id -> }
+            ) { _, _ -> }
             .setNegativeButton(
                 "cancel"
-            ) { dialogBox, id -> dialogBox.cancel() }
+            ) { dialogBox, _ -> dialogBox.cancel() }
         val alertDialog = alertDialogBuilderUserInput.create()
         alertDialog.show()
         alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(
             View.OnClickListener {
                 // Show toast message when no text is entered
                 if (TextUtils.isEmpty(inputNote.text.toString())) {
-                    setToastWarning("Enter Note!")
+                    setToastWarning(activity,"Enter Note!")
                     return@OnClickListener
                 }else if (TextUtils.isEmpty(inputNote.text.toString())) {
-                    setToastWarning("Enter Note Title!")
+                    setToastWarning(activity,"Enter Note Title!")
                     return@OnClickListener
                 }else {
                     alertDialog.dismiss()
@@ -219,7 +215,7 @@ class BottomSheetNote : BaseBottomSheet() {
         if (n != null) {
             // adding new note to array list at 0 position
             notesList.add(0, n)
-            setToastSuccess("Note Success Add")
+            setToastSuccess(activity,"Note Success Add")
             // refreshing the list
             mAdapter?.notifyDataSetChanged()
             toggleEmptyNotes()

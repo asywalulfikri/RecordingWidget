@@ -17,13 +17,11 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.DisplayMetrics
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
 import android.widget.Button
-import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -84,8 +82,6 @@ internal class VoiceRecorderFragmentWidgetHorizontalNew : BaseFragmentWidget(), 
     private var volume : Float? =null
     private var showNote : Boolean? =null
 
-
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = WidgetRecordHorizontalNewBinding.inflate(inflater, container, false)
         return binding.root
@@ -97,16 +93,16 @@ internal class VoiceRecorderFragmentWidgetHorizontalNew : BaseFragmentWidget(), 
         if(activity!=null){
             ActivityCompat.requestPermissions(activity as Activity, permissions, REQUEST_RECORD_AUDIO_PERMISSION)
 
-            sharedPreferences = DataSession(requireContext()).getShared()
+            sharedPreferences = DataSession(requireActivity()).getShared()
             sharedPreferences?.registerOnSharedPreferenceChangeListener(this)
-            showNote = DataSession(requireContext()).getShowNote()
+            showNote = DataSession(requireActivity()).getShowNote()
 
             mp = MediaPlayer()
             val progress = sharedPreferences?.getInt(Constant.keyShared.volume,100)
             volume = (1 - ln((ToneGenerator.MAX_VOLUME - progress!!).toDouble()) / ln(
                 ToneGenerator.MAX_VOLUME.toDouble())).toFloat()
 
-            setupAds()
+            setupAds(activity)
 
             if(showNote==true){
                 binding.noteBtn.visibility = View.VISIBLE
@@ -128,7 +124,7 @@ internal class VoiceRecorderFragmentWidgetHorizontalNew : BaseFragmentWidget(), 
                         else -> startPermission()
                     }
                 }else{
-                    setToastError("Your device not support to record audio")
+                    setToastError(activity,"Your device not support to record audio")
                 }
             }
 
@@ -166,9 +162,9 @@ internal class VoiceRecorderFragmentWidgetHorizontalNew : BaseFragmentWidget(), 
 
     private fun setupScreenRecorder(){
 
-        val intent = Intent(requireContext(), BackgroundService::class.java)
+        val intent = Intent(requireActivity(), BackgroundService::class.java)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            startForegroundService(requireContext(),intent)
+            startForegroundService(requireActivity(),intent)
         } else {
             activity?.startService(intent)
         }
@@ -185,7 +181,7 @@ internal class VoiceRecorderFragmentWidgetHorizontalNew : BaseFragmentWidget(), 
 
     private fun showDialogRecord() {
         // custom dialog
-        val dialog = Dialog(requireContext())
+        val dialog = Dialog(requireActivity())
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog.setContentView(R.layout.dialog_alert)
         dialog.setCancelable(true)
@@ -200,11 +196,14 @@ internal class VoiceRecorderFragmentWidgetHorizontalNew : BaseFragmentWidget(), 
         }
 
 
+        btnScreenAudio.visibility = View.GONE
         btnScreenAudio.setOnClickListener {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 if (ContextCompat.checkSelfPermission(activity as Context, Manifest.permission.FOREGROUND_SERVICE) != PackageManager.PERMISSION_GRANTED) {
                     // Pass any permission you want while launching
-                    requestPermissionForeGround.launch(Manifest.permission.FOREGROUND_SERVICE)
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                        requestPermissionForeGround.launch(Manifest.permission.FOREGROUND_SERVICE)
+                    }
                 } else {
                     recordingScreen = true
                     startScreenRecorder()
@@ -218,13 +217,15 @@ internal class VoiceRecorderFragmentWidgetHorizontalNew : BaseFragmentWidget(), 
 
 
     private fun showBottomSheetSong(){
-        val bottomSheet = BottomSheetListSong(showBtnStop,this)
-        bottomSheet.show(requireActivity().supportFragmentManager, LOG_TAG)
+        if(activity!=null){
+            val bottomSheet = BottomSheetListSong(showBtnStop,this)
+            bottomSheet.show(requireActivity().supportFragmentManager, LOG_TAG)
+        }
     }
 
     private fun startPermission(){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (ContextCompat.checkSelfPermission(activity as Context, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
+            if (ContextCompat.checkSelfPermission(requireActivity(), Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
                 // Pass any permission you want while launching
                 requestPermission.launch(Manifest.permission.RECORD_AUDIO)
             }else{
@@ -271,7 +272,7 @@ internal class VoiceRecorderFragmentWidgetHorizontalNew : BaseFragmentWidget(), 
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
             // do something
             if(isGranted){
-                screenRecorder?.start(this,requireContext())
+                screenRecorder?.start(this,requireActivity())
             }else{
                 showAllowPermission()
             }
@@ -289,7 +290,7 @@ internal class VoiceRecorderFragmentWidgetHorizontalNew : BaseFragmentWidget(), 
 
 
     private fun showAllowPermission(){
-        setToastInfo("Allow Permission in Setting")
+        setToastInfo(activity,"Allow Permission in Setting")
     }
 
 
@@ -306,7 +307,7 @@ internal class VoiceRecorderFragmentWidgetHorizontalNew : BaseFragmentWidget(), 
 
 
     private fun startScreenRecorder(){
-        screenRecorder?.start(this,requireContext())
+        screenRecorder?.start(this,requireActivity())
         showLayoutStartRecord()
 
     }
@@ -355,8 +356,22 @@ internal class VoiceRecorderFragmentWidgetHorizontalNew : BaseFragmentWidget(), 
         binding.playerView.reset()
         try {
             timer.stop()
-        }catch (e: Exception){
-            setToastError(e.message.toString())
+        }catch (e: IllegalStateException) {
+            // Handle IllegalStateException (e.g., recording already started)
+            e.printStackTrace()
+            setToastError(activity,e.message.toString())
+
+            // Perform error handling or show appropriate message to the user
+        } catch (e: IOException) {
+            // Handle IOException (e.g., failed to prepare or write to file)
+            e.printStackTrace()
+            setToastError(activity,e.message.toString())
+            // Perform error handling or show appropriate message to the user
+        } catch (e: Exception) {
+            // Handle other exceptions
+            e.printStackTrace()
+            setToastError(activity,e.message.toString())
+            // Perform error handling or show appropriate message to the user
         }
 
         binding.timerView.text = "00:00.00"
@@ -376,29 +391,33 @@ internal class VoiceRecorderFragmentWidgetHorizontalNew : BaseFragmentWidget(), 
         dirPath = "${activity?.externalCacheDir?.absolutePath}/"
         fileName = "record_${date}.mp3"
 
-        recorder = MediaRecorder().apply {
-            setAudioSource(MediaRecorder.AudioSource.MIC)
-            /** START COMMENT
-             * These two together enable saving file into mp3 format
-             * because android doesn't support mp3 saving explicitly **/
-            setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP)
-            setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB)
-            setAudioSamplingRate(16000)
-            /** END COMMENT **/
-
-            setOutputFile(dirPath+fileName)
-            try {
+        try {
+            recorder = MediaRecorder()
+            recorder?.apply {
+                setAudioSource(MediaRecorder.AudioSource.MIC)
+                setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP)
+                setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB)
+                setOutputFile(dirPath + fileName)
                 prepare()
                 start()
-            } catch (e: IOException) {
-                Log.e(LOG_TAG, "prepare() failed")
-                setToastError(e.message.toString())
+                animatePlayerView()
             }
-
+        } catch (e: IllegalStateException) {
+            // Handle IllegalStateException (e.g., recording already started)
+            e.printStackTrace()
+            setToastError(activity,e.message.toString())
+            // Perform error handling or show appropriate message to the user
+        } catch (e: IOException) {
+            // Handle IOException (e.g., failed to prepare or write to file)
+            e.printStackTrace()
+            setToastError(activity,e.message.toString())
+            // Perform error handling or show appropriate message to the user
+        } catch (e: Exception) {
+            // Handle other exceptions
+            e.printStackTrace()
+            setToastError(activity,e.message.toString())
+            // Perform error handling or show appropriate message to the user
         }
-
-        animatePlayerView()
-
     }
 
 
@@ -417,26 +436,33 @@ internal class VoiceRecorderFragmentWidgetHorizontalNew : BaseFragmentWidget(), 
         }
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        //screenRecorder?.onActivityResult(requestCode, resultCode, data,requireContext())
-    }
-
-
     private fun pauseRecordingAudio(){
         if(recorder!=null&&recordingAudio){
             try {
                 recorder?.apply {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                         pause()
+                        showLayoutPauseRecord()
+                        pauseRecordAudio = true
+                        setToastInfo(activity,"Recording Paused")
                     }
                 }
-                showLayoutPauseRecord()
-                pauseRecordAudio = true
-                setToastInfo("Recording Paused")
-            } catch (e: java.lang.IllegalStateException) {
+            } catch (e: IllegalStateException) {
+                // Handle IllegalStateException (e.g., recording already started)
                 e.printStackTrace()
-                setToastError("Failed Pause Recording")
+                setToastError(activity,e.message.toString())
+
+                // Perform error handling or show appropriate message to the user
+            } catch (e: IOException) {
+                // Handle IOException (e.g., failed to prepare or write to file)
+                e.printStackTrace()
+                setToastError(activity,e.message.toString())
+                // Perform error handling or show appropriate message to the user
+            } catch (e: Exception) {
+                // Handle other exceptions
+                e.printStackTrace()
+                setToastError(activity,e.message.toString())
+                // Perform error handling or show appropriate message to the user
             }
         }
     }
@@ -447,20 +473,32 @@ internal class VoiceRecorderFragmentWidgetHorizontalNew : BaseFragmentWidget(), 
                 recorder?.apply {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                         resume()
+                        setToastInfo(activity,"Recording Resumed")
+                        binding.recordText.visibility = View.GONE
+                        pauseRecordAudio = false
+
+                        binding.recordBtn.setImageResource(R.drawable.ic_pause)
+                        animatePlayerView()
+                        timer.start()
                     }
                 }
-                setToastInfo("Recording Resumed")
-                binding.recordText.visibility = View.GONE
-                pauseRecordAudio = false
-
-                binding.recordBtn.setImageResource(R.drawable.ic_pause)
-                animatePlayerView()
-                timer.start()
-
 
             } catch (e: IllegalStateException) {
+                // Handle IllegalStateException (e.g., recording already started)
                 e.printStackTrace()
-                setToastError("Failed Resume Recording")
+                setToastError(activity,e.message.toString())
+
+                // Perform error handling or show appropriate message to the user
+            } catch (e: IOException) {
+                // Handle IOException (e.g., failed to prepare or write to file)
+                e.printStackTrace()
+                setToastError(activity,e.message.toString())
+                // Perform error handling or show appropriate message to the user
+            } catch (e: Exception) {
+                // Handle other exceptions
+                e.printStackTrace()
+                setToastError(activity,e.message.toString())
+                // Perform error handling or show appropriate message to the user
             }
 
         }
@@ -471,19 +509,33 @@ internal class VoiceRecorderFragmentWidgetHorizontalNew : BaseFragmentWidget(), 
             try {
                 recorder?.apply {
                     stop()
+                    reset()
                     release()
-                    recorder = null
-                }
-                recordingAudio = false
-                pauseRecordAudio= false
-                showLayoutStopRecord()
-                if(message.isNotEmpty()){
-                    setToastInfo(message)
+                    recordingAudio = false
+                    pauseRecordAudio= false
+                    showLayoutStopRecord()
+                    if(message.isNotEmpty()){
+                        setToastInfo(activity,message)
+                    }
                 }
 
+                recorder = null
             } catch (e: IllegalStateException) {
+                // Handle IllegalStateException (e.g., recording already started)
                 e.printStackTrace()
-                setToastError("Failed Stop Recording")
+                setToastError(activity,e.message.toString())
+
+                // Perform error handling or show appropriate message to the user
+            } catch (e: IOException) {
+                // Handle IOException (e.g., failed to prepare or write to file)
+                e.printStackTrace()
+                setToastError(activity,e.message.toString())
+                // Perform error handling or show appropriate message to the user
+            } catch (e: Exception) {
+                // Handle other exceptions
+                e.printStackTrace()
+                setToastError(activity,e.message.toString())
+                // Perform error handling or show appropriate message to the user
             }
 
         }
@@ -544,7 +596,7 @@ internal class VoiceRecorderFragmentWidgetHorizontalNew : BaseFragmentWidget(), 
     @SuppressLint("SetTextI18n")
     override fun onCancelClicked() {
         /*Toast.makeText(activity, "Audio record deleted", Toast.LENGTH_SHORT).show()*/
-        setToastSuccess("The recording has been cancelled")
+        setToastSuccess(activity,"The recording has been cancelled")
         binding.recordText.text = "Record"
         binding.recordText.visibility = View.VISIBLE
 
@@ -554,33 +606,27 @@ internal class VoiceRecorderFragmentWidgetHorizontalNew : BaseFragmentWidget(), 
     @SuppressLint("SetTextI18n")
     override fun onOkClicked(filePath: String, filename: String, isChange : Boolean) {
         // add audio record info to database
-        val db = Room.databaseBuilder(activity as Activity, AppDatabase::class.java, "audioRecords").build()
+        if(activity!=null){
+            val db = Room.databaseBuilder(requireActivity(), AppDatabase::class.java, "audioRecords").build()
 
-        val duration = timer.format().split(".")[0]
+            val duration = timer.format().split(".")[0]
 
-        stopRecordingAudio("")
+            stopRecordingAudio("")
 
-        if(isChange){
-            val newFile = File("$dirPath$filename.mp3")
-            File(dirPath+fileName).renameTo(newFile)
+            if(isChange){
+                val newFile = File("$dirPath$filename.mp3")
+                File(dirPath+fileName).renameTo(newFile)
+            }
+
+            GlobalScope.launch {
+                db.audioRecordDAO().insert(AudioRecord(filename, filePath, Date().time, duration))
+            }
+            setToastSuccess(activity,"Successfully saved the recording")
+
+            binding.recordText.visibility = View.VISIBLE
+            binding.recordText.text = "Record"
+            showInterstitial(activity)
         }
-
-        GlobalScope.launch {
-            db.audioRecordDAO().insert(AudioRecord(filename, filePath, Date().time, duration))
-        }
-
-       // Toast.makeText(requireContext(),"Successfully saved the recording",Toast.LENGTH_LONG).show()
-        Toastic.toastic(
-            context = requireContext(),
-            message = "Successfully saved the recording",
-            duration = Toastic.LENGTH_SHORT,
-            type = Toastic.SUCCESS,
-            isIconAnimated = true
-        ).show()
-
-        binding.recordText.visibility = View.VISIBLE
-        binding.recordText.text = "Record"
-        showInterstitial()
 
     }
 

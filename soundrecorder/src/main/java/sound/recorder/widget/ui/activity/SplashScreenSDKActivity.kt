@@ -38,7 +38,10 @@ class SplashScreenSDKActivity : BaseActivityWidget() {
         super.onCreate(savedInstanceState)
         binding = ActivitySplashSdkBinding.inflate(layoutInflater)
         setContentView(binding.root)
+    }
 
+    @SuppressLint("SetTextI18n")
+    fun updateData(){
         FirebaseApp.initializeApp(this)
 
         dataSession = DataSession(this)
@@ -64,7 +67,12 @@ class SplashScreenSDKActivity : BaseActivityWidget() {
         }else{
             goToNextPage()
         }
+    }
 
+    override fun onResume() {
+        super.onResume()
+
+        updateData()
     }
 
 
@@ -134,7 +142,6 @@ class SplashScreenSDKActivity : BaseActivityWidget() {
         }
 
     }
-
 
     private fun isLatestVersion(currentVersion: Int, latestVersion: Int): Boolean {
         return currentVersion >= latestVersion

@@ -2,6 +2,7 @@ package sound.recorder.widget.ui.bottomSheet
 
 import android.annotation.SuppressLint
 import android.content.ActivityNotFoundException
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
@@ -18,7 +19,6 @@ import sound.recorder.widget.base.BaseBottomSheet
 import sound.recorder.widget.databinding.ActivityListVideoBinding
 import sound.recorder.widget.model.Video
 import sound.recorder.widget.model.VideoWrapper
-import java.util.ArrayList
 
 
 open class BottomSheetVideo(var firestore: FirebaseFirestore?) : BaseBottomSheet(),VideoListAdapter.OnItemClickListener {
@@ -26,13 +26,8 @@ open class BottomSheetVideo(var firestore: FirebaseFirestore?) : BaseBottomSheet
     private var mAdapter: VideoListAdapter? = null
     private var mPage = 1
     private var mVideoList = ArrayList<Video>()
-
-    // Step 1 - This interface defines the type of messages I want to communicate to my owner
-    interface OnClickListener {
-        fun onPlayVideo(filePath: String)
-    }
-
     private lateinit var binding : ActivityListVideoBinding
+    private var isFragmentAdded = false
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = ActivityListVideoBinding.inflate(layoutInflater)
@@ -61,6 +56,13 @@ open class BottomSheetVideo(var firestore: FirebaseFirestore?) : BaseBottomSheet
 
     }
 
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        isFragmentAdded = true
+    }
+
+
+
     private fun setupRecyclerView(){
         val mainMenuLayoutManager = GridLayoutManager(activity, 3)
         binding.recyclerView.layoutManager = mainMenuLayoutManager
@@ -69,6 +71,7 @@ open class BottomSheetVideo(var firestore: FirebaseFirestore?) : BaseBottomSheet
 
     @SuppressLint("NotifyDataSetChanged")
     private fun load(loadMore: Boolean) {
+
         firestore?.collection("videos")
             ?.get()
             ?.addOnCompleteListener { task ->
@@ -93,11 +96,11 @@ open class BottomSheetVideo(var firestore: FirebaseFirestore?) : BaseBottomSheet
                         result(wrapper, loadMore)
                         mAdapter?.notifyDataSetChanged()
                     } else if (task.result!!.size() == 0) {
-                        setToastInfo("No Data")
+                        setToastInfo(activity,"No Data")
                     }
                 } else {
                     setLog(task.result.toString())
-                    setToastError("Failed get data")
+                    setToastError(activity,"Failed get data")
 
                 }
             }
@@ -108,12 +111,12 @@ open class BottomSheetVideo(var firestore: FirebaseFirestore?) : BaseBottomSheet
             Log.e("gg2", "mm")
             if (wrapper.list.size == 0) {
                 Log.e("gg3", "mm")
-                setToastInfo("Tidak ada data")
+                setToastInfo(activity,"Tidak ada data")
             } else {
                 mVideoList = ArrayList()
                 updateList(wrapper)
-                for (i in wrapper.list!!.indices) {
-                    mVideoList.add(wrapper.list!![i])
+                for (i in wrapper.list.indices) {
+                    mVideoList.add(wrapper.list[i])
                 }
                 if (loadMore) {
                     mPage += 1
@@ -122,7 +125,7 @@ open class BottomSheetVideo(var firestore: FirebaseFirestore?) : BaseBottomSheet
             }
         } else {
             Log.e("gg4", "mm")
-            setToastInfo("Tidak ada data")
+            setToastInfo(activity,"No Data Found")
         }
     }
 
@@ -131,13 +134,12 @@ open class BottomSheetVideo(var firestore: FirebaseFirestore?) : BaseBottomSheet
     }
 
 
+    @SuppressLint("NotifyDataSetChanged")
     private fun updateList(wrapper: VideoWrapper) {
         showList()
-        if(activity==null){
-            //nothing to do
-        }else{
-            mAdapter = VideoListAdapter(requireActivity(),wrapper.list,this)
-            mAdapter?.setData(requireActivity(),wrapper.list)
+        if(activity!=null){
+            mAdapter = VideoListAdapter(activity,wrapper.list,this)
+            mAdapter?.setData(activity,wrapper.list)
             binding.recyclerView.adapter = mAdapter
             mAdapter?.notifyDataSetChanged()
         }
@@ -157,6 +159,7 @@ open class BottomSheetVideo(var firestore: FirebaseFirestore?) : BaseBottomSheet
             startActivity(webIntent)
         }
     }
+
 
 
 }
