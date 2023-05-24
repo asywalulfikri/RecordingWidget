@@ -37,7 +37,7 @@
         </activity>
 
         <activity android:name=".MainActivityWidget"
-            android:screenOrientation="landscape"/>
+            android:screenOrientation="sensorLandscape"/>
 
         <activity android:name="sound.recorder.widget.ui.activity.SplashScreenSDKActivity"
             android:screenOrientation="sensorLandscape"/>

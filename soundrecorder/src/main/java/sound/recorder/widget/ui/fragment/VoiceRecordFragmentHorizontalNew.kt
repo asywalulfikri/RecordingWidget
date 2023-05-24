@@ -22,7 +22,6 @@ import android.view.ViewGroup
 import android.view.Window
 import android.widget.Button
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.room.Room
@@ -51,7 +50,6 @@ import java.util.*
 import kotlin.math.ln
 
 private const val LOG_TAG = "AudioRecordTest"
-private const val REQUEST_RECORD_AUDIO_PERMISSION = 200
 
 internal class VoiceRecorderFragmentWidgetHorizontalNew : Fragment, BottomSheet.OnClickListener,
     BottomSheetListSong.OnClickListener, Timer.OnTimerUpdateListener,SharedPreferences.OnSharedPreferenceChangeListener {
@@ -68,7 +66,6 @@ internal class VoiceRecorderFragmentWidgetHorizontalNew : Fragment, BottomSheet.
     private var _binding: WidgetRecordHorizontalNewBinding? = null
     private val binding get() = _binding!!
 
-    // Requesting permission to RECORD_AUDIO
     private var mp :  MediaPlayer? =null
     private var showBtnStop = false
     private var songIsPlaying = false
@@ -112,10 +109,6 @@ internal class VoiceRecorderFragmentWidgetHorizontalNew : Fragment, BottomSheet.
             }else{
                 binding.noteBtn.visibility = View.GONE
             }
-
-
-
-            //setupScreenRecorder()
 
             handler = Handler(Looper.myLooper()!!)
 
@@ -162,7 +155,6 @@ internal class VoiceRecorderFragmentWidgetHorizontalNew : Fragment, BottomSheet.
             }
         }
     }
-
 
     private fun showDialogRecord() {
         // custom dialog
@@ -215,23 +207,23 @@ internal class VoiceRecorderFragmentWidgetHorizontalNew : Fragment, BottomSheet.
                 requestPermission.launch(Manifest.permission.RECORD_AUDIO)
             }else{
                 startRecordingAudio()
-               // showDialogRecord()
+
             }
         }else{
             startRecordingAudio()
-            //showDialogRecord()
         }
 
     }
 
     private fun startPermissionSong(){
-        if(Build.VERSION.SDK_INT >=33){
-
-            showBottomSheetSong()
-
+        if(Build.VERSION.SDK_INT >=Build.VERSION_CODES.TIRAMISU){
+            if (ContextCompat.checkSelfPermission(requireActivity(), Manifest.permission.READ_MEDIA_AUDIO) == PackageManager.PERMISSION_GRANTED) {
+                showBottomSheetSong()
+            } else {
+                requestPermissionSong.launch(Manifest.permission.READ_MEDIA_AUDIO)
+            }
         } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (ContextCompat.checkSelfPermission(activity as Context, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                // Pass any permission you want while launching
                 requestPermissionSong.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
             }else{
                 showBottomSheetSong()
@@ -246,7 +238,7 @@ internal class VoiceRecorderFragmentWidgetHorizontalNew : Fragment, BottomSheet.
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
             // do something
             if(isGranted){
-                showDialogRecord()
+                startRecordingAudio()
             }else{
                 showAllowPermission()
             }
@@ -275,8 +267,9 @@ internal class VoiceRecorderFragmentWidgetHorizontalNew : Fragment, BottomSheet.
 
 
     private fun showAllowPermission(){
-        setToastInfo(activity,"Allow Permission in Setting")
+        setToastInfo(activity,"Allow Permission in Setting Audio In Setting")
     }
+
 
     private fun startScreenRecorder(){
         screenRecorder?.start(this,requireActivity())
@@ -363,6 +356,7 @@ internal class VoiceRecorderFragmentWidgetHorizontalNew : Fragment, BottomSheet.
                 prepare()
                 start()
                 animatePlayerView()
+                setToastInfo(activity,"Recorded Started")
             }
         } catch (e: IllegalStateException) {
             // Handle IllegalStateException (e.g., recording already started)

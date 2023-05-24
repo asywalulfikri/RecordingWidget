@@ -102,14 +102,14 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:contentDescription="@string/app_names"
-            android:src="@drawable/ic_menu" />
+            app:srcCompat="@drawable/ic_menu" />
 
         <ImageView
             android:id="@+id/doneBtn"
             android:visibility="gone"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:src="@drawable/ic_done"/>
+            app:srcCompat="@drawable/ic_done"/>
 
         <ImageView
             android:id="@+id/settingBtn"
@@ -117,7 +117,7 @@
             android:layout_marginEnd="10dp"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:src="@drawable/ic_baseline_settings_24"/>
+            app:srcCompat="@drawable/ic_baseline_settings_24"/>
 
 
         <TextView

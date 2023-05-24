@@ -110,10 +110,6 @@ internal class VoiceRecorderFragmentWidgetVertical : Fragment, BottomSheet.OnCli
                 binding.noteBtn.visibility = View.GONE
             }
 
-
-
-            //setupScreenRecorder()
-
             handler = Handler(Looper.myLooper()!!)
 
             binding.recordBtn.setOnClickListener {
@@ -211,23 +207,23 @@ internal class VoiceRecorderFragmentWidgetVertical : Fragment, BottomSheet.OnCli
                 requestPermission.launch(Manifest.permission.RECORD_AUDIO)
             }else{
                 startRecordingAudio()
-               // showDialogRecord()
+
             }
         }else{
             startRecordingAudio()
-            //showDialogRecord()
         }
 
     }
 
     private fun startPermissionSong(){
-        if(Build.VERSION.SDK_INT >=33){
-
-            showBottomSheetSong()
-
+        if(Build.VERSION.SDK_INT >=Build.VERSION_CODES.TIRAMISU){
+            if (ContextCompat.checkSelfPermission(requireActivity(), Manifest.permission.READ_MEDIA_AUDIO) == PackageManager.PERMISSION_GRANTED) {
+                showBottomSheetSong()
+            } else {
+                requestPermissionSong.launch(Manifest.permission.READ_MEDIA_AUDIO)
+            }
         } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (ContextCompat.checkSelfPermission(activity as Context, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                // Pass any permission you want while launching
                 requestPermissionSong.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
             }else{
                 showBottomSheetSong()
@@ -242,7 +238,7 @@ internal class VoiceRecorderFragmentWidgetVertical : Fragment, BottomSheet.OnCli
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
             // do something
             if(isGranted){
-                showDialogRecord()
+                startRecordingAudio()
             }else{
                 showAllowPermission()
             }
@@ -271,7 +267,7 @@ internal class VoiceRecorderFragmentWidgetVertical : Fragment, BottomSheet.OnCli
 
 
     private fun showAllowPermission(){
-        setToastInfo(activity,"Allow Permission in Setting")
+        setToastInfo(activity,"Allow Permission in Setting Audio In Setting")
     }
 
 
@@ -360,6 +356,7 @@ internal class VoiceRecorderFragmentWidgetVertical : Fragment, BottomSheet.OnCli
                 prepare()
                 start()
                 animatePlayerView()
+                setToastInfo(activity,"Recorded Started")
             }
         } catch (e: IllegalStateException) {
             // Handle IllegalStateException (e.g., recording already started)

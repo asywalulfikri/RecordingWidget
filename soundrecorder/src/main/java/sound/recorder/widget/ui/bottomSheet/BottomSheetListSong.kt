@@ -90,11 +90,12 @@ internal class BottomSheetListSong(private var showBtnStop: Boolean, private var
 
 
     private fun getSong(list : ArrayList<Song>){
-        if(Build.VERSION.SDK_INT>32){
+       /* if(Build.VERSION.SDK_INT>32){
             getTiramisu(list)
         }else{
             getAllMediaMp3Files(list)
-        }
+        }*/
+        getAllMediaMp3Files(list)
     }
 
 
