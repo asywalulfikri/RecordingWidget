@@ -16,29 +16,26 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.util.DisplayMetrics
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
 import android.widget.Button
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.core.content.ContextCompat.startForegroundService
 import androidx.fragment.app.Fragment
 import androidx.room.Room
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import sound.recorder.widget.R
 import sound.recorder.widget.databinding.WidgetRecordHorizontalBlackBinding
 import sound.recorder.widget.db.AppDatabase
 import sound.recorder.widget.db.AudioRecord
-import sound.recorder.widget.service.BackgroundService
 import sound.recorder.widget.tools.Timer
 import sound.recorder.widget.ui.activity.ListingActivityWidgetNew
 import sound.recorder.widget.ui.bottomSheet.BottomSheet
@@ -71,8 +68,6 @@ internal class VoiceRecorderFragmentWidgetHorizontalBlack : Fragment, BottomShee
     private val binding get() = _binding!!
 
     // Requesting permission to RECORD_AUDIO
-    private var permissionToRecordAccepted = false
-    private var permissions: Array<String> = arrayOf(Manifest.permission.RECORD_AUDIO)
     private var mp :  MediaPlayer? =null
     private var showBtnStop = false
     private var songIsPlaying = false
@@ -84,7 +79,7 @@ internal class VoiceRecorderFragmentWidgetHorizontalBlack : Fragment, BottomShee
     var recordingScreen = false
     var pauseRecordScreen = false
     private var sharedPreferences : SharedPreferences? =null
-    private var volume : Float? =null
+    private var volumes : Float? =null
     private var showNote : Boolean? =null
 
     constructor() : super() {
@@ -100,15 +95,13 @@ internal class VoiceRecorderFragmentWidgetHorizontalBlack : Fragment, BottomShee
         super.onViewCreated(view, savedInstanceState)
         // Record to the external cache directory for visibility
         if(activity!=null){
-            ActivityCompat.requestPermissions(activity as Activity, permissions, REQUEST_RECORD_AUDIO_PERMISSION)
 
             sharedPreferences = DataSession(requireActivity()).getShared()
             sharedPreferences?.registerOnSharedPreferenceChangeListener(this)
             showNote = DataSession(requireActivity()).getShowNote()
 
-            mp = MediaPlayer()
             val progress = sharedPreferences?.getInt(Constant.keyShared.volume,100)
-            volume = (1 - ln((ToneGenerator.MAX_VOLUME - progress!!).toDouble()) / ln(
+            volumes = (1 - ln((ToneGenerator.MAX_VOLUME - progress!!).toDouble()) / ln(
                 ToneGenerator.MAX_VOLUME.toDouble())).toFloat()
 
             setupAds(activity)
@@ -166,24 +159,6 @@ internal class VoiceRecorderFragmentWidgetHorizontalBlack : Fragment, BottomShee
                 val bottomSheet = BottomSheetNote()
                 bottomSheet.show(requireActivity().supportFragmentManager, LOG_TAG)
             }
-        }
-    }
-
-    private fun setupScreenRecorder(){
-
-        val intent = Intent(requireActivity(), BackgroundService::class.java)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            startForegroundService(requireActivity(),intent)
-        } else {
-            activity?.startService(intent)
-        }
-
-        val metrics = DisplayMetrics()
-        activity?.windowManager?.defaultDisplay?.getMetrics(metrics)
-        screenRecorder = ScreenRecorder(requireActivity().application).apply {
-            width = metrics.widthPixels
-            height = metrics.heightPixels
-            dpi = metrics.densityDpi
         }
     }
 
@@ -302,19 +277,6 @@ internal class VoiceRecorderFragmentWidgetHorizontalBlack : Fragment, BottomShee
         setToastInfo(activity,"Allow Permission in Setting")
     }
 
-
-
-    @Deprecated("Deprecated in Java")
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        permissionToRecordAccepted = if (requestCode == REQUEST_RECORD_AUDIO_PERMISSION) {
-            grantResults[0] == PackageManager.PERMISSION_GRANTED
-        } else {
-            false
-        }
-    }
-
-
     private fun startScreenRecorder(){
         screenRecorder?.start(this,requireActivity())
         showLayoutStartRecord()
@@ -334,25 +296,15 @@ internal class VoiceRecorderFragmentWidgetHorizontalBlack : Fragment, BottomShee
     }
 
 
+    @SuppressLint("SetTextI18n")
     private fun showLayoutPauseRecord(){
         binding.recordText.visibility = View.VISIBLE
         binding.recordText.text = "Continue"
-        /*if(binding.recordText.text.toString() == "Continue"){
-            val spTextSize = 2f
-            val textSize = spTextSize * resources.displayMetrics.scaledDensity
-
-            binding.recordText.textSize = textSize
-        }else{
-            val spTextSize = 9f
-            val textSize = spTextSize * resources.displayMetrics.scaledDensity
-
-            binding.recordText.textSize = textSize
-        }*/
-
         binding.recordBtn.setImageResource(R.drawable.transparant_bg)
         timer.pause()
     }
 
+    @SuppressLint("SetTextI18n")
     private fun showLayoutStopRecord(){
         binding.recordBtn.setImageResource(R.drawable.transparant_bg)
         binding.recordText.text = "Record"
@@ -564,35 +516,9 @@ internal class VoiceRecorderFragmentWidgetHorizontalBlack : Fragment, BottomShee
         }
     }
 
-
-    private fun resumeRecordingScreen(){
-        if(screenRecorder!=null){
-            binding.recordText.visibility = View.GONE
-            pauseRecordScreen = false
-            screenRecorder?.apply {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    resume()
-                }
-            }
-            binding.recordBtn.setImageResource(R.drawable.ic_pause)
-            animatePlayerView()
-            timer.start()
-        }
-    }
-
     @SuppressLint("SetTextI18n")
     private fun stopRecordingScreen(){
-        /*if(screenRecorder!=null&&screenRecorder?.isRecording==true){
-            recordingScreen = false
-            pauseRecordScreen= false
-            screenRecorder?.apply {
-                stop()
-                reset()
-            }
-            recorder = null
-            showLayoutStopRecord()
 
-        }*/
     }
 
     private fun showBottomSheet(){
@@ -604,14 +530,13 @@ internal class VoiceRecorderFragmentWidgetHorizontalBlack : Fragment, BottomShee
 
     @SuppressLint("SetTextI18n")
     override fun onCancelClicked() {
-        /*Toast.makeText(activity, "Audio record deleted", Toast.LENGTH_SHORT).show()*/
         setToastSuccess(activity,"The recording has been cancelled")
         binding.recordText.text = "Record"
         binding.recordText.visibility = View.VISIBLE
-
         stopRecordingAudio("")
     }
 
+    @OptIn(DelicateCoroutinesApi::class)
     @SuppressLint("SetTextI18n")
     override fun onOkClicked(filePath: String, filename: String, isChange : Boolean) {
         // add audio record info to database
@@ -640,16 +565,37 @@ internal class VoiceRecorderFragmentWidgetHorizontalBlack : Fragment, BottomShee
     }
 
     override fun onPlaySong(filePath: String) {
-        if (mp != null) {
-            releaseMediaPlayer()
-        }
-        mp = MediaPlayer.create(activity, Uri.parse(filePath))
+        if(activity!=null){
+            if(mp!=null){
+               mp.apply {
+                   mp?.release()
+                   mp = null
+               }
+            }
+            val handler = Handler(Looper.getMainLooper())
+            handler.postDelayed({
+                try {
+                    mp = MediaPlayer()
+                    mp?.apply {
+                        setDataSource(requireActivity(),Uri.parse(filePath))
+                        volumes?.let { setVolume(it, volumes!!) }
+                        setOnPreparedListener{
+                            mp?.start()
+                        }
+                        mp?.prepareAsync()
+                        showBtnStop = true
+                        songIsPlaying = true
 
-        if (mp != null) {
-            showBtnStop = true
-            volume?.let { mp?.setVolume(it, volume!!) }
-            mp?.start()
-            songIsPlaying = true
+                    }
+                } catch (e: IOException) {
+                    setToastError(activity,e.message.toString())
+                } catch (e: IllegalStateException) {
+                    setToastError(activity,e.message.toString())
+                }catch (e : Exception){
+                    setToastError(activity,e.message.toString())
+                }
+            }, 100)
+
         }
     }
 
@@ -658,16 +604,18 @@ internal class VoiceRecorderFragmentWidgetHorizontalBlack : Fragment, BottomShee
         super.onPause()
         sharedPreferences?.unregisterOnSharedPreferenceChangeListener(this)
         if (mp != null) {
-            mp?.release()
-            showBtnStop = false
-            songIsPlaying = false
+            mp.apply {
+                mp?.release()
+                showBtnStop = false
+                songIsPlaying = false
+            }
         }
 
         if(recorder!=null&&recordingAudio){
-            recordingAudio = false
-            pauseRecordAudio= false
             recorder?.apply {
                 release()
+                recordingAudio = false
+                pauseRecordAudio= false
             }
             recorder = null
             showLayoutStopRecord()
@@ -677,15 +625,17 @@ internal class VoiceRecorderFragmentWidgetHorizontalBlack : Fragment, BottomShee
     override fun onDestroy() {
         super.onDestroy()
         if (mp != null) {
-            mp?.release()
-            showBtnStop = false
-            songIsPlaying = false
+            mp?.apply {
+                release()
+                showBtnStop = false
+                songIsPlaying = false
+            }
         }
         if(recorder!=null&&recordingAudio){
-            recordingAudio = false
-            pauseRecordAudio= false
             recorder?.apply {
                 release()
+                recordingAudio = false
+                pauseRecordAudio= false
             }
             recorder = null
             showLayoutStopRecord()
@@ -693,16 +643,25 @@ internal class VoiceRecorderFragmentWidgetHorizontalBlack : Fragment, BottomShee
     }
 
     override fun onStopSong() {
-        releaseMediaPlayer()
+        if(activity!=null&&mp!=null){
+            try {
+                mp?.apply {
+                    stop()
+                    reset()
+                    release()
+                    mp = null
+                    songIsPlaying = false
+                    showBtnStop = false
+                }
+            } catch (e: IOException) {
+                setToastError(activity,e.message.toString())
+            } catch (e: IllegalStateException) {
+                setToastError(activity,e.message.toString())
+            }catch (e : Exception){
+                setToastError(activity,e.message.toString())
+            }
+        }
     }
-
-    private fun releaseMediaPlayer() {
-        mp?.release()
-        mp = null
-        songIsPlaying = false
-        showBtnStop = false
-    }
-
 
     override fun onTimerUpdate(duration: String) {
         activity?.runOnUiThread{
@@ -739,17 +698,6 @@ internal class VoiceRecorderFragmentWidgetHorizontalBlack : Fragment, BottomShee
                 message = message,
                 duration = Toastic.LENGTH_SHORT,
                 type = Toastic.SUCCESS,
-                isIconAnimated = true
-            ).show()
-        }
-    }
-
-    fun setToastWarning(activity: Activity?,message : String){
-        if(activity!=null){
-            Toastic.toastic(activity,
-                message = message,
-                duration = Toastic.LENGTH_SHORT,
-                type = Toastic.WARNING,
                 isIconAnimated = true
             ).show()
         }

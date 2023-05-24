@@ -96,7 +96,6 @@ dependencies {
 
 }
 
-
 project.afterEvaluate {
     publishing {
         publications {
