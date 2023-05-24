@@ -1,6 +1,7 @@
 package sound.recorder.widget.ui.bottomSheet
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
@@ -13,21 +14,26 @@ import androidx.core.view.WindowCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetBehavior.STATE_EXPANDED
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.firebase.firestore.FirebaseFirestore
 import sound.recorder.widget.adapter.VideoListAdapter
-import sound.recorder.widget.base.BaseBottomSheet
 import sound.recorder.widget.databinding.ActivityListVideoBinding
 import sound.recorder.widget.model.Video
 import sound.recorder.widget.model.VideoWrapper
+import sound.recorder.widget.util.Toastic
 
 
-open class BottomSheetVideo(var firestore: FirebaseFirestore?) : BaseBottomSheet(),VideoListAdapter.OnItemClickListener {
+open class BottomSheetVideo(var firestore: FirebaseFirestore?) : BottomSheetDialogFragment(),VideoListAdapter.OnItemClickListener {
 
     private var mAdapter: VideoListAdapter? = null
     private var mPage = 1
     private var mVideoList = ArrayList<Video>()
     private lateinit var binding : ActivityListVideoBinding
     private var isFragmentAdded = false
+
+    constructor() : this(FirebaseFirestore.getInstance()) {
+        // Empty constructor required for DialogFragment
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = ActivityListVideoBinding.inflate(layoutInflater)
@@ -99,7 +105,6 @@ open class BottomSheetVideo(var firestore: FirebaseFirestore?) : BaseBottomSheet
                         setToastInfo(activity,"No Data")
                     }
                 } else {
-                    setLog(task.result.toString())
                     setToastError(activity,"Failed get data")
 
                 }
@@ -157,6 +162,55 @@ open class BottomSheetVideo(var firestore: FirebaseFirestore?) : BaseBottomSheet
             startActivity(appIntent)
         } catch (ex: ActivityNotFoundException) {
             startActivity(webIntent)
+        }
+    }
+
+
+
+
+    fun setToastError(activity: Activity?, message : String){
+        if(activity!=null){
+            Toastic.toastic(activity,
+                message = message,
+                duration = Toastic.LENGTH_SHORT,
+                type = Toastic.SUCCESS,
+                isIconAnimated = true
+            ).show()
+        }
+    }
+
+    fun setToastWarning(activity: Activity?, message : String){
+        if(activity!=null){
+            Toastic.toastic(activity,
+                message = message,
+                duration = Toastic.LENGTH_SHORT,
+                type = Toastic.WARNING,
+                isIconAnimated = true
+            ).show()
+        }
+
+    }
+
+    fun setToastSuccess(activity: Activity?, message : String){
+        if(activity!=null){
+            Toastic.toastic(
+                activity,
+                message = message,
+                duration = Toastic.LENGTH_SHORT,
+                type = Toastic.SUCCESS,
+                isIconAnimated = true
+            ).show()
+        }
+    }
+
+    fun setToastInfo(activity: Activity?, message : String){
+        if(activity!=null){
+            Toastic.toastic(activity,
+                message = message,
+                duration = Toastic.LENGTH_SHORT,
+                type = Toastic.INFO,
+                isIconAnimated = true
+            ).show()
         }
     }
 

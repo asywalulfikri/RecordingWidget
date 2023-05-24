@@ -47,11 +47,11 @@ open class BaseActivityWidget : AppCompatActivity() {
         adRequest = AdRequest.Builder().build()
     }
 
-    fun setupAnimationNot(musicAnimation : MusicAnimationView){
+   /* fun setupAnimationNot(musicAnimation : MusicAnimationView){
         val myImageList = intArrayOf(sound.recorder.widget.R.drawable.music_8, sound.recorder.widget.R.drawable.music_not9, sound.recorder.widget.R.drawable.audio_track)
         musicAnimation.setImages(myImageList).start()
         musicAnimation.start()
-    }
+    }*/
 
 
     fun getNoteValue(note: Note) : String{

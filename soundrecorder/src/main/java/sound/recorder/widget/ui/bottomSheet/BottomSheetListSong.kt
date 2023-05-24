@@ -44,7 +44,6 @@ internal class BottomSheetListSong(private var showBtnStop: Boolean, private var
     private var sharedPreferences : SharedPreferences? =null
     private var lisSong = ArrayList<Song>()
 
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = BottomSheetSongBinding.inflate(layoutInflater)
 

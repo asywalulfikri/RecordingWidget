@@ -26,11 +26,15 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.startForegroundService
+import androidx.fragment.app.Fragment
 import androidx.room.Room
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.LoadAdError
+import com.google.android.gms.ads.interstitial.InterstitialAd
+import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import sound.recorder.widget.R
-import sound.recorder.widget.base.BaseFragmentWidget
 import sound.recorder.widget.databinding.WidgetRecordVerticalBlackBinding
 import sound.recorder.widget.db.AppDatabase
 import sound.recorder.widget.db.AudioRecord
@@ -51,11 +55,11 @@ import kotlin.math.ln
 private const val LOG_TAG = "AudioRecordTest"
 private const val REQUEST_RECORD_AUDIO_PERMISSION = 200
 
-internal class VoiceRecorderFragmentWidgetVerticalBlack : BaseFragmentWidget(), BottomSheet.OnClickListener,
+internal class VoiceRecorderFragmentWidgetVerticalBlack : Fragment, BottomSheet.OnClickListener,
     BottomSheetListSong.OnClickListener, Timer.OnTimerUpdateListener,SharedPreferences.OnSharedPreferenceChangeListener {
 
-    private lateinit var fileName: String
-    private lateinit var dirPath: String
+    private var fileName =  ""
+    private var dirPath = ""
     private var recorder: MediaRecorder? = null
     private var recordingAudio = false
     private var pauseRecordAudio = false
@@ -72,7 +76,8 @@ internal class VoiceRecorderFragmentWidgetVerticalBlack : BaseFragmentWidget(), 
     private var mp :  MediaPlayer? =null
     private var showBtnStop = false
     private var songIsPlaying = false
-
+    var mInterstitialAd: InterstitialAd? = null
+    private var isLoad = false
 
     //ScreenRecorder
     var screenRecorder: ScreenRecorder? =null
@@ -81,6 +86,10 @@ internal class VoiceRecorderFragmentWidgetVerticalBlack : BaseFragmentWidget(), 
     private var sharedPreferences : SharedPreferences? =null
     private var volume : Float? =null
     private var showNote : Boolean? =null
+
+    constructor() : super() {
+        // Required empty public constructor
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = WidgetRecordVerticalBlackBinding.inflate(inflater, container, false)
@@ -719,6 +728,78 @@ internal class VoiceRecorderFragmentWidgetVerticalBlack : BaseFragmentWidget(), 
                 if(songIsPlaying){
                     mp?.setVolume(volume,volume)
                 }
+            }
+        }
+    }
+
+
+    fun setToastError(activity: Activity?,message : String){
+        if(activity!=null){
+            Toastic.toastic(activity,
+                message = message,
+                duration = Toastic.LENGTH_SHORT,
+                type = Toastic.SUCCESS,
+                isIconAnimated = true
+            ).show()
+        }
+    }
+
+    fun setToastWarning(activity: Activity?,message : String){
+        if(activity!=null){
+            Toastic.toastic(activity,
+                message = message,
+                duration = Toastic.LENGTH_SHORT,
+                type = Toastic.WARNING,
+                isIconAnimated = true
+            ).show()
+        }
+    }
+
+    private fun setToastSuccess(activity: Activity?, message : String){
+        if(activity!=null){
+            Toastic.toastic(
+                activity,
+                message = message,
+                duration = Toastic.LENGTH_SHORT,
+                type = Toastic.SUCCESS,
+                isIconAnimated = true
+            ).show()
+        }
+    }
+
+    private fun setToastInfo(activity: Activity?, message : String){
+        if(activity!=null){
+            Toastic.toastic(activity,
+                message = message,
+                duration = Toastic.LENGTH_SHORT,
+                type = Toastic.INFO,
+                isIconAnimated = true
+            ).show()
+        }
+    }
+
+    private fun setupAds(activity: Activity?) {
+        if(activity!=null){
+            val adRequestInterstitial = AdRequest.Builder().build()
+            adRequestInterstitial.isTestDevice(activity)
+            InterstitialAd.load(requireActivity(),DataSession(requireActivity()).getInterstitialId(), adRequestInterstitial,
+                object : InterstitialAdLoadCallback() {
+                    override fun onAdLoaded(interstitialAd: InterstitialAd) {
+                        mInterstitialAd = interstitialAd
+                        isLoad = true
+                    }
+
+                    override fun onAdFailedToLoad(loadAdError: LoadAdError) {
+                        mInterstitialAd = null
+                    }
+                })
+        }
+    }
+
+    private fun showInterstitial(activity: Activity?){
+        if(activity!=null){
+            if(isLoad){
+                mInterstitialAd?.show(activity)
             }
         }
     }

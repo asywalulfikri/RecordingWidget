@@ -1,6 +1,7 @@
 package sound.recorder.widget.ui.bottomSheet
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.os.Build
 import android.os.Bundle
 import android.text.TextUtils
@@ -13,10 +14,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetBehavior.STATE_EXPANDED
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.gson.Gson
 import org.json.JSONObject
 import sound.recorder.widget.R
-import sound.recorder.widget.base.BaseBottomSheet
 import sound.recorder.widget.databinding.BottomSheetNotesBinding
 import sound.recorder.widget.model.MyEventBus
 import sound.recorder.widget.notes.DatabaseHelper
@@ -24,15 +25,20 @@ import sound.recorder.widget.notes.Note
 import sound.recorder.widget.notes.NotesAdapter
 import sound.recorder.widget.notes.utils.MyDividerItemDecoration
 import sound.recorder.widget.notes.utils.RecyclerTouchListener
+import sound.recorder.widget.util.Toastic
 
 
-class BottomSheetNote : BaseBottomSheet() {
+class BottomSheetNote : BottomSheetDialogFragment {
 
     private lateinit var binding : BottomSheetNotesBinding
 
     private val notesList: ArrayList<Note> = ArrayList()
     private var db: DatabaseHelper? = null
     private var mAdapter: NotesAdapter? = null
+
+    constructor() : super() {
+        // Empty constructor required for DialogFragment
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = BottomSheetNotesBinding.inflate(layoutInflater)
@@ -222,6 +228,30 @@ class BottomSheetNote : BaseBottomSheet() {
 
 
         }
+    }
+
+    fun setToastSuccess(activity: Activity?, message : String){
+        if(activity!=null){
+            Toastic.toastic(
+                activity,
+                message = message,
+                duration = Toastic.LENGTH_SHORT,
+                type = Toastic.SUCCESS,
+                isIconAnimated = true
+            ).show()
+        }
+    }
+
+    private fun setToastWarning(activity: Activity?, message : String){
+        if(activity!=null){
+            Toastic.toastic(activity,
+                message = message,
+                duration = Toastic.LENGTH_SHORT,
+                type = Toastic.WARNING,
+                isIconAnimated = true
+            ).show()
+        }
+
     }
 
     private fun updateNote(note: String,title : String, position: Int) {

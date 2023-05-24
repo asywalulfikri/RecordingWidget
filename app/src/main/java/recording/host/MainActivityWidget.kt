@@ -55,7 +55,7 @@ class MainActivityWidget : BaseActivityWidget(),SharedPreferences.OnSharedPrefer
         sharedPreferences = DataSession(this).getShared()
         sharedPreferences?.registerOnSharedPreferenceChangeListener(this)
 
-        setupAnimationNot(binding.musicView)
+        //setupAnimationNot(binding.musicView)
 
         if(DataSession(this).getAnimation()){
             binding.musicView.visibility = View.VISIBLE
