@@ -6,14 +6,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.activity.ListingActivity">
+
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:elevation="0dp"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         android:fitsSystemWindows="true"
-        android:outlineSpotShadowColor="@android:color/transparent"
-        android:outlineAmbientShadowColor="@android:color/transparent"
         android:background="@color/colorBackground">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
@@ -31,25 +29,26 @@
                 android:layout_width="match_parent"
                 android:layout_height="?actionBarSize"
                 app:title="Recordings"
-                app:layout_collapseMode="pin"
-                android:elevation="0dp">
+                app:layout_collapseMode="pin">
+
                 <RelativeLayout
                     android:id="@+id/editorBar"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:visibility="gone">
-                    <androidx.appcompat.widget.AppCompatImageButton
+
+                    <ImageView
                         android:id="@+id/btnClose"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/ic_close"/>
+                        app:srcCompat="@drawable/ic_close"/>
 
-                    <androidx.appcompat.widget.AppCompatImageButton
+                    <ImageView
                         android:id="@+id/btnSelectAll"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
-                        android:background="@drawable/ic_list"
+                        app:srcCompat="@drawable/ic_list"
                         android:layout_marginEnd="16dp"/>
                 </RelativeLayout>
 

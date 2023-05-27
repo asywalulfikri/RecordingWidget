@@ -37,7 +37,7 @@ import sound.recorder.widget.databinding.WidgetRecordHorizontalBlackBinding
 import sound.recorder.widget.db.AppDatabase
 import sound.recorder.widget.db.AudioRecord
 import sound.recorder.widget.tools.Timer
-import sound.recorder.widget.ui.activity.ListingActivityWidgetNew
+import sound.recorder.widget.ui.activity.ListingMusicActivity
 import sound.recorder.widget.ui.bottomSheet.BottomSheet
 import sound.recorder.widget.ui.bottomSheet.BottomSheetListSong
 import sound.recorder.widget.ui.bottomSheet.BottomSheetNote
@@ -51,7 +51,7 @@ import kotlin.math.ln
 
 private const val LOG_TAG = "AudioRecordTest"
 
-internal class VoiceRecorderFragmentWidgetHorizontalBlack : Fragment, BottomSheet.OnClickListener,
+class VoiceRecorderFragmentWidgetHorizontalBlack : Fragment, BottomSheet.OnClickListener,
     BottomSheetListSong.OnClickListener, Timer.OnTimerUpdateListener,SharedPreferences.OnSharedPreferenceChangeListener {
 
     private var fileName =  ""
@@ -130,7 +130,7 @@ internal class VoiceRecorderFragmentWidgetHorizontalBlack : Fragment, BottomShee
             }
 
             binding.listBtn.setOnClickListener {
-                startActivity(Intent(activity, ListingActivityWidgetNew::class.java))
+                startActivity(Intent(activity, ListingMusicActivity::class.java))
             }
 
             binding.deleteBtn.setOnClickListener {

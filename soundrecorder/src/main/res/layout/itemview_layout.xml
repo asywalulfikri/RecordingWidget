@@ -5,7 +5,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:gravity="center_vertical"
     android:padding="20dp"
-    android:paddingStart="22dp"
     android:clickable="true"
     android:background="?selectableItemBackground"
     android:focusable="true">
@@ -13,7 +12,10 @@
     <ImageView
         android:layout_width="@dimen/itemview_btn_size"
         android:layout_height="@dimen/itemview_btn_size"
-        app:srcCompat="@drawable/ic_play"/>
+        app:srcCompat="@drawable/ic_play"
+        android:contentDescription="@string/app_name" />
+
+
     <LinearLayout
         android:layout_width="0dp"
         android:layout_weight="1"
@@ -34,10 +36,12 @@
             android:layout_height="wrap_content"
             android:textSize="14sp"/>
     </LinearLayout>
-    <com.google.android.material.checkbox.MaterialCheckBox
+
+    <CheckBox
         android:id="@+id/checkbox"
         android:clickable="false"
         android:visibility="gone"
         android:layout_width="30dp"
         android:layout_height="20dp"/>
+
 </LinearLayout>

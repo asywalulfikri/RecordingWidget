@@ -69,8 +69,11 @@ internal class AudioRecorderAdapter(private var audioRecords: List<AudioRecord>,
 
             if(editMode) {
                 holder.checkBox.visibility = View.VISIBLE
-                if (audioRecord.isChecked)
+                if (audioRecord.isChecked){
                     holder.checkBox.isChecked = audioRecord.isChecked
+                }else{
+                    holder.checkBox.isChecked = false
+                }
             }else {
                 holder.checkBox.visibility = View.GONE
                 audioRecord.isChecked = false

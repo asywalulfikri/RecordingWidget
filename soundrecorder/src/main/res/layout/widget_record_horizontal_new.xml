@@ -39,11 +39,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
 
-            <androidx.appcompat.widget.AppCompatImageButton
+            <ImageView
                 android:id="@+id/songBtn"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:background="@drawable/ic_song1"
+                app:srcCompat="@drawable/ic_song1"
                 android:contentDescription="@string/app_names"
                 tools:ignore="DuplicateSpeakableTextCheck" />
 
@@ -72,13 +72,23 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
 
-            <androidx.appcompat.widget.AppCompatImageButton
+            <ImageView
+                android:layout_centerInParent="true"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                app:srcCompat="@drawable/ic_record_button"
+                android:contentDescription="@string/app_names"
+                tools:ignore="DuplicateSpeakableTextCheck" />
+
+            <ImageView
+                android:layout_centerInParent="true"
                 android:id="@+id/recordBtn"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="10dp"
-                android:background="@drawable/ic_record_button"
                 android:contentDescription="@string/app_names"
                 tools:ignore="DuplicateSpeakableTextCheck" />
 
@@ -109,7 +119,8 @@
             android:visibility="gone"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            app:srcCompat="@drawable/ic_done"/>
+            app:srcCompat="@drawable/ic_done"
+            android:contentDescription="@string/app_name" />
 
         <ImageView
             android:id="@+id/settingBtn"
@@ -117,7 +128,8 @@
             android:layout_marginEnd="10dp"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            app:srcCompat="@drawable/ic_baseline_settings_24"/>
+            app:srcCompat="@drawable/ic_baseline_settings_24"
+            android:contentDescription="@string/app_name" />
 
 
         <TextView
@@ -128,7 +140,8 @@
             android:textSize="14sp"
             android:layout_marginEnd="10dp"
             android:textColor="#FFFFFF"
-            android:text="00:00.0"/>
+            android:text="00:00.0"
+            tools:ignore="HardcodedText" />
 
         <sound.recorder.widget.tools.RecorderWaveformView
             android:layout_marginStart="10dp"
@@ -153,6 +166,7 @@
         android:paddingTop="5dp"
         android:paddingBottom="5dp"
         android:singleLine="true"
-        android:text="A B C D E F G" />
+        android:text="A B C D E F G"
+        tools:ignore="HardcodedText" />
 
 </RelativeLayout>

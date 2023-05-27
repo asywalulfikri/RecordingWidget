@@ -65,7 +65,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
-                <androidx.appcompat.widget.AppCompatButton
+                <ImageView
                     android:id="@+id/btn_primary"
                     android:layout_weight="1"
                     android:background="@drawable/button_border"
@@ -77,7 +77,7 @@
                     android:text="Audio Only"
                     />
 
-                <androidx.appcompat.widget.AppCompatButton
+                <ImageView
                     android:id="@+id/btn_cancel"
                     android:layout_marginStart="10dp"
                     android:layout_weight="1"

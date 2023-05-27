@@ -17,8 +17,8 @@
 
     <sound.recorder.widget.tools.PlayerWaveformView
         android:id="@+id/playerView"
-        android:layout_width="656px"
-        android:layout_height="640px"
+        android:layout_width="250dp"
+        android:layout_height="250dp"
         app:layout_constraintBottom_toTopOf="@+id/seekBar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -26,15 +26,16 @@
 
     <com.google.android.material.chip.Chip
         android:id="@+id/chip"
-        android:layout_width="60dp"
-        android:layout_height="40dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginBottom="20dp"
         android:text="x 1.0"
         android:textAlignment="center"
-        android:textSize="14sp"
+        android:textSize="15sp"
         app:layout_constraintBottom_toTopOf="@+id/seekBar"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        tools:ignore="HardcodedText" />
 
     <TextView
         android:id="@+id/tvFilename"
@@ -53,8 +54,6 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="20dp"
         android:progress="40"
-        android:thumbTint="@color/colorPrimary"
-        android:progressTint="@color/colorPrimary"
         app:layout_constraintBottom_toTopOf="@+id/constraintLayout" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -64,35 +63,36 @@
         android:layout_marginBottom="36dp"
         app:layout_constraintBottom_toBottomOf="parent">
 
-        <androidx.appcompat.widget.AppCompatImageButton
+        <ImageView
             android:id="@+id/btnBackward"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:background="@drawable/ic_circle_selectable_white"
             app:srcCompat="@drawable/ic_backward"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/btnPlay"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            android:contentDescription="@string/app_name" />
 
-        <androidx.appcompat.widget.AppCompatImageButton
+        <ImageView
             android:id="@+id/btnPlay"
             android:layout_width="66dp"
             android:layout_height="66dp"
-            android:background="@drawable/ic_play_circle"
+            app:srcCompat="@drawable/ic_play_circle"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            tools:ignore="MissingConstraints" />
+            tools:ignore="MissingConstraints"
+            android:contentDescription="@string/app_name" />
 
-        <androidx.appcompat.widget.AppCompatImageButton
+        <ImageView
             android:id="@+id/btnForward"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:background="@drawable/ic_circle_selectable_white"
             app:srcCompat="@drawable/ic_forward"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/btnPlay"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            android:contentDescription="@string/app_name" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

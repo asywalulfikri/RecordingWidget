@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.core.widget.NestedScrollView android:id="@+id/nsvForums"
-    android:background="#FFE09115"
+    android:background="#FFE091"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -10,12 +10,13 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <androidx.appcompat.widget.AppCompatButton
+        <ImageView
             android:layout_alignParentEnd="true"
             android:id="@+id/ivClose"
-            android:background="@drawable/ic_close"
+            app:srcCompat="@drawable/ic_close"
             android:layout_width="40dp"
-            android:layout_height="40dp"/>
+            android:layout_height="40dp"
+            android:contentDescription="@string/app_name" />
 
 
         <androidx.recyclerview.widget.RecyclerView

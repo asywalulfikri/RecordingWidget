@@ -34,16 +34,15 @@
         android:id="@+id/buttons_layout"
         android:gravity="end">
 
-        <androidx.appcompat.widget.AppCompatButton
+        <Button
             android:id="@+id/positive"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
-        <androidx.appcompat.widget.AppCompatButton
+        <Button
             android:id="@+id/negative"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
             android:layout_marginStart="5dp" />
     </LinearLayout>
 

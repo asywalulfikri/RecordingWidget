@@ -6,15 +6,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.activity.ListingActivity">
+
+
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:elevation="0dp"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         android:fitsSystemWindows="true"
-        android:outlineSpotShadowColor="@android:color/transparent"
-        android:outlineAmbientShadowColor="@android:color/transparent"
         android:background="@color/colorBackground">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
@@ -33,26 +32,27 @@
                 android:layout_width="match_parent"
                 android:layout_height="?actionBarSize"
                 app:title="Recordings"
-                app:layout_collapseMode="pin"
-                android:elevation="0dp">
+                app:layout_collapseMode="pin">
                 <RelativeLayout
                     android:id="@+id/editorBar"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:visibility="gone">
-                    <androidx.appcompat.widget.AppCompatImageButton
+                    <ImageView
                         android:id="@+id/btnClose"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/ic_close"/>
+                        app:srcCompat="@drawable/ic_close"
+                        android:contentDescription="@string/app_name" />
 
-                    <androidx.appcompat.widget.AppCompatImageButton
+                    <ImageView
                         android:id="@+id/btnSelectAll"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
-                        android:background="@drawable/ic_list"
-                        android:layout_marginEnd="16dp"/>
+                        app:srcCompat="@drawable/ic_list"
+                        android:layout_marginEnd="16dp"
+                        android:contentDescription="@string/app_name" />
                 </RelativeLayout>
 
             </com.google.android.material.appbar.MaterialToolbar>
@@ -66,27 +66,18 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/searchInput"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:imeOptions="actionSearch"
                 android:textColor="@color/colorText"
                 android:hint="Search audio record"
                 android:textColorHint="@color/colorGrayDark"
-                android:inputType="text" />
+                android:inputType="text"
+                tools:ignore="HardcodedText" />
         </com.google.android.material.textfield.TextInputLayout>
 
 
     </com.google.android.material.appbar.AppBarLayout>
 
-   <!-- <androidx.core.widget.NestedScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/colorBackground"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerview"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
-    </androidx.core.widget.NestedScrollView>-->
 
     <androidx.recyclerview.widget.RecyclerView
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
@@ -94,16 +85,18 @@
         android:layout_width="match_parent"
         android:layout_marginBottom="50dp"
         android:layout_height="match_parent"/>
+
     <LinearLayout
         android:id="@+id/bottomSheet"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="5dp"
-        android:clickable="true"
         android:gravity="center"
         app:behavior_hideable="true"
         app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
-        android:background="@color/colorBackground">
+        android:background="@color/colorBackground"
+        android:baselineAligned="false">
+
         <LinearLayout
             android:id="@+id/llRename"
             android:layout_weight="1"
@@ -112,23 +105,15 @@
             android:gravity="center"
             android:layout_marginEnd="10dp"
             android:orientation="vertical">
-            <androidx.appcompat.widget.AppCompatButton
+            <Button
                 android:id="@+id/btnRename"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="#FFFFFF"
                 android:padding="10dp"
                 android:clickable="false"
                 android:text="Rename"
-                android:drawableStart="@drawable/ic_edit_disabled"
-                app:srcCompat="@drawable/ic_edit_disabled"/>
-            <TextView
-                android:id="@+id/tvRename"
-                android:visibility="gone"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/colorDisabled"
-                android:text="Rename"/>
+                tools:ignore="HardcodedText" />
+
         </LinearLayout>
 
         <LinearLayout
@@ -139,23 +124,42 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:orientation="vertical">
-            <androidx.appcompat.widget.AppCompatButton
+            android:orientation="vertical"
+            android:focusable="true">
+
+            <Button
                 android:id="@+id/btnDelete"
                 android:clickable="false"
-                android:background="#FFFFFF"
                 android:text="Delete"
                 android:padding="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:drawableStart="@drawable/ic_delete_disabled2"/>
-            <TextView
-                android:id="@+id/tvDelete"
-                android:visibility="gone"
-                android:layout_width="wrap_content"
+                android:drawableStart="@drawable/ic_delete_disabled2"
+                tools:ignore="HardcodedText" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/llCancel"
+            android:layout_weight="1"
+            android:clickable="true"
+            android:layout_marginStart="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:focusable="true">
+
+            <Button
+                android:id="@+id/btnCancel"
+                android:clickable="false"
+                android:text="Cancel"
+                android:padding="10dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@color/colorDisabled"
-                android:text=""/>
+                android:drawableStart="@drawable/ic_delete_disabled2"
+                tools:ignore="HardcodedText" />
+
         </LinearLayout>
     </LinearLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

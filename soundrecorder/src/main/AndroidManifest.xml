@@ -23,7 +23,7 @@
         <activity android:name=".ui.activity.ListingActivity"
             android:screenOrientation="landscape"/>
 
-        <activity android:name=".ui.activity.ListingActivityWidgetNew"
+        <activity android:name=".ui.activity.ListingMusicActivity"
             android:screenOrientation="landscape"/>
 
         <service

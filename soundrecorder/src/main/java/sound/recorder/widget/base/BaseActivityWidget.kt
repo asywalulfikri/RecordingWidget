@@ -26,7 +26,6 @@ import com.google.gson.Gson
 import org.json.JSONObject
 import sound.recorder.widget.notes.Note
 import sound.recorder.widget.util.DataSession
-import sound.recorder.widget.util.MusicAnimationView
 import sound.recorder.widget.util.Toastic
 import java.util.concurrent.atomic.AtomicReference
 
@@ -46,13 +45,6 @@ open class BaseActivityWidget : AppCompatActivity() {
         dataSession = DataSession(this)
         adRequest = AdRequest.Builder().build()
     }
-
-   /* fun setupAnimationNot(musicAnimation : MusicAnimationView){
-        val myImageList = intArrayOf(sound.recorder.widget.R.drawable.music_8, sound.recorder.widget.R.drawable.music_not9, sound.recorder.widget.R.drawable.audio_track)
-        musicAnimation.setImages(myImageList).start()
-        musicAnimation.start()
-    }*/
-
 
     fun getNoteValue(note: Note) : String{
         val valueNote = try {

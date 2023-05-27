@@ -23,17 +23,13 @@ import sound.recorder.widget.model.VideoWrapper
 import sound.recorder.widget.util.Toastic
 
 
-open class BottomSheetVideo(var firestore: FirebaseFirestore?) : BottomSheetDialogFragment(),VideoListAdapter.OnItemClickListener {
+open class BottomSheetVideo(private var firestore: FirebaseFirestore? = FirebaseFirestore.getInstance()) : BottomSheetDialogFragment(),VideoListAdapter.OnItemClickListener {
 
     private var mAdapter: VideoListAdapter? = null
     private var mPage = 1
     private var mVideoList = ArrayList<Video>()
     private lateinit var binding : ActivityListVideoBinding
     private var isFragmentAdded = false
-
-    constructor() : this(FirebaseFirestore.getInstance()) {
-        // Empty constructor required for DialogFragment
-    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = ActivityListVideoBinding.inflate(layoutInflater)
