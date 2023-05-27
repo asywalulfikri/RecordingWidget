@@ -25,7 +25,7 @@ import sound.recorder.widget.model.Song
 import sound.recorder.widget.util.DataSession
 
 
-internal class BottomSheetListSong(private var showBtnStop: Boolean, private var listener: OnClickListener) : BottomSheetDialogFragment(),SharedPreferences.OnSharedPreferenceChangeListener {
+class BottomSheetListSong(private var showBtnStop: Boolean, private var listener: OnClickListener) : BottomSheetDialogFragment(),SharedPreferences.OnSharedPreferenceChangeListener {
 
 
     //Load Song

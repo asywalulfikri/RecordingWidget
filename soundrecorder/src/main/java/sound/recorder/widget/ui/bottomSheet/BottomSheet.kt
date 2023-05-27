@@ -18,7 +18,7 @@ import sound.recorder.widget.R
 import java.io.File
 
 
-internal class BottomSheet(private var dirPath: String, private var filename: String, private var listener: OnClickListener) : BottomSheetDialogFragment() {
+class BottomSheet(private var dirPath: String, private var filename: String, private var listener: OnClickListener) : BottomSheetDialogFragment() {
 
     // Step 1 - This interface defines the type of messages I want to communicate to my owner
     interface OnClickListener {

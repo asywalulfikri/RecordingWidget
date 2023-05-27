@@ -23,7 +23,7 @@ import sound.recorder.widget.model.VideoWrapper
 import sound.recorder.widget.util.Toastic
 
 
-open class BottomSheetVideo(private var firestore: FirebaseFirestore? = FirebaseFirestore.getInstance()) : BottomSheetDialogFragment(),VideoListAdapter.OnItemClickListener {
+class BottomSheetVideo(private var firestore: FirebaseFirestore? = FirebaseFirestore.getInstance()) : BottomSheetDialogFragment(),VideoListAdapter.OnItemClickListener {
 
     private var mAdapter: VideoListAdapter? = null
     private var mPage = 1

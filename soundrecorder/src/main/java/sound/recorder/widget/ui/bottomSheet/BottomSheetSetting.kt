@@ -15,7 +15,7 @@ import sound.recorder.widget.util.Constant
 import sound.recorder.widget.util.DataSession
 
 
-internal class BottomSheetSetting : BottomSheetDialogFragment,SharedPreferences.OnSharedPreferenceChangeListener {
+class BottomSheetSetting : BottomSheetDialogFragment,SharedPreferences.OnSharedPreferenceChangeListener {
 
     private var binding : BottomSheetSettingBinding? = null
     private var sharedPreferences : SharedPreferences? =null
