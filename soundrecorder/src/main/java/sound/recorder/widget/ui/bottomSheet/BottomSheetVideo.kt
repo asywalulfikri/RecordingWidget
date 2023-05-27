@@ -148,16 +148,14 @@ class BottomSheetVideo(private var firestore: FirebaseFirestore? = FirebaseFires
 
     override fun onItemClick(position: Int) {
         val video = mVideoList[position]
-        val appIntent =
-            Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:" + video.url))
-        val webIntent = Intent(
-            Intent.ACTION_VIEW,
-            Uri.parse("http://www.youtube.com/watch?v=" + video.url)
-        )
+        val appIntent = Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:" + video.url))
+        //val webIntent = Intent(Intent.ACTION_VIEW, Uri.parse("http://www.youtube.com/watch?v=" + video.url))
         try {
             startActivity(appIntent)
-        } catch (ex: ActivityNotFoundException) {
-            startActivity(webIntent)
+        } catch (e: ActivityNotFoundException) {
+            setToastError(activity,e.message.toString())
+        }catch (e : Exception){
+            setToastError(activity,e.message.toString())
         }
     }
 
