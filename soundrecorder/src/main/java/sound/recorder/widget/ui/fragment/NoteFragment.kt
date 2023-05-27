@@ -39,7 +39,7 @@ internal class NoteFragment : BottomSheetDialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         // Record to the external cache directory for visibility
-        if(activity!=null){
+        if(activity!=null&&requireActivity()!=null){
             val displayMetrics = DisplayMetrics()
             val screenWidth = displayMetrics.widthPixels
 
@@ -65,12 +65,12 @@ internal class NoteFragment : BottomSheetDialogFragment() {
         db = DatabaseHelper(activity)
         notesList.addAll(db!!.allNotes)
         val mAdapter = NotesAdapter(notesList)
-        val mLayoutManager: RecyclerView.LayoutManager = LinearLayoutManager(requireContext())
+        val mLayoutManager: RecyclerView.LayoutManager = LinearLayoutManager(requireActivity())
         binding.recyclerView.layoutManager = mLayoutManager
         binding.recyclerView.itemAnimator = DefaultItemAnimator()
         binding.recyclerView.addItemDecoration(
             MyDividerItemDecoration(
-                requireContext(),
+                requireActivity(),
                 LinearLayoutManager.VERTICAL,
                 16
             )
@@ -78,7 +78,7 @@ internal class NoteFragment : BottomSheetDialogFragment() {
         binding.recyclerView.adapter = mAdapter
         toggleEmptyNotes()
         binding.recyclerView.addOnItemTouchListener(
-            RecyclerTouchListener(requireContext(),
+            RecyclerTouchListener(requireActivity(),
                 binding.recyclerView, object : RecyclerTouchListener.ClickListener {
                     override fun onClick(view: View?, position: Int) {
 

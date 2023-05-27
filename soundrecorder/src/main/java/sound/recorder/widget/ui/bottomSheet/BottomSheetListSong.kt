@@ -47,41 +47,42 @@ class BottomSheetListSong(private var showBtnStop: Boolean, private var listener
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = BottomSheetSongBinding.inflate(layoutInflater)
 
-        (dialog as? BottomSheetDialog)?.behavior?.state = STATE_EXPANDED
-        (dialog as? BottomSheetDialog)?.behavior?.isDraggable = false
+        if(activity!=null&&requireActivity()!=null){
+            (dialog as? BottomSheetDialog)?.behavior?.state = STATE_EXPANDED
+            (dialog as? BottomSheetDialog)?.behavior?.isDraggable = false
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            dialog?.window?.let { WindowCompat.setDecorFitsSystemWindows(it, false) }
-        } else {
-            @Suppress("DEPRECATION")
-            dialog?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
-        }
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                dialog?.window?.let { WindowCompat.setDecorFitsSystemWindows(it, false) }
+            } else {
+                @Suppress("DEPRECATION")
+                dialog?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
+            }
 
-        //dialog?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
 
-        sharedPreferences = DataSession(requireContext()).getShared()
-        sharedPreferences?.registerOnSharedPreferenceChangeListener(this)
+            sharedPreferences = DataSession(requireActivity()).getShared()
+            sharedPreferences?.registerOnSharedPreferenceChangeListener(this)
 
-        if(showBtnStop){
-            binding.btnStop.visibility = View.VISIBLE
-        }else{
-            binding.btnStop.visibility = View.GONE
-        }
+            if(showBtnStop){
+                binding.btnStop.visibility = View.VISIBLE
+            }else{
+                binding.btnStop.visibility = View.GONE
+            }
 
-        binding.btnStop.setOnClickListener {
-            listener.onStopSong()
-            binding.btnStop.visibility = View.GONE
-        }
+            binding.btnStop.setOnClickListener {
+                listener.onStopSong()
+                binding.btnStop.visibility = View.GONE
+            }
 
-        binding.btnCLose.setOnClickListener {
-            dismiss()
-        }
+            binding.btnCLose.setOnClickListener {
+                dismiss()
+            }
 
-        listTitleSong = ArrayList()
-        listLocationSong = ArrayList()
+            listTitleSong = ArrayList()
+            listLocationSong = ArrayList()
 
-        if(!RecordingSDK.isHaveSong(requireActivity())){
-            getSong(lisSong)
+            if(!RecordingSDK.isHaveSong(requireActivity())){
+                getSong(lisSong)
+            }
         }
 
         return binding.root
@@ -122,83 +123,89 @@ class BottomSheetListSong(private var showBtnStop: Boolean, private var listener
 
     @SuppressLint("Recycle")
     private fun getAllMediaMp3Files(songList : ArrayList<Song>) {
-        val uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
-        val cursor = requireContext().contentResolver?.query(uri,
-            null,
-            null,
-            null,
-            null
-        )
-        if (cursor == null) {
-            Toast.makeText(requireContext(), "Something Went Wrong.", Toast.LENGTH_LONG).show()
-        } else if (!cursor.moveToFirst()) {
-            Toast.makeText(requireContext(), "No Music Found on SD Card.", Toast.LENGTH_LONG).show()
-        } else {
-            val title    = cursor.getColumnIndex(MediaStore.Audio.Media.TITLE)
-            val location = cursor.getColumnIndex(MediaStore.Audio.Media.DATA)
+        if(activity!=null&&requireActivity()!=null){
+            val uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
+            val cursor = requireActivity().contentResolver?.query(uri,
+                null,
+                null,
+                null,
+                null
+            )
+            if (cursor == null) {
+                Toast.makeText(requireActivity(), "Something Went Wrong.", Toast.LENGTH_LONG).show()
+            } else if (!cursor.moveToFirst()) {
+                Toast.makeText(requireActivity(), "No Music Found on SD Card.", Toast.LENGTH_LONG).show()
+            } else {
+                val title    = cursor.getColumnIndex(MediaStore.Audio.Media.TITLE)
+                val location = cursor.getColumnIndex(MediaStore.Audio.Media.DATA)
 
-
-            MainScope().launch {
-
-                var songTitle1: String
-                var songLocation1: String
-
-                withContext(Dispatchers.Default) {
-
-                    //Process Background 2
-                    for (i in songList.indices) {
-                        songTitle1 = songList[i].title.toString()
-                        songLocation1  = songList[i].pathRaw.toString()
-                        listLocationSong?.add(songLocation1)
-                        listTitleSong?.add(songTitle1)
-                    }
-                }
-
-                //Result Process Background 2
 
                 MainScope().launch {
 
-                    //Background Process 1
+                    var songTitle1: String
+                    var songLocation1: String
+
                     withContext(Dispatchers.Default) {
 
-                        do {
-                            var songTitle = ""
-                            var songLocation = ""
-                            if(cursor.getString(title)!=null){
-                                songTitle = cursor.getString(title)
-                            }
-
-                            if(cursor.getString(location)!=null){
-                                songLocation = cursor.getString(location)
-                            }
-
-                            listLocationSong?.add(songLocation)
-                            listTitleSong?.add(songTitle)
-
-                        } while (cursor.moveToNext())
+                        //Process Background 2
+                        for (i in songList.indices) {
+                            songTitle1 = songList[i].title.toString()
+                            songLocation1  = songList[i].pathRaw.toString()
+                            listLocationSong?.add(songLocation1)
+                            listTitleSong?.add(songTitle1)
+                        }
                     }
-                   updateView()
+
+                    //Result Process Background 2
+
+                    MainScope().launch {
+
+                        //Background Process 1
+                        withContext(Dispatchers.Default) {
+
+                            do {
+                                var songTitle = ""
+                                var songLocation = ""
+                                if(cursor.getString(title)!=null){
+                                    songTitle = cursor.getString(title)
+                                }
+
+                                if(cursor.getString(location)!=null){
+                                    songLocation = cursor.getString(location)
+                                }
+
+                                listLocationSong?.add(songLocation)
+                                listTitleSong?.add(songTitle)
+
+                            } while (cursor.moveToNext())
+                        }
+                        updateView()
+                    }
+
                 }
 
             }
 
         }
-
     }
 
     private fun updateView(){
-        val listSong = listTitleSong!!.toTypedArray()
-        adapter = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, listSong)
-        binding.listView.adapter = adapter
-        adapter?.notifyDataSetChanged()
-        binding.listView.onItemClickListener =
-            AdapterView.OnItemClickListener { _: AdapterView<*>?, _: View?, i: Int, _: Long ->
-                //dismiss()
-                (dialog as? BottomSheetDialog)?.behavior?.state = STATE_HIDDEN
-                listener.onPlaySong(listLocationSong?.get(i).toString())
-                binding.btnStop.visibility = View.VISIBLE
+        if(activity!=null){
+            val listSong = listTitleSong!!.toTypedArray()
 
-            }
+            adapter = ArrayAdapter(requireActivity(), android.R.layout.simple_list_item_1, listSong)
+            binding.listView.adapter = adapter
+            adapter?.notifyDataSetChanged()
+            binding.listView.onItemClickListener =
+                AdapterView.OnItemClickListener { _: AdapterView<*>?, _: View?, i: Int, _: Long ->
+                    //dismiss()
+                    (dialog as? BottomSheetDialog)?.behavior?.state = STATE_HIDDEN
+                    listener.onPlaySong(listLocationSong?.get(i).toString())
+                    binding.btnStop.visibility = View.VISIBLE
+
+                }
+        }
+
     }
 
 

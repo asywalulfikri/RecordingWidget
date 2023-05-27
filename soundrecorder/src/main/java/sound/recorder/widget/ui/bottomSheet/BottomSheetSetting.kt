@@ -26,50 +26,53 @@ class BottomSheetSetting : BottomSheetDialogFragment,SharedPreferences.OnSharedP
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): RelativeLayout? {
         binding = BottomSheetSettingBinding.inflate(layoutInflater)
-        (dialog as? BottomSheetDialog)?.behavior?.state = STATE_EXPANDED
-        (dialog as? BottomSheetDialog)?.behavior?.isDraggable = false
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            dialog?.window?.let { WindowCompat.setDecorFitsSystemWindows(it, false) }
-        } else {
-            @Suppress("DEPRECATION")
-            dialog?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
-        }
+        if(activity!=null&&requireActivity()!=null){
+            (dialog as? BottomSheetDialog)?.behavior?.state = STATE_EXPANDED
+            (dialog as? BottomSheetDialog)?.behavior?.isDraggable = false
 
-
-        sharedPreferences = DataSession(requireContext()).getShared()
-        sharedPreferences?.registerOnSharedPreferenceChangeListener(this)
-
-        binding?.layoutBackground?.setOnClickListener {
-            RecordingSDK.showDialogColorPicker(requireContext())
-            dismiss()
-        }
-
-        binding?.btnColor?.setBackgroundColor(DataSession(requireContext()).getBackgroundColor())
-
-        binding?.cbAnimation?.isChecked = DataSession(requireContext()).getAnimation()
-
-        binding?.cbAnimation?.setOnCheckedChangeListener { _, b ->
-            if (b) {
-                DataSession(requireContext()).saveAnimation(true)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                dialog?.window?.let { WindowCompat.setDecorFitsSystemWindows(it, false) }
             } else {
-                DataSession(requireContext()).saveAnimation(false)
+                @Suppress("DEPRECATION")
+                dialog?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
             }
-        }
 
-        binding?.rlAnimation?.setOnClickListener {
-            if(binding?.cbAnimation?.isChecked == true){
-                binding?.cbAnimation?.isChecked = false
-                DataSession(requireContext()).saveAnimation(false)
-            }else{
-                binding?.cbAnimation?.isChecked = true
-                DataSession(requireContext()).saveAnimation(true)
+
+            sharedPreferences = DataSession(requireActivity()).getShared()
+            sharedPreferences?.registerOnSharedPreferenceChangeListener(this)
+
+            binding?.layoutBackground?.setOnClickListener {
+                RecordingSDK.showDialogColorPicker(requireActivity())
+                dismiss()
             }
+
+            binding?.btnColor?.setBackgroundColor(DataSession(requireActivity()).getBackgroundColor())
+
+            binding?.cbAnimation?.isChecked = DataSession(requireActivity()).getAnimation()
+
+            binding?.cbAnimation?.setOnCheckedChangeListener { _, b ->
+                if (b) {
+                    DataSession(requireActivity()).saveAnimation(true)
+                } else {
+                    DataSession(requireActivity()).saveAnimation(false)
+                }
+            }
+
+            binding?.rlAnimation?.setOnClickListener {
+                if(binding?.cbAnimation?.isChecked == true){
+                    binding?.cbAnimation?.isChecked = false
+                    DataSession(requireActivity()).saveAnimation(false)
+                }else{
+                    binding?.cbAnimation?.isChecked = true
+                    DataSession(requireActivity()).saveAnimation(true)
+                }
+            }
+
+            setupSeekBar()
+            binding?.seekBar?.progress = DataSession(requireActivity()).getVolume()
+
         }
-
-        setupSeekBar()
-        binding?.seekBar?.progress = DataSession(requireContext()).getVolume()
-
         return binding?.root
 
     }
@@ -77,7 +80,7 @@ class BottomSheetSetting : BottomSheetDialogFragment,SharedPreferences.OnSharedP
     private fun setupSeekBar(){
         binding?.seekBar?.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
-                DataSession(requireContext()).saveVolume(progress)
+                DataSession(requireActivity()).saveVolume(progress)
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar) {

@@ -42,7 +42,7 @@ class BottomSheetNote : BottomSheetDialogFragment {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = BottomSheetNotesBinding.inflate(layoutInflater)
-        if(activity!=null){
+        if(activity!=null&&requireActivity()!=null){
             (dialog as? BottomSheetDialog)?.behavior?.state = STATE_EXPANDED
             (dialog as? BottomSheetDialog)?.behavior?.isDraggable = false
 
@@ -86,7 +86,7 @@ class BottomSheetNote : BottomSheetDialogFragment {
         binding.recyclerView.itemAnimator = DefaultItemAnimator()
         binding.recyclerView.addItemDecoration(
             MyDividerItemDecoration(
-                requireContext(),
+                requireActivity(),
                 LinearLayoutManager.VERTICAL,
                 16
             )
