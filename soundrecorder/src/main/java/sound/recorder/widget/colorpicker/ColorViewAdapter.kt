@@ -8,8 +8,8 @@ import android.text.Html
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.LinearLayout
-import androidx.appcompat.widget.AppCompatButton
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import sound.recorder.widget.R
@@ -39,7 +39,7 @@ class ColorViewAdapter : RecyclerView.Adapter<ColorViewAdapter.ViewHolder> {
 
     inner class ViewHolder(v: View) : RecyclerView.ViewHolder(v),
         View.OnClickListener {
-        var colorItem: AppCompatButton
+        var colorItem: Button
         override fun onClick(v: View) {
             if (colorPosition != -1 && colorPosition != layoutPosition) {
                 mDataset[colorPosition].isCheck = false
@@ -59,7 +59,8 @@ class ColorViewAdapter : RecyclerView.Adapter<ColorViewAdapter.ViewHolder> {
             //buttons settings
             colorItem = v.findViewById(R.id.color)
             colorItem.setTextColor(tickColor)
-            colorItem.setBackgroundResource(buttonDrawable)
+           // colorItem.setBackgroundResource(buttonDrawable)
+            colorItem.setBackgroundColor(buttonDrawable)
             colorItem.setOnClickListener(this)
             val layoutParams = colorItem.layoutParams as LinearLayout.LayoutParams
             layoutParams.setMargins(
@@ -118,7 +119,8 @@ class ColorViewAdapter : RecyclerView.Adapter<ColorViewAdapter.ViewHolder> {
         } else holder.colorItem.text = ""
         holder.colorItem.setTextColor(if (tickColor == Color.WHITE) textColor else tickColor)
         if (buttonDrawable != 0) {
-            holder.colorItem.background.setColorFilter(color, PorterDuff.Mode.SRC_IN)
+          //  holder.colorItem.background.setColorFilter(color, PorterDuff.Mode.SRC_IN)
+            holder.colorItem.setBackgroundColor(color)
         } else {
             holder.colorItem.setBackgroundColor(color)
         }
