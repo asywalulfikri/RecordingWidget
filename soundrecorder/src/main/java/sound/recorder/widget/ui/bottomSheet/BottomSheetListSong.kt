@@ -61,7 +61,6 @@ class BottomSheetListSong(private var showBtnStop: Boolean, private var listener
 
             sharedPreferences = DataSession(requireActivity()).getShared()
             sharedPreferences?.registerOnSharedPreferenceChangeListener(this)
-
             if(showBtnStop){
                 binding.btnStop.visibility = View.VISIBLE
             }else{
