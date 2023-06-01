@@ -6,7 +6,6 @@ import android.content.Context
 import android.content.Intent
 import android.util.Log
 import android.widget.Toast
-import androidx.core.content.ContextCompat.startActivity
 import org.greenrobot.eventbus.EventBus
 import sound.recorder.widget.colorpicker.ColorPicker
 import sound.recorder.widget.colorpicker.ColorPicker.OnChooseColorListener
@@ -17,8 +16,8 @@ import sound.recorder.widget.util.DataSession
 
 object RecordingSDK {
 
-    private fun initSdkRecording(ctx: Context,admobId : String,bannerId: String,interstitialId: String) {
-        DataSession(ctx).addInitiate(true,admobId,bannerId,interstitialId)
+    private fun initSdkRecording(ctx: Context,admobId : String,bannerId: String,interstitialId: String,rewardId : String,nativeId :String) {
+        DataSession(ctx).setupAds(true,admobId,bannerId,interstitialId,rewardId,nativeId)
         DataSession(ctx).initiateSong(false)
     }
 
@@ -26,13 +25,16 @@ object RecordingSDK {
     fun initSdkColor(context: Context,colorWidget : Int,colorRunningText: Int) {
         DataSession(context).addColor(colorWidget,colorRunningText)
     }
-    fun initSdk(context: Context,admobId: String, bannerId: String, interstitialId: String): RecordingSDK {
+    fun initSdk(context: Context,admobId: String, bannerId: String, interstitialId: String, rewardId : String, nativeId : String): RecordingSDK {
 
         initSdkRecording(
             context,
             admobId,
             bannerId,
-            interstitialId
+            interstitialId,
+            rewardId,
+            nativeId
+
         )
         return this
     }

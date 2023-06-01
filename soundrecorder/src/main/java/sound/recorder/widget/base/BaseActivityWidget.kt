@@ -19,6 +19,8 @@ import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.MobileAds
 import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
+import com.google.android.gms.ads.rewarded.RewardedAd
+import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback
 import com.google.android.gms.tasks.Task
 import com.google.firebase.FirebaseApp
 import com.google.firebase.messaging.FirebaseMessaging
@@ -36,14 +38,13 @@ open class BaseActivityWidget : AppCompatActivity() {
     private var mInterstitialAd: InterstitialAd? = null
     var id: String? = null
     private var isLoad = false
-    private lateinit var adRequest : AdRequest
+    private var rewardedAd: RewardedAd? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         FirebaseApp.initializeApp(this)
         MobileAds.initialize(this) {}
         dataSession = DataSession(this)
-        adRequest = AdRequest.Builder().build()
     }
 
     fun getNoteValue(note: Note) : String{
@@ -77,8 +78,8 @@ open class BaseActivityWidget : AppCompatActivity() {
         return  valueNote
     }
 
-    fun setupAds(mAdView: AdView){
-
+    fun setupBanner(mAdView: AdView){
+        val adRequest = AdRequest.Builder().build()
         mAdView.adListener = object : AdListener() {
             override fun onAdLoaded() {
                 Log.d("AdMob", "Ad loaded successfully")
@@ -102,19 +103,10 @@ open class BaseActivityWidget : AppCompatActivity() {
         }
 
         mAdView.loadAd(adRequest)
-        adRequest.let {
-            InterstitialAd.load(this, dataSession?.getInterstitialId().toString(), it,
-                object : InterstitialAdLoadCallback() {
-                    override fun onAdLoaded(interstitialAd: InterstitialAd) {
-                        mInterstitialAd = interstitialAd
-                        isLoad = true
-                    }
 
-                    override fun onAdFailedToLoad(loadAdError: LoadAdError) {
-                        mInterstitialAd = null
-                    }
-                })
-        }
+
+
+
     }
 
     private fun permissionNotification(){
@@ -130,6 +122,7 @@ open class BaseActivityWidget : AppCompatActivity() {
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { _ -> }
 
     fun setupInterstitial() {
+        val adRequest = AdRequest.Builder().build()
         adRequest.let {
             InterstitialAd.load(this, dataSession?.getInterstitialId().toString(), it,
                 object : InterstitialAdLoadCallback() {
@@ -143,6 +136,18 @@ open class BaseActivityWidget : AppCompatActivity() {
                     }
                 })
         }
+    }
+
+    fun setupReward(){
+        val adRequest = AdRequest.Builder().build()
+        RewardedAd.load(this,dataSession?.getRewardId().toString(), adRequest, object : RewardedAdLoadCallback() {
+            override fun onAdFailedToLoad(adError: LoadAdError) {
+                rewardedAd = null
+            }
+            override fun onAdLoaded(ad: RewardedAd) {
+                rewardedAd = ad
+            }
+        })
     }
 
     protected open fun getFirebaseToken(): String? {
@@ -169,6 +174,10 @@ open class BaseActivityWidget : AppCompatActivity() {
         if(isLoad){
             mInterstitialAd?.show(this)
         }
+    }
+
+    fun showReward(){
+
     }
 
 

@@ -2,7 +2,6 @@ package sound.recorder.widget.util
 
 import android.content.Context
 import android.content.SharedPreferences
-import android.util.Log
 import sound.recorder.widget.R
 
 open class DataSession(private val mContext: Context) {
@@ -15,6 +14,8 @@ open class DataSession(private val mContext: Context) {
     var bannerIdName = "bannerId"
     var admobIdName = "admobId"
     var interstitialIdName = "interstitialIdName"
+    var rewardName = "rewardId"
+    var nativeName = "nativeId"
 
     init {
         sharedPref = mContext.getSharedPreferences("recordingWidget", 0)
@@ -60,12 +61,15 @@ open class DataSession(private val mContext: Context) {
         return sharedPref.getInt(Constant.keyShared.volume, 100)
     }
 
-    fun addInitiate(status : Boolean,admobId : String, bannerId : String, interstitialId : String){
+    fun setupAds(status : Boolean,admobId : String, bannerId : String, interstitialId : String,rewardId : String, nativeId : String){
         val editor = sharedPref.edit()
         editor.putBoolean("initiate", status)
         editor.putString(admobIdName, admobId)
         editor.putString(bannerIdName, bannerId)
         editor.putString(interstitialIdName, interstitialId)
+        editor.putString(rewardName,rewardId)
+        editor.putString(nativeName,nativeId)
+
         editor.apply()
     }
 
@@ -139,6 +143,14 @@ open class DataSession(private val mContext: Context) {
 
     fun getInterstitialId(): String {
         return sharedPref.getString(interstitialIdName, "").toString()
+    }
+
+    fun getRewardId(): String {
+        return sharedPref.getString(rewardName, "").toString()
+    }
+
+    fun getNativeId(): String {
+        return sharedPref.getString(nativeName, "").toString()
     }
 
     fun getAdmobId(): String {
