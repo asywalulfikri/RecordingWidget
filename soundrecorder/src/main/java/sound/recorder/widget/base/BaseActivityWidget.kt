@@ -12,9 +12,11 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.gms.ads.AdError
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdView
+import com.google.android.gms.ads.FullScreenContentCallback
 import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.MobileAds
 import com.google.android.gms.ads.interstitial.InterstitialAd
@@ -39,6 +41,7 @@ open class BaseActivityWidget : AppCompatActivity() {
     var id: String? = null
     private var isLoad = false
     private var rewardedAd: RewardedAd? = null
+    private var isLoadReward = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -138,18 +141,66 @@ open class BaseActivityWidget : AppCompatActivity() {
         }
     }
 
-    fun setupReward(){
+    private fun setupReward(){
         val adRequest = AdRequest.Builder().build()
-        RewardedAd.load(this,dataSession?.getRewardId().toString(), adRequest, object : RewardedAdLoadCallback() {
+        RewardedAd.load(this,DataSession(this).getRewardId(), adRequest, object : RewardedAdLoadCallback() {
             override fun onAdFailedToLoad(adError: LoadAdError) {
                 rewardedAd = null
             }
             override fun onAdLoaded(ad: RewardedAd) {
                 rewardedAd = ad
+                isLoadReward = true
+                rewardedAd?.fullScreenContentCallback = object: FullScreenContentCallback() {
+                    override fun onAdClicked() {
+                        // Called when a click is recorded for an ad.
+                        Log.d("yametere", "Ad was clicked.")
+                    }
+
+                    override fun onAdDismissedFullScreenContent() {
+                        // Called when ad is dismissed.
+                        // Set the ad reference to null so you don't show the ad a second time.
+                        Log.d("yametere", "Ad dismissed fullscreen content.")
+                        rewardedAd = null
+                    }
+
+                    override fun onAdFailedToShowFullScreenContent(p0: AdError) {
+                        // Called when ad fails to show.
+                        Log.d("yametere", "Ad failed to show fullscreen content.")
+                        rewardedAd = null
+                    }
+
+                    override fun onAdImpression() {
+                        // Called when an impression is recorded for an ad.
+                        Log.d("yametere", "Ad recorded an impression.")
+                    }
+
+                    override fun onAdShowedFullScreenContent() {
+                        // Called when ad is shown.
+                        Log.d("yametere","Ad showed fullscreen content.")
+                    }
+                }
             }
         })
     }
 
+    private fun showRewardAds(){
+        if(isLoadReward){
+            Log.d("yametere", "show")
+            rewardedAd?.let { ad ->
+                ad.show(this) { rewardItem ->
+                    // Handle the reward.
+                    val rewardAmount = rewardItem.amount
+                    val rewardType = rewardItem.type
+                    Log.d("yametere", "User earned the reward.$rewardAmount--$rewardType")
+                }
+            } ?: run {
+                Log.d("yametere", "The rewarded ad wasn't ready yet.")
+                showInterstitial()
+            }
+        }else{
+            Log.d("yametere", "nall")
+        }
+    }
     protected open fun getFirebaseToken(): String? {
         val tokens = AtomicReference("")
         FirebaseMessaging.getInstance().token
@@ -177,7 +228,22 @@ open class BaseActivityWidget : AppCompatActivity() {
     }
 
     fun showReward(){
-
+        if(isLoadReward){
+            Log.d("yametere", "show")
+            rewardedAd?.let { ad ->
+                ad.show(this) { rewardItem ->
+                    // Handle the reward.
+                    val rewardAmount = rewardItem.amount
+                    val rewardType = rewardItem.type
+                    Log.d("yametere", "User earned the reward.$rewardAmount--$rewardType")
+                }
+            } ?: run {
+                Log.d("yametere", "The rewarded ad wasn't ready yet.")
+                showInterstitial()
+            }
+        }else{
+            Log.d("yametere", "nall")
+        }
     }
 
 
