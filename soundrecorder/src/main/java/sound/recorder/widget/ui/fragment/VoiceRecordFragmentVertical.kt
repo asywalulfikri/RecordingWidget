@@ -32,8 +32,8 @@ import com.google.android.gms.ads.FullScreenContentCallback
 import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
-import com.google.android.gms.ads.rewarded.RewardedAd
-import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback
+import com.google.android.gms.ads.rewardedinterstitial.RewardedInterstitialAd
+import com.google.android.gms.ads.rewardedinterstitial.RewardedInterstitialAdLoadCallback
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -75,9 +75,9 @@ class VoiceRecorderFragmentWidgetVertical : Fragment, BottomSheet.OnClickListene
     private var showBtnStop = false
     private var songIsPlaying = false
     var mInterstitialAd: InterstitialAd? = null
-    var rewardedAd : RewardedAd? =null
     private var isLoadInterstitial = false
-    private var isLoadReward = false
+    private var isLoadInterstitialReward = false
+    private var rewardedInterstitialAd : RewardedInterstitialAd? =null
 
     //ScreenRecorder
     var screenRecorder: ScreenRecorder? =null
@@ -109,8 +109,8 @@ class VoiceRecorderFragmentWidgetVertical : Fragment, BottomSheet.OnClickListene
             volumes = (1 - ln((ToneGenerator.MAX_VOLUME - progress!!).toDouble()) / ln(
                 ToneGenerator.MAX_VOLUME.toDouble())).toFloat()
 
+            setupRewardInterstitial()
             setupInterstitial()
-            setupReward()
 
             if(showNote==true){
                 binding.noteBtn.visibility = View.VISIBLE
@@ -563,7 +563,7 @@ class VoiceRecorderFragmentWidgetVertical : Fragment, BottomSheet.OnClickListene
             binding.recordText.visibility = View.VISIBLE
             binding.recordText.text = "Record"
             //showInterstitial(activity)
-            showRewardAds()
+            showRewardInterstitial()
         }
 
     }
@@ -747,17 +747,15 @@ class VoiceRecorderFragmentWidgetVertical : Fragment, BottomSheet.OnClickListene
         }
     }
 
-    private fun setupReward(){
-        if(activity!=null){
-            val adRequest = AdRequest.Builder().build()
-            RewardedAd.load(requireActivity(),DataSession(requireActivity()).getRewardId(), adRequest, object : RewardedAdLoadCallback() {
-                override fun onAdFailedToLoad(adError: LoadAdError) {
-                    rewardedAd = null
-                }
-                override fun onAdLoaded(ad: RewardedAd) {
-                    rewardedAd = ad
-                    isLoadReward = true
-                    rewardedAd?.fullScreenContentCallback = object: FullScreenContentCallback() {
+    private fun setupRewardInterstitial(){
+        RewardedInterstitialAd.load(requireActivity(), DataSession(requireActivity()).getRewardInterstitialId(),
+            AdRequest.Builder().build(), object : RewardedInterstitialAdLoadCallback() {
+                override fun onAdLoaded(ad: RewardedInterstitialAd) {
+                    //Log.d(TAG, "Ad was loaded.")
+                    rewardedInterstitialAd = ad
+                    Log.d("yameteres", ad.rewardItem.type.toString()+"--")
+                    isLoadInterstitialReward = true
+                    rewardedInterstitialAd?.fullScreenContentCallback = object: FullScreenContentCallback() {
                         override fun onAdClicked() {
                             // Called when a click is recorded for an ad.
                             Log.d("yametere", "Ad was clicked.")
@@ -767,13 +765,13 @@ class VoiceRecorderFragmentWidgetVertical : Fragment, BottomSheet.OnClickListene
                             // Called when ad is dismissed.
                             // Set the ad reference to null so you don't show the ad a second time.
                             Log.d("yametere", "Ad dismissed fullscreen content.")
-                            rewardedAd = null
+                            rewardedInterstitialAd = null
                         }
 
                         override fun onAdFailedToShowFullScreenContent(p0: AdError) {
                             // Called when ad fails to show.
                             Log.d("yametere", "Ad failed to show fullscreen content.")
-                            rewardedAd = null
+                            rewardedInterstitialAd = null
                         }
 
                         override fun onAdImpression() {
@@ -787,8 +785,14 @@ class VoiceRecorderFragmentWidgetVertical : Fragment, BottomSheet.OnClickListene
                         }
                     }
                 }
+
+                override fun onAdFailedToLoad(adError: LoadAdError) {
+                   // Log.d(TAG, adError?.toString())
+                    Log.d("yameterex",adError.message.toString())
+                    rewardedInterstitialAd = null
+                }
             })
-        }
+
     }
 
     private fun showInterstitial(){
@@ -799,11 +803,11 @@ class VoiceRecorderFragmentWidgetVertical : Fragment, BottomSheet.OnClickListene
         }
     }
 
-    private fun showRewardAds(){
+    private fun showRewardInterstitial(){
         if(activity!=null){
-            if(isLoadReward){
+            if(isLoadInterstitialReward){
                 Log.d("yametere", "show")
-                rewardedAd?.let { ad ->
+                rewardedInterstitialAd?.let { ad ->
                     ad.show(requireActivity()) { rewardItem ->
                         // Handle the reward.
                         val rewardAmount = rewardItem.amount
@@ -814,8 +818,6 @@ class VoiceRecorderFragmentWidgetVertical : Fragment, BottomSheet.OnClickListene
                     Log.d("yametere", "The rewarded ad wasn't ready yet.")
                     showInterstitial()
                 }
-            }else{
-                Log.d("yametere", "nall")
             }
         }else{
             Log.d("yametere", "null")

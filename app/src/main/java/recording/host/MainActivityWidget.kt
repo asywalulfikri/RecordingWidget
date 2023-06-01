@@ -61,7 +61,7 @@ class MainActivityWidget : BaseActivityWidget(),SharedPreferences.OnSharedPrefer
 
         MobileAds.initialize(this)
 
-        RecordingSDK.initSdk(this,"","ca-app-pub-3940256099942544/6300978111","ca-app-pub-3940256099942544/1033173712","ca-app-pub-3940256099942544/5224354917","").run()
+        RecordingSDK.initSdk(this,"","ca-app-pub-3940256099942544/6300978111","ca-app-pub-3940256099942544/1033173712","ca-app-pub-3940256099942544/5354046379","ca-app-pub-3940256099942544/5224354917","").run()
         RecordingSDK.initSdkColor(this, sound.recorder.widget.R.color.color7,R.color.white)
 
         for (i in listTitle.indices) {

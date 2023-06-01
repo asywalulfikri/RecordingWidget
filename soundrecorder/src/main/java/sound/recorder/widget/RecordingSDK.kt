@@ -16,8 +16,8 @@ import sound.recorder.widget.util.DataSession
 
 object RecordingSDK {
 
-    private fun initSdkRecording(ctx: Context,admobId : String,bannerId: String,interstitialId: String,rewardId : String,nativeId :String) {
-        DataSession(ctx).setupAds(true,admobId,bannerId,interstitialId,rewardId,nativeId)
+    private fun initSdkRecording(ctx: Context,admobId : String,bannerId: String,interstitialId: String,rewardInterstitialId : String,rewardId : String,nativeId :String) {
+        DataSession(ctx).setupAds(true,admobId,bannerId,interstitialId,rewardInterstitialId,rewardId,nativeId)
         DataSession(ctx).initiateSong(false)
     }
 
@@ -25,13 +25,14 @@ object RecordingSDK {
     fun initSdkColor(context: Context,colorWidget : Int,colorRunningText: Int) {
         DataSession(context).addColor(colorWidget,colorRunningText)
     }
-    fun initSdk(context: Context,admobId: String, bannerId: String, interstitialId: String, rewardId : String, nativeId : String): RecordingSDK {
+    fun initSdk(context: Context,admobId: String, bannerId: String, interstitialId: String, rewardInterstitialId : String,rewardId : String, nativeId : String): RecordingSDK {
 
         initSdkRecording(
             context,
             admobId,
             bannerId,
             interstitialId,
+            rewardInterstitialId,
             rewardId,
             nativeId
 

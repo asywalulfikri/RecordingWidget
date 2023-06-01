@@ -14,6 +14,7 @@ open class DataSession(private val mContext: Context) {
     var bannerIdName = "bannerId"
     var admobIdName = "admobId"
     var interstitialIdName = "interstitialIdName"
+    var rewardInterstitialName = "rewardInterstitialId"
     var rewardName = "rewardId"
     var nativeName = "nativeId"
 
@@ -61,13 +62,14 @@ open class DataSession(private val mContext: Context) {
         return sharedPref.getInt(Constant.keyShared.volume, 100)
     }
 
-    fun setupAds(status : Boolean,admobId : String, bannerId : String, interstitialId : String,rewardId : String, nativeId : String){
+    fun setupAds(status : Boolean,admobId : String, bannerId : String, interstitialId : String,rewardInterstitialId : String,rewardId : String, nativeId : String){
         val editor = sharedPref.edit()
         editor.putBoolean("initiate", status)
         editor.putString(admobIdName, admobId)
         editor.putString(bannerIdName, bannerId)
         editor.putString(interstitialIdName, interstitialId)
         editor.putString(rewardName,rewardId)
+        editor.putString(rewardInterstitialName,rewardInterstitialId)
         editor.putString(nativeName,nativeId)
 
         editor.apply()
@@ -143,6 +145,10 @@ open class DataSession(private val mContext: Context) {
 
     fun getInterstitialId(): String {
         return sharedPref.getString(interstitialIdName, "").toString()
+    }
+
+    fun getRewardInterstitialId(): String {
+        return sharedPref.getString(rewardInterstitialName, "").toString()
     }
 
     fun getRewardId(): String {
