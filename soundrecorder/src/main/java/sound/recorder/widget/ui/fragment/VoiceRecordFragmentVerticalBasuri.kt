@@ -38,7 +38,7 @@ import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import sound.recorder.widget.R
-import sound.recorder.widget.databinding.WidgetRecordHorizontalBinding
+import sound.recorder.widget.databinding.WidgetRecordVerticalBasuriBinding
 import sound.recorder.widget.db.AppDatabase
 import sound.recorder.widget.db.AudioRecord
 import sound.recorder.widget.tools.Timer
@@ -56,7 +56,7 @@ import kotlin.math.ln
 
 private const val LOG_TAG = "AudioRecordTest"
 
-class VoiceRecorderFragmentWidgetHorizontal : Fragment, BottomSheet.OnClickListener,
+class VoiceRecorderFragmentWidgetVerticalBasuri : Fragment, BottomSheet.OnClickListener,
     BottomSheetListSong.OnClickListener, Timer.OnTimerUpdateListener,SharedPreferences.OnSharedPreferenceChangeListener {
 
     private var fileName =  ""
@@ -68,7 +68,7 @@ class VoiceRecorderFragmentWidgetHorizontal : Fragment, BottomSheet.OnClickListe
     private lateinit var timer: Timer
 
     private lateinit var handler: Handler
-    private var _binding: WidgetRecordHorizontalBinding? = null
+    private var _binding: WidgetRecordVerticalBasuriBinding? = null
     private val binding get() = _binding!!
 
     private var mp :  MediaPlayer? =null
@@ -92,7 +92,7 @@ class VoiceRecorderFragmentWidgetHorizontal : Fragment, BottomSheet.OnClickListe
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        _binding = WidgetRecordHorizontalBinding.inflate(inflater, container, false)
+        _binding = WidgetRecordVerticalBasuriBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -302,13 +302,13 @@ class VoiceRecorderFragmentWidgetHorizontal : Fragment, BottomSheet.OnClickListe
     private fun showLayoutPauseRecord(){
         binding.recordText.visibility = View.VISIBLE
         binding.recordText.text = "Continue"
-        binding.recordBtn.setImageResource(R.drawable.ic_record)
+        binding.recordBtn.setImageResource(R.drawable.ic_record_black)
         timer.pause()
     }
 
     @SuppressLint("SetTextI18n")
     private fun showLayoutStopRecord(){
-        binding.recordBtn.setImageResource(R.drawable.ic_record)
+        binding.recordBtn.setImageResource(R.drawable.ic_record_black)
         binding.recordText.text = "Record"
         binding.recordText.visibility = View.VISIBLE
         binding.listBtn.visibility = View.VISIBLE
