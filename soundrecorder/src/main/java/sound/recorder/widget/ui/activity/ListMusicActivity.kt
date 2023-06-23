@@ -252,7 +252,6 @@ internal class ListingMusicActivity : BaseActivityWidget(), AudioRecorderAdapter
         // show relative layout
         binding.editorBar.visibility = View.VISIBLE
 
-
     }
 
 }
