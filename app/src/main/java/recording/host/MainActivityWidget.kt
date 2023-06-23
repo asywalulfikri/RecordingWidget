@@ -9,17 +9,25 @@ import android.view.WindowManager
 import com.google.android.gms.ads.MobileAds
 import com.google.firebase.firestore.FirebaseFirestore
 import recording.host.databinding.ActivityMainBinding
-import sound.recorder.widget.*
+import sound.recorder.widget.RecordWidgetH
+import sound.recorder.widget.RecordWidgetHB
+import sound.recorder.widget.RecordWidgetHN
+import sound.recorder.widget.RecordWidgetVBA
+import sound.recorder.widget.RecordingSDK
 import sound.recorder.widget.base.BaseActivityWidget
+import sound.recorder.widget.internet.InternetAvailabilityChecker
+import sound.recorder.widget.internet.InternetConnectivityListener
 import sound.recorder.widget.model.Song
 import sound.recorder.widget.ui.bottomSheet.BottomSheetVideo
 import sound.recorder.widget.util.Constant
 import sound.recorder.widget.util.DataSession
 
 
-class MainActivityWidget : BaseActivityWidget(),SharedPreferences.OnSharedPreferenceChangeListener{
+class MainActivityWidget : BaseActivityWidget(),SharedPreferences.OnSharedPreferenceChangeListener,
+    InternetConnectivityListener {
 
 
+    private var mInternetAvailabilityChecker: InternetAvailabilityChecker? = null
     private var recordWidgetHN : RecordWidgetHN? =null
     private var recordWidgetHB : RecordWidgetHB? =null
     private var recordWidgetH : RecordWidgetH? =null
@@ -44,6 +52,9 @@ class MainActivityWidget : BaseActivityWidget(),SharedPreferences.OnSharedPrefer
         binding = ActivityMainBinding.inflate(layoutInflater)
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         setContentView(binding.root)
+
+        mInternetAvailabilityChecker = InternetAvailabilityChecker.getInstance();
+        mInternetAvailabilityChecker?.addInternetConnectivityListener(this);
 
         firebaseFirestore = FirebaseFirestore.getInstance()
 
@@ -140,6 +151,19 @@ class MainActivityWidget : BaseActivityWidget(),SharedPreferences.OnSharedPrefer
             }else{
                 binding.musicView.visibility =View.VISIBLE
             }
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        mInternetAvailabilityChecker?.removeInternetConnectivityChangeListener(this)
+    }
+
+    override fun onInternetConnectivityChanged(isConnected: Boolean) {
+        if (isConnected) {
+           setToastInfo("konek")
+        } else {
+           setToastInfo("ilang")
         }
     }
 

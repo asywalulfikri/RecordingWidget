@@ -1,5 +1,6 @@
 package sound.recorder.widget.tools
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.*
 import android.util.AttributeSet
@@ -33,6 +34,7 @@ internal class PlayerWaveformView: View {
         init(attrs)
     }
 
+    @SuppressLint("NewApi")
     constructor(
         context: Context?,
         attrs: AttributeSet?,
@@ -78,13 +80,13 @@ internal class PlayerWaveformView: View {
         invalidate()
     }
 
-    override fun onDraw(canvas: Canvas?) {
+    override fun onDraw(canvas: Canvas) {
         // this may be called several times on start or create
         // therefore we shouldn't initialize objects here
 
         spikes.forEach {
             Log.d("waveform", it.bottom.toString())
-            canvas?.drawRoundRect(it,10f, 10f, paintRead)
+            canvas.drawRoundRect(it,10f, 10f, paintRead)
         }
         //Log.d("waveform", rect.bottom.toString())
         //canvas?.drawRect(rect, paintRead)

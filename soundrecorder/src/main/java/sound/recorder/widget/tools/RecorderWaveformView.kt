@@ -84,12 +84,12 @@ internal class RecorderWaveformView: View {
         invalidate()
     }
 
-    override fun onDraw(canvas: Canvas?) {
+    override fun onDraw(canvas: Canvas) {
         // this may be called several times on start or create
         // therefore we shouldn't initialize objects here
 
         spikes.forEach {
-            canvas?.drawRoundRect(it, 6f, 6f,paintRead)
+            canvas.drawRoundRect(it, 6f, 6f,paintRead)
         }
     }
 }
