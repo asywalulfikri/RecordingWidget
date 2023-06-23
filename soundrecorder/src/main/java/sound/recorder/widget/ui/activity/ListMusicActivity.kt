@@ -162,6 +162,7 @@ internal class ListingMusicActivity : BaseActivityWidget(), AudioRecorderAdapter
         val intent = Intent()
         setResult(RESULT_OK,intent)
         finish()
+        showInterstitial()
     }
 
     private fun fetchAll(){
