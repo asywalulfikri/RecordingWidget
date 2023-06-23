@@ -5,7 +5,10 @@ import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import androidx.core.text.HtmlCompat
@@ -26,6 +29,30 @@ open class BaseFragmentWidget : Fragment(){
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         dataSession = DataSession(activity as Context)
+    }
+
+    fun isInternetConnected(): Boolean {
+        val connectivityManager = requireActivity().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            val networkCapabilities = connectivityManager.activeNetwork ?: return false
+            val actNw = connectivityManager.getNetworkCapabilities(networkCapabilities) ?: return false
+
+            return when {
+                actNw.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
+                actNw.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
+                // for other device how are able to connect with Ethernet
+                actNw.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) -> true
+                // for check internet over Bluetooth
+                actNw.hasTransport(NetworkCapabilities.TRANSPORT_BLUETOOTH) -> true
+                else -> false
+            }
+        } else {
+            @Suppress("DEPRECATION")
+            val networkInfo = connectivityManager.activeNetworkInfo ?: return false
+            @Suppress("DEPRECATION")
+            return networkInfo.isConnected
+        }
     }
 
     fun setToastError(activity: Activity?,message : String){

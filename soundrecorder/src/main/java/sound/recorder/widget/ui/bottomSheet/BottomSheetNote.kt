@@ -2,12 +2,12 @@ package sound.recorder.widget.ui.bottomSheet
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.app.AlertDialog
 import android.os.Build
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.*
 import android.widget.*
-import androidx.appcompat.app.AlertDialog
 import androidx.core.view.WindowCompat
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager

@@ -2,6 +2,7 @@ package sound.recorder.widget.ui.activity
 
 import android.media.MediaPlayer
 import android.media.PlaybackParams
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
@@ -12,6 +13,7 @@ import androidx.core.content.res.ResourcesCompat
 import sound.recorder.widget.R
 import sound.recorder.widget.base.BaseActivityWidget
 import sound.recorder.widget.databinding.ActivityPlayerBinding
+import java.io.IOException
 
 internal class PlayerActivityWidget : BaseActivityWidget() {
 
@@ -40,11 +42,26 @@ internal class PlayerActivityWidget : BaseActivityWidget() {
         if(filePath!=null||filePath!=""){
             binding.tvFilename.text = filename
 
-            mediaPlayer = MediaPlayer()
+
+            try {
+                mediaPlayer = MediaPlayer()
+                mediaPlayer.apply {
+                    setDataSource(this@PlayerActivityWidget, Uri.parse(filePath))
+                    mediaPlayer.prepare()
+                }
+            } catch (e: IOException) {
+                setToastError(e.message.toString())
+            } catch (e: IllegalStateException) {
+                setToastError(e.message.toString())
+            }catch (e : Exception){
+                setToastError(e.message.toString())
+            }
+
+            /*mediaPlayer = MediaPlayer()
             mediaPlayer.apply {
                 setDataSource(filePath)
                 prepare()
-            }
+            }*/
             binding.seekBar.max = mediaPlayer.duration
 
             handler = Handler(Looper.getMainLooper())
@@ -59,14 +76,39 @@ internal class PlayerActivityWidget : BaseActivityWidget() {
             }
 
             binding.btnForward.setOnClickListener {
-                mediaPlayer.seekTo(mediaPlayer.currentPosition + 1000)
-                binding.seekBar.progress += 1000
+
+                if(mediaPlayer!=null){
+                    try {
+                        mediaPlayer.apply {
+                            seekTo(mediaPlayer.currentPosition + 1000)
+                            binding.seekBar.progress += 1000
+                        }
+                    } catch (e: IOException) {
+                        setToastError(e.message.toString())
+                    } catch (e: IllegalStateException) {
+                        setToastError(e.message.toString())
+                    }catch (e : Exception){
+                        setToastError(e.message.toString())
+                    }
+                }
             }
 
             binding.btnBackward.setOnClickListener {
-                mediaPlayer.seekTo(mediaPlayer.currentPosition - 1000)
-                binding.seekBar.progress -= 1000
 
+                if(mediaPlayer!=null){
+                    try {
+                        mediaPlayer.apply {
+                            seekTo(mediaPlayer.currentPosition - 1000)
+                            binding.seekBar.progress += 1000
+                        }
+                    } catch (e: IOException) {
+                        setToastError(e.message.toString())
+                    } catch (e: IllegalStateException) {
+                        setToastError(e.message.toString())
+                    }catch (e : Exception){
+                        setToastError(e.message.toString())
+                    }
+                }
             }
 
             binding.seekBar.setOnSeekBarChangeListener(object: SeekBar.OnSeekBarChangeListener{
@@ -132,8 +174,21 @@ internal class PlayerActivityWidget : BaseActivityWidget() {
 
     override fun onBackPressed() {
         super.onBackPressed()
-        mediaPlayer.stop()
-        mediaPlayer.release()
-        handler.removeCallbacks(runnable)
+
+        if(mediaPlayer!=null){
+            try {
+                mediaPlayer.apply {
+                    stop()
+                    release()
+                    handler.removeCallbacks(runnable)
+                }
+            } catch (e: IOException) {
+                setToastError(e.message.toString())
+            } catch (e: IllegalStateException) {
+                setToastError(e.message.toString())
+            }catch (e : Exception){
+                setToastError(e.message.toString())
+            }
+        }
     }
 }

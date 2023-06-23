@@ -387,7 +387,7 @@ class VoiceRecorderFragmentWidgetVertical : Fragment, BottomSheet.OnClickListene
 
     private fun animatePlayerView(){
         if(recordingAudio && !pauseRecordAudio){
-            val amp = recorder!!.maxAmplitude
+            val amp = recorder?.maxAmplitude
             binding.playerView.updateAmps(amp)
 
             // write maxmap to a file for visualization in player activity
@@ -753,7 +753,7 @@ class VoiceRecorderFragmentWidgetVertical : Fragment, BottomSheet.OnClickListene
                 override fun onAdLoaded(ad: RewardedInterstitialAd) {
                     //Log.d(TAG, "Ad was loaded.")
                     rewardedInterstitialAd = ad
-                    Log.d("yameteres", ad.rewardItem.type.toString()+"--")
+                    Log.d("yameteres", ad.rewardItem.type +"--")
                     isLoadInterstitialReward = true
                     rewardedInterstitialAd?.fullScreenContentCallback = object: FullScreenContentCallback() {
                         override fun onAdClicked() {
@@ -788,7 +788,7 @@ class VoiceRecorderFragmentWidgetVertical : Fragment, BottomSheet.OnClickListene
 
                 override fun onAdFailedToLoad(adError: LoadAdError) {
                    // Log.d(TAG, adError?.toString())
-                    Log.d("yameterex",adError.message.toString())
+                    Log.d("yameterex", adError.message)
                     rewardedInterstitialAd = null
                 }
             })

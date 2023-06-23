@@ -104,8 +104,13 @@ class MainActivityWidget : BaseActivityWidget(),SharedPreferences.OnSharedPrefer
         recordWidgetV.loadData()*/
 
         binding.btnKlik.setOnClickListener {
-            val bottomSheet = BottomSheetVideo(firebaseFirestore)
-            bottomSheet.show(this.supportFragmentManager, "")
+            if(isInternetConnected(this)){
+                setToastInfo("konek")
+            }else{
+                setToastInfo("tidak konek")
+            }
+           /* val bottomSheet = BottomSheetVideo(firebaseFirestore)
+            bottomSheet.show(this.supportFragmentManager, "")*/
             //RecordingSDK.showDialogColorPicker(this,"background")
             // val intent = Intent(this,ListVideoActivity::class.java)
             //startActivity(intent)

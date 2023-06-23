@@ -64,24 +64,26 @@ internal class RecorderWaveformView: View {
         invalidate()
     }
 
-    fun updateAmps(amp: Int){
+    fun updateAmps(amp: Int?){
 
-        val norm  = min(amp/7, maxAmp) // 100*abs(Math.log10(1.0*amp/(sqrt(amp*1.0)+1)))
-        amplitudes.add(norm)
-        val amps = amplitudes.takeLast(maxSpikes)
+        if(amp!=null){
+            val norm  = min(amp/7, maxAmp) // 100*abs(Math.log10(1.0*amp/(sqrt(amp*1.0)+1)))
+            amplitudes.add(norm)
+            val amps = amplitudes.takeLast(maxSpikes)
 
-        spikes.clear()
+            spikes.clear()
 
-        for(i in amps.indices){
-            val delta = maxAmp.toFloat()
-            val top = delta - amps[i]
-            val bottom = top + amps[i] as Int
-            val rectUp = RectF(sw-i*(w+d), top, sw-i*(w+d) - w, bottom)
-            val rectDown = RectF(sw-i*(w+d), delta-2, sw-i*(w+d) - w, delta+amps[i])
-            spikes.add(rectUp)
-            spikes.add(rectDown)
+            for(i in amps.indices){
+                val delta = maxAmp.toFloat()
+                val top = delta - amps[i]
+                val bottom = top + amps[i] as Int
+                val rectUp = RectF(sw-i*(w+d), top, sw-i*(w+d) - w, bottom)
+                val rectDown = RectF(sw-i*(w+d), delta-2, sw-i*(w+d) - w, delta+amps[i])
+                spikes.add(rectUp)
+                spikes.add(rectDown)
+            }
+            invalidate()
         }
-        invalidate()
     }
 
     override fun onDraw(canvas: Canvas) {
