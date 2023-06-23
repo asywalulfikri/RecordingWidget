@@ -98,6 +98,7 @@
         android:baselineAligned="false">
 
         <LinearLayout
+            android:visibility="gone"
             android:id="@+id/llRename"
             android:layout_weight="1"
             android:layout_width="match_parent"

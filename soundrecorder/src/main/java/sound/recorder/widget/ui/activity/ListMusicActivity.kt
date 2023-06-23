@@ -41,6 +41,9 @@ internal class ListingMusicActivity : BaseActivityWidget(), AudioRecorderAdapter
         setContentView(binding.root)
 
         setSupportActionBar(binding.toolbar)
+
+        setupInterstitial()
+        setupRewardInterstitial()
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
         binding.toolbar.setNavigationOnClickListener {
@@ -114,11 +117,14 @@ internal class ListingMusicActivity : BaseActivityWidget(), AudioRecorderAdapter
                 }else{
                     runOnUiThread {
                         audioRecorderAdapter.setData(audioRecords)
+                        showRewardInterstitial()
+
                     }
                 }
             }
         }
 
+        binding.btnRename.visibility = View.GONE
         binding.btnRename.setOnClickListener {
             Toast.makeText(this, "rename clicked", Toast.LENGTH_SHORT).show()
         }

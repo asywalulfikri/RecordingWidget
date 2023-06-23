@@ -11,6 +11,8 @@ import android.content.pm.PackageManager
 import android.media.MediaPlayer
 import android.media.MediaRecorder
 import android.media.ToneGenerator
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -138,7 +140,12 @@ class VoiceRecorderFragmentWidgetVerticalBasuri : Fragment, BottomSheet.OnClickL
             }
 
             binding.listBtn.setOnClickListener {
-                startActivity(Intent(activity, ListingMusicActivity::class.java))
+                if(!isInternetConnected()){
+                    setToastError(requireActivity(),"No Internet Connection, Turn On your Data")
+                }else{
+                    startActivity(Intent(activity, ListingMusicActivity::class.java))
+                }
+
             }
 
             binding.deleteBtn.setOnClickListener {
@@ -302,13 +309,13 @@ class VoiceRecorderFragmentWidgetVerticalBasuri : Fragment, BottomSheet.OnClickL
     private fun showLayoutPauseRecord(){
         binding.recordText.visibility = View.VISIBLE
         binding.recordText.text = "Continue"
-        binding.recordBtn.setImageResource(R.drawable.ic_record_black)
+        binding.recordBtn.setImageResource(R.drawable.transparant_bg)
         timer.pause()
     }
 
     @SuppressLint("SetTextI18n")
     private fun showLayoutStopRecord(){
-        binding.recordBtn.setImageResource(R.drawable.ic_record_black)
+        binding.recordBtn.setImageResource(R.drawable.transparant_bg)
         binding.recordText.text = "Record"
         binding.recordText.visibility = View.VISIBLE
         binding.listBtn.visibility = View.VISIBLE
@@ -340,54 +347,85 @@ class VoiceRecorderFragmentWidgetVerticalBasuri : Fragment, BottomSheet.OnClickL
         binding.timerView.text = "00:00.00"
     }
 
+
+    fun isInternetConnected(): Boolean {
+        val connectivityManager = requireActivity().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            val networkCapabilities = connectivityManager.activeNetwork ?: return false
+            val actNw = connectivityManager.getNetworkCapabilities(networkCapabilities) ?: return false
+
+            return when {
+                actNw.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
+                actNw.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
+                // for other device how are able to connect with Ethernet
+                actNw.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) -> true
+                // for check internet over Bluetooth
+                actNw.hasTransport(NetworkCapabilities.TRANSPORT_BLUETOOTH) -> true
+                else -> false
+            }
+        } else {
+            @Suppress("DEPRECATION")
+            val networkInfo = connectivityManager.activeNetworkInfo ?: return false
+            @Suppress("DEPRECATION")
+            return networkInfo.isConnected
+        }
+    }
+
     @SuppressLint("SimpleDateFormat")
     private fun startRecordingAudio(){
-        showLayoutStartRecord()
 
-        recordingAudio = true
+        if(!isInternetConnected()){
+            setToastError(requireActivity(),"No Internet Connection, Turn On your Data")
+        }else{
+            showLayoutStartRecord()
 
-        // format file name with date
-        val pattern = "yyyy.MM.dd_hh.mm.ss"
-        val simpleDateFormat = SimpleDateFormat(pattern)
-        val date: String = simpleDateFormat.format(Date())
+            recordingAudio = true
 
-        dirPath = "${activity?.externalCacheDir?.absolutePath}/"
-        fileName = "record_${date}.mp3"
+            // format file name with date
+            val pattern = "yyyy.MM.dd_hh.mm.ss"
+            val simpleDateFormat = SimpleDateFormat(pattern)
+            val date: String = simpleDateFormat.format(Date())
 
-        try {
-            recorder = MediaRecorder()
-            recorder?.apply {
-                setAudioSource(MediaRecorder.AudioSource.MIC)
-                setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP)
-                setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB)
-                setOutputFile(dirPath + fileName)
-                prepare()
-                start()
-                animatePlayerView()
-                setToastInfo(activity,"Recorded Started")
+            dirPath = "${activity?.externalCacheDir?.absolutePath}/"
+            fileName = "record_${date}.mp3"
+
+            try {
+                recorder = MediaRecorder()
+                recorder?.apply {
+                    setAudioSource(MediaRecorder.AudioSource.MIC)
+                    setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP)
+                    setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB)
+                    setOutputFile(dirPath + fileName)
+                    prepare()
+                    start()
+                    animatePlayerView()
+                    setToastInfo(activity,"Recorded Started")
+                }
+            } catch (e: IllegalStateException) {
+                // Handle IllegalStateException (e.g., recording already started)
+                e.printStackTrace()
+                setToastError(activity,e.message.toString())
+                // Perform error handling or show appropriate message to the user
+            } catch (e: IOException) {
+                // Handle IOException (e.g., failed to prepare or write to file)
+                e.printStackTrace()
+                setToastError(activity,e.message.toString())
+                // Perform error handling or show appropriate message to the user
+            } catch (e: Exception) {
+                // Handle other exceptions
+                e.printStackTrace()
+                setToastError(activity,e.message.toString())
+                // Perform error handling or show appropriate message to the user
             }
-        } catch (e: IllegalStateException) {
-            // Handle IllegalStateException (e.g., recording already started)
-            e.printStackTrace()
-            setToastError(activity,e.message.toString())
-            // Perform error handling or show appropriate message to the user
-        } catch (e: IOException) {
-            // Handle IOException (e.g., failed to prepare or write to file)
-            e.printStackTrace()
-            setToastError(activity,e.message.toString())
-            // Perform error handling or show appropriate message to the user
-        } catch (e: Exception) {
-            // Handle other exceptions
-            e.printStackTrace()
-            setToastError(activity,e.message.toString())
-            // Perform error handling or show appropriate message to the user
         }
+
     }
 
 
     private fun animatePlayerView(){
         if(recordingAudio && !pauseRecordAudio){
-            val amp = recorder!!.maxAmplitude
+            val amp = recorder?.maxAmplitude
             binding.playerView.updateAmps(amp)
 
             // write maxmap to a file for visualization in player activity
@@ -701,7 +739,7 @@ class VoiceRecorderFragmentWidgetVerticalBasuri : Fragment, BottomSheet.OnClickL
             Toastic.toastic(activity,
                 message = message,
                 duration = Toastic.LENGTH_SHORT,
-                type = Toastic.SUCCESS,
+                type = Toastic.ERROR,
                 isIconAnimated = true
             ).show()
         }
@@ -753,7 +791,7 @@ class VoiceRecorderFragmentWidgetVerticalBasuri : Fragment, BottomSheet.OnClickL
                 override fun onAdLoaded(ad: RewardedInterstitialAd) {
                     //Log.d(TAG, "Ad was loaded.")
                     rewardedInterstitialAd = ad
-                    Log.d("yameteres", ad.rewardItem.type.toString()+"--")
+                    Log.d("yameteres", ad.rewardItem.type +"--")
                     isLoadInterstitialReward = true
                     rewardedInterstitialAd?.fullScreenContentCallback = object: FullScreenContentCallback() {
                         override fun onAdClicked() {
@@ -788,7 +826,7 @@ class VoiceRecorderFragmentWidgetVerticalBasuri : Fragment, BottomSheet.OnClickL
 
                 override fun onAdFailedToLoad(adError: LoadAdError) {
                    // Log.d(TAG, adError?.toString())
-                    Log.d("yameterex",adError.message.toString())
+                    Log.d("yameterex", adError.message)
                     rewardedInterstitialAd = null
                 }
             })

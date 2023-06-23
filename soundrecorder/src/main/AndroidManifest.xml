@@ -2,14 +2,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-   <!-- <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />-->
     <uses-permission android:name="android.permission.RECORD_AUDIO"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"
         android:maxSdkVersion="32" />
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.READ_MEDIA_AUDIO"/>
-    <uses-permission android:name="android.permission.INTERNATIONAL_IN" />
 
     <application
         android:allowBackup="false"
@@ -19,13 +17,13 @@
         tools:ignore="UnusedAttribute">
 
         <activity android:name=".ui.activity.PlayerActivityWidget"
-            android:screenOrientation="landscape"/>
+            android:screenOrientation="sensorLandscape"/>
 
         <activity android:name=".ui.activity.ListingActivity"
-            android:screenOrientation="landscape"/>
+            android:screenOrientation="sensorLandscape"/>
 
         <activity android:name=".ui.activity.ListingMusicActivity"
-            android:screenOrientation="landscape"/>
+            android:screenOrientation="sensorLandscape"/>
 
         <service
             android:name=".notification.FirebaseMessageReceiver"
@@ -41,13 +39,6 @@
 
         <meta-data android:name="com.google.firebase.messaging.default_notification_icon"
             android:resource="@drawable/ic_baseline_notifications_active_24" />
-
-       <!-- <service
-            android:name=".service.BackgroundService"
-            android:foregroundServiceType="mediaProjection"
-            android:enabled="true"
-            android:exported="true"
-            android:stopWithTask="true"/>-->
 
     </application>
 
