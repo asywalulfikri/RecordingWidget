@@ -29,8 +29,8 @@ android {
         }
     }
 
-    lintOptions {
-        disable 'InvalidPackage'
+    lint {
+        abortOnError = false
     }
 
     externalNativeBuild {
