@@ -22,3 +22,15 @@
 
 -keep class sound.recorder.widget.model.MenuConfig$* { *; }
 -keepclassmembers class sound.recorder.widget.model.MenuConfig { *; }
+
+-keep class sound.recorder.widget.model.Song$* { *; }
+-keepclassmembers class sound.recorder.widget.model.Song { *; }
+
+-keep class sound.recorder.widget.model.Video$* { *; }
+-keepclassmembers class sound.recorder.widget.model.Video{ *; }
+
+-keep class sound.recorder.widget.model.VideoWrapper$* { *; }
+-keepclassmembers class sound.recorder.widget.model.VideoWrapper { *; }
+
+-keep class sound.recorder.widget.model.MyEventBus$* { *; }
+-keepclassmembers class sound.recorder.widget.model.MyEventBus { *; }
