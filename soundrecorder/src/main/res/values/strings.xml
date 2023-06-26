@@ -6,6 +6,9 @@
     <string name="colorpicker_dialog_cancel">CANCEL</string>
     <string name="colorpicker_dialog_ok">OK</string>
 
+    <string name="please_wait_dialog_default_title" />
+    <string name="please_wait_dialog_default_message" />
+
 
     <array name="default_colors">
         <item>@color/color1</item>

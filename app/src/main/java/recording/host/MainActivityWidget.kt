@@ -2,6 +2,7 @@ package recording.host
 
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.os.Handler
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -21,6 +22,7 @@ import sound.recorder.widget.model.Song
 import sound.recorder.widget.ui.bottomSheet.BottomSheetVideo
 import sound.recorder.widget.util.Constant
 import sound.recorder.widget.util.DataSession
+import sound.recorder.widget.util.PleaseWaitDialog
 
 
 class MainActivityWidget : BaseActivityWidget(),SharedPreferences.OnSharedPreferenceChangeListener,
@@ -45,6 +47,7 @@ class MainActivityWidget : BaseActivityWidget(),SharedPreferences.OnSharedPrefer
     private val song : ArrayList<Song> = ArrayList()
     private var sharedPreferences : SharedPreferences? =null
     private var firebaseFirestore: FirebaseFirestore? = null
+    private var pleaseWaitDialog : PleaseWaitDialog? =null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -52,6 +55,11 @@ class MainActivityWidget : BaseActivityWidget(),SharedPreferences.OnSharedPrefer
         binding = ActivityMainBinding.inflate(layoutInflater)
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         setContentView(binding.root)
+
+        pleaseWaitDialog = PleaseWaitDialog(this)
+        pleaseWaitDialog?.setTitle("tunggu")
+        pleaseWaitDialog?.isCancelable = false
+        showLoading(5000)
 
         mInternetAvailabilityChecker = InternetAvailabilityChecker.getInstance();
         mInternetAvailabilityChecker?.addInternetConnectivityListener(this);
@@ -118,6 +126,21 @@ class MainActivityWidget : BaseActivityWidget(),SharedPreferences.OnSharedPrefer
 
         getFirebaseToken()
         setupBackground()
+
+    }
+
+    private fun showLoading(long : Long){
+        pleaseWaitDialog?.show()
+        // Audio file loaded successfully
+        val handler = Handler()
+        handler.postDelayed({
+
+            //progressDialog?.dismiss()
+            //  binding.layoutDialog.visibility = View.GONE
+            pleaseWaitDialog?.dismiss()
+
+        },
+            long)
 
     }
 
