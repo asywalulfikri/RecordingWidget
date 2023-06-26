@@ -103,7 +103,7 @@ project.afterEvaluate {
                 from components.release
                 groupId = 'recording'
                 artifactId = 'recordingSDK'
-                version = '0.0.75'
+                version = '0.0.78'
             }
         }
     }
