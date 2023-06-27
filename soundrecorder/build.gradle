@@ -24,13 +24,13 @@ android {
 
     buildTypes {
         release {
-            minifyEnabled true
+            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
 
-    lint {
-        abortOnError = false
+    lintOptions {
+        disable 'InvalidPackage'
     }
 
     externalNativeBuild {
@@ -66,7 +66,7 @@ dependencies {
 
     implementation 'com.google.android.material:material:1.9.0'
     implementation 'com.karumi:dexter:6.2.3'
-   // implementation "org.koin:koin-android:2.1.6"
+    // implementation "org.koin:koin-android:2.1.6"
     //implementation "io.insert-koin:koin-core:3.0.1"
     implementation 'com.airbnb.android:lottie:6.0.0'
 
@@ -103,7 +103,7 @@ project.afterEvaluate {
                 from components.release
                 groupId = 'recording'
                 artifactId = 'recordingSDK'
-                version = '0.0.78'
+                version = '0.0.79'
             }
         }
     }

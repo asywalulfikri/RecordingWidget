@@ -1,76 +1,52 @@
 package sound.recorder.widget
 
 import android.content.Context
-import android.os.Build
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.LinearLayout
-import android.widget.Toast
-import androidx.fragment.app.FragmentActivity
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentManager
-import sound.recorder.widget.databinding.LayoutEmptyVerticalBlackBinding
 import sound.recorder.widget.ui.fragment.VoiceRecorderFragmentWidgetVerticalBlack
+import java.lang.Exception
 
-class RecordWidgetVB : LinearLayout {
+class RecordWidgetVB :  LinearLayout {
 
-    private var fragmentManagers: FragmentManager? =null
-    private val imkasFragment = VoiceRecorderFragmentWidgetVerticalBlack()
-    private var isAdd = false
-    private var binding: LayoutEmptyVerticalBlackBinding
+    private var fragmentManager: FragmentManager? =null
 
-
-    constructor(_context: Context) : super(_context) {
-        fragmentManagers = (_context as FragmentActivity).supportFragmentManager
-        binding = LayoutEmptyVerticalBlackBinding.inflate(LayoutInflater.from(context))
+    constructor(context: Context) : super(context) {
+        init()
     }
 
-    constructor(_context: Context, attributeSet: AttributeSet?) : super(_context, attributeSet) {
-        fragmentManagers = (_context as FragmentActivity).supportFragmentManager
-        binding = LayoutEmptyVerticalBlackBinding.inflate(LayoutInflater.from(context))
-        addView(binding.root)
+    constructor(context: Context, attrs: AttributeSet?) : super(context, attrs) {
+        init()
     }
 
-    fun loadData(){
-        if(isAdd){
-            removeAllViews()
-            resetView()
-        }else{
-            setupViews()
-        }
+    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
+        init()
     }
 
-    private fun setupViewsAgain(){
-        isAdd = true
-        fragmentManagers?.beginTransaction()?.replace(binding.recordWidgetVerticalBlack.id, imkasFragment)?.commit()
-        addView(binding.root)
-    }
+    private fun init() {
 
+        try {
+            val inflater = LayoutInflater.from(context)
+            val view = inflater?.inflate(R.layout.layout_empty_vertical_black, this, true)
+            fragmentManager = (context as AppCompatActivity).supportFragmentManager
 
-    private fun setupViews(){
-        fragmentManagers?.beginTransaction()?.replace(binding.recordWidgetVerticalBlack.id, imkasFragment)?.commitAllowingStateLoss()
-        if(!imkasFragment.isAdded){
-            addView(binding.recordWidgetVerticalBlack)
-            isAdd = true
-        }else{
-            removeAllViews()
+            view?.let {
+                val myFragment = VoiceRecorderFragmentWidgetVerticalBlack()
+                val containerViewId = R.id.recordWidgetVerticalBlack
+                fragmentManager?.beginTransaction()?.add(containerViewId, myFragment)?.commitAllowingStateLoss()
+            } ?: run {
+
+            }
+        } catch (e: Exception) {
+            // Handle exception here
+            e.printStackTrace()
+        } catch (e: IllegalStateException){
+            e.printStackTrace()
+        } catch (e : IllegalAccessException){
+            e.printStackTrace()
         }
 
     }
-
-    private fun resetView(){
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            fragmentManagers?.beginTransaction()?.detach(imkasFragment)?.commitAllowingStateLoss()
-            fragmentManagers?.beginTransaction()?.attach(imkasFragment)?.commitNow();
-        } else {
-            fragmentManagers?.beginTransaction()?.detach(imkasFragment)?.attach(imkasFragment)?.commitAllowingStateLoss()
-        }
-        addView(binding.recordWidgetVerticalBlack)
-    }
-
-    fun setToast(message : String){
-        Toast.makeText(context, "$message.",Toast.LENGTH_SHORT).show()
-    }
-
-
-
 }

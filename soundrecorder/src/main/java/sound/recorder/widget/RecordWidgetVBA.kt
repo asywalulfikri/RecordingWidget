@@ -1,78 +1,52 @@
 package sound.recorder.widget
 
 import android.content.Context
-import android.os.Build
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.LinearLayout
-import android.widget.Toast
-import androidx.fragment.app.FragmentActivity
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentManager
-import sound.recorder.widget.databinding.LayoutEmptyVerticalBasuriBinding
-import sound.recorder.widget.databinding.LayoutEmptyVerticalBlackBinding
 import sound.recorder.widget.ui.fragment.VoiceRecorderFragmentWidgetVerticalBasuri
-import sound.recorder.widget.ui.fragment.VoiceRecorderFragmentWidgetVerticalBlack
+import java.lang.Exception
 
-class RecordWidgetVBA : LinearLayout {
+class RecordWidgetVBA :  LinearLayout {
 
-    private var fragmentManagers: FragmentManager? =null
-    private val imkasFragment = VoiceRecorderFragmentWidgetVerticalBasuri()
-    private var isAdd = false
-    private var binding: LayoutEmptyVerticalBasuriBinding
+    private var fragmentManager: FragmentManager? =null
 
-
-    constructor(_context: Context) : super(_context) {
-        fragmentManagers = (_context as FragmentActivity).supportFragmentManager
-        binding = LayoutEmptyVerticalBasuriBinding.inflate(LayoutInflater.from(context))
+    constructor(context: Context) : super(context) {
+        init()
     }
 
-    constructor(_context: Context, attributeSet: AttributeSet?) : super(_context, attributeSet) {
-        fragmentManagers = (_context as FragmentActivity).supportFragmentManager
-        binding = LayoutEmptyVerticalBasuriBinding.inflate(LayoutInflater.from(context))
-        addView(binding.root)
+    constructor(context: Context, attrs: AttributeSet?) : super(context, attrs) {
+        init()
     }
 
-    fun loadData(){
-        if(isAdd){
-            removeAllViews()
-            resetView()
-        }else{
-            setupViews()
-        }
+    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
+        init()
     }
 
-    private fun setupViewsAgain(){
-        isAdd = true
-        fragmentManagers?.beginTransaction()?.replace(binding.recordWidgetVerticalBasuri.id, imkasFragment)?.commit()
-        addView(binding.root)
-    }
+    private fun init() {
 
+        try {
+            val inflater = LayoutInflater.from(context)
+            val view = inflater?.inflate(R.layout.layout_empty_vertical_basuri, this, true)
+            fragmentManager = (context as AppCompatActivity).supportFragmentManager
 
-    private fun setupViews(){
-        fragmentManagers?.beginTransaction()?.replace(binding.recordWidgetVerticalBasuri.id, imkasFragment)?.commitAllowingStateLoss()
-        if(!imkasFragment.isAdded){
-            addView(binding.recordWidgetVerticalBasuri)
-            isAdd = true
-        }else{
-            removeAllViews()
+            view?.let {
+                val myFragment = VoiceRecorderFragmentWidgetVerticalBasuri()
+                val containerViewId = R.id.recordWidgetVerticalBasuri
+                fragmentManager?.beginTransaction()?.add(containerViewId, myFragment)?.commitAllowingStateLoss()
+            } ?: run {
+
+            }
+        } catch (e: Exception) {
+            // Handle exception here
+            e.printStackTrace()
+        } catch (e: IllegalStateException){
+            e.printStackTrace()
+        } catch (e : IllegalAccessException){
+            e.printStackTrace()
         }
 
     }
-
-    private fun resetView(){
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            fragmentManagers?.beginTransaction()?.detach(imkasFragment)?.commitAllowingStateLoss()
-            fragmentManagers?.beginTransaction()?.attach(imkasFragment)?.commitNow();
-        } else {
-            fragmentManagers?.beginTransaction()?.detach(imkasFragment)?.attach(imkasFragment)?.commitAllowingStateLoss()
-        }
-        addView(binding.recordWidgetVerticalBasuri)
-    }
-
-    fun setToast(message : String){
-        Toast.makeText(context, "$message.",Toast.LENGTH_SHORT).show()
-    }
-
-
-
 }

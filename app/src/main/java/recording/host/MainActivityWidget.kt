@@ -13,6 +13,7 @@ import recording.host.databinding.ActivityMainBinding
 import sound.recorder.widget.RecordWidgetH
 import sound.recorder.widget.RecordWidgetHB
 import sound.recorder.widget.RecordWidgetHN
+import sound.recorder.widget.RecordWidgetV
 import sound.recorder.widget.RecordWidgetVBA
 import sound.recorder.widget.RecordingSDK
 import sound.recorder.widget.base.BaseActivityWidget
@@ -33,6 +34,7 @@ class MainActivityWidget : BaseActivityWidget(),SharedPreferences.OnSharedPrefer
     private var recordWidgetHN : RecordWidgetHN? =null
     private var recordWidgetHB : RecordWidgetHB? =null
     private var recordWidgetH : RecordWidgetH? =null
+    private var recordWidgetV : RecordWidgetV? =null
     private var recordWidgetVB : RecordWidgetVBA? =null
 
     private lateinit var binding: ActivityMainBinding
@@ -95,17 +97,21 @@ class MainActivityWidget : BaseActivityWidget(),SharedPreferences.OnSharedPrefer
         setSupportActionBar(binding.toolbar)
 
         recordWidgetHN = RecordWidgetHN(this)
-        recordWidgetHN?.loadData()
+       // recordWidgetHN?.loadData()
 
         recordWidgetHB = RecordWidgetHB(this)
-        recordWidgetHB?.loadData()
+       // recordWidgetHB?.loadData()
+
+        recordWidgetV = RecordWidgetV(this)
+       // recordWidgetV?.loadData()
+        binding.llV.addView(recordWidgetV)
 
 
         recordWidgetH = RecordWidgetH(this)
-        recordWidgetH?.loadData()
+       // recordWidgetH?.loadData()
 
         recordWidgetVB = RecordWidgetVBA(this)
-        recordWidgetVB?.loadData()
+     //   recordWidgetVB?.loadData()
 
 
        /* val recordWidgetV = RecordWidgetV(this)
