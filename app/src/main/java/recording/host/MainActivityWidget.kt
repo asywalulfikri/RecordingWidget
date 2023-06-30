@@ -26,8 +26,7 @@ import sound.recorder.widget.util.DataSession
 import sound.recorder.widget.util.PleaseWaitDialog
 
 
-class MainActivityWidget : BaseActivityWidget(),SharedPreferences.OnSharedPreferenceChangeListener,
-    InternetConnectivityListener {
+class MainActivityWidget : BaseActivityWidget(),SharedPreferences.OnSharedPreferenceChangeListener{
 
 
     private var mInternetAvailabilityChecker: InternetAvailabilityChecker? = null
@@ -55,16 +54,16 @@ class MainActivityWidget : BaseActivityWidget(),SharedPreferences.OnSharedPrefer
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
-        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+       // window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         setContentView(binding.root)
 
         pleaseWaitDialog = PleaseWaitDialog(this)
         pleaseWaitDialog?.setTitle("tunggu")
         pleaseWaitDialog?.isCancelable = false
-        showLoading(5000)
+        //showLoading(5000)
 
-        mInternetAvailabilityChecker = InternetAvailabilityChecker.getInstance();
-        mInternetAvailabilityChecker?.addInternetConnectivityListener(this);
+       // mInternetAvailabilityChecker = InternetAvailabilityChecker.getInstance();
+      //  mInternetAvailabilityChecker?.addInternetConnectivityListener(this);
 
         firebaseFirestore = FirebaseFirestore.getInstance()
 
@@ -74,11 +73,11 @@ class MainActivityWidget : BaseActivityWidget(),SharedPreferences.OnSharedPrefer
 
         //setupAnimationNot(binding.musicView)
 
-        if(DataSession(this).getAnimation()){
+       /* if(DataSession(this).getAnimation()){
             binding.musicView.visibility = View.VISIBLE
         }else{
             binding.musicView.visibility = View.INVISIBLE
-        }
+        }*/
 
         MobileAds.initialize(this)
 
@@ -96,21 +95,7 @@ class MainActivityWidget : BaseActivityWidget(),SharedPreferences.OnSharedPrefer
 
         setSupportActionBar(binding.toolbar)
 
-        recordWidgetHN = RecordWidgetHN(this)
-       // recordWidgetHN?.loadData()
 
-        recordWidgetHB = RecordWidgetHB(this)
-       // recordWidgetHB?.loadData()
-
-        recordWidgetV = RecordWidgetV(this)
-       // recordWidgetV?.loadData()
-        binding.llV.addView(recordWidgetV)
-
-
-        recordWidgetH = RecordWidgetH(this)
-       // recordWidgetH?.loadData()
-
-        recordWidgetVB = RecordWidgetVBA(this)
      //   recordWidgetVB?.loadData()
 
 
@@ -150,6 +135,22 @@ class MainActivityWidget : BaseActivityWidget(),SharedPreferences.OnSharedPrefer
 
     }
 
+    override fun onResume() {
+        super.onResume()
+        recordWidgetHN = RecordWidgetHN(this)
+        // recordWidgetHN?.loadData()
+
+        recordWidgetHB = RecordWidgetHB(this)
+        // recordWidgetHB?.loadData()
+
+        recordWidgetV = RecordWidgetV(this)
+
+        recordWidgetH = RecordWidgetH(this)
+        // recordWidgetH?.loadData()
+
+        recordWidgetVB = RecordWidgetVBA(this)
+    }
+
     private fun setupBackground(){
         binding.rlBackground.setBackgroundColor(getSharedPreferenceUpdate().getInt(Constant.keyShared.backgroundColor,-1))
     }
@@ -179,27 +180,27 @@ class MainActivityWidget : BaseActivityWidget(),SharedPreferences.OnSharedPrefer
         if(key==Constant.keyShared.backgroundColor){
             binding.rlBackground.setBackgroundColor(getSharedPreferenceUpdate().getInt(Constant.keyShared.backgroundColor,-1))
         }else if(key==Constant.keyShared.animation){
-            val animation = getSharedPreferenceUpdate().getBoolean(Constant.keyShared.animation,false)
+           /* val animation = getSharedPreferenceUpdate().getBoolean(Constant.keyShared.animation,false)
             if(!animation){
                 binding.musicView.visibility =View.INVISIBLE
             }else{
                 binding.musicView.visibility =View.VISIBLE
-            }
+            }*/
         }
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        mInternetAvailabilityChecker?.removeInternetConnectivityChangeListener(this)
+       // mInternetAvailabilityChecker?.removeInternetConnectivityChangeListener(this)
     }
 
-    override fun onInternetConnectivityChanged(isConnected: Boolean) {
+   /* override fun onInternetConnectivityChanged(isConnected: Boolean) {
         if (isConnected) {
            setToastInfo("konek")
         } else {
            setToastInfo("ilang")
         }
-    }
+    }*/
 
 
 }

@@ -7,46 +7,35 @@ import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentManager
 import sound.recorder.widget.ui.fragment.VoiceRecorderFragmentWidgetHorizontalNew
-import java.lang.Exception
 
-class RecordWidgetHN :  LinearLayout {
+class RecordWidgetHN @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0
+) : LinearLayout(context, attrs, defStyleAttr) {
 
-    private var fragmentManager: FragmentManager? =null
+    private var fragmentManager: FragmentManager? = null
 
-    constructor(context: Context) : super(context) {
-        init()
-    }
-
-    constructor(context: Context, attrs: AttributeSet?) : super(context, attrs) {
-        init()
-    }
-
-    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
+    init {
         init()
     }
 
     private fun init() {
-
         try {
             val inflater = LayoutInflater.from(context)
-            val view = inflater?.inflate(R.layout.layout_empty_horizontal_new, this, true)
+            inflater.inflate(R.layout.layout_empty_horizontal_new, this, true)
             fragmentManager = (context as AppCompatActivity).supportFragmentManager
 
-            view?.let {
-                val myFragment = VoiceRecorderFragmentWidgetHorizontalNew()
-                val containerViewId = R.id.recordWidgetHorizontalNew
-                fragmentManager?.beginTransaction()?.add(containerViewId, myFragment)?.commitAllowingStateLoss()
-            } ?: run {
+            val containerViewId = R.id.recordWidgetHorizontalNew
+            val myFragment = VoiceRecorderFragmentWidgetHorizontalNew()
 
-            }
+            fragmentManager?.beginTransaction()
+                ?.replace(containerViewId, myFragment)
+                ?.commitNowAllowingStateLoss()
+
         } catch (e: Exception) {
             // Handle exception here
             e.printStackTrace()
-        } catch (e: IllegalStateException){
-            e.printStackTrace()
-        } catch (e : IllegalAccessException){
-            e.printStackTrace()
         }
-
     }
 }

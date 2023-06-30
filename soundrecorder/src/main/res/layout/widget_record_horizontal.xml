@@ -62,16 +62,28 @@
             app:srcCompat="@drawable/ic_delete_disabled"/>
 
         <RelativeLayout
+            android:layout_weight="1"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent">
+
+
+            <ImageView
+                android:layout_centerInParent="true"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                app:srcCompat="@drawable/ic_record"
+                android:contentDescription="@string/app_names"
+                tools:ignore="DuplicateSpeakableTextCheck" />
 
             <ImageView
                 android:id="@+id/recordBtn"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"
-                app:srcCompat="@drawable/ic_record"
+                android:layout_centerInParent="true"
+                android:layout_marginTop="3dp"
+                android:layout_marginBottom="3dp"
                 android:contentDescription="@string/app_names"
                 tools:ignore="DuplicateSpeakableTextCheck" />
 
@@ -80,11 +92,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"
+                android:fontFamily="@font/rimouski"
                 android:text="Record"
                 android:textColor="#FFFFFF"
-                android:textSize="9sp"
+                android:textSize="8sp"
                 tools:ignore="HardcodedText,SmallSp" />
 
         </RelativeLayout>
