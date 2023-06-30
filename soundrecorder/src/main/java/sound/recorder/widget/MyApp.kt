@@ -11,11 +11,11 @@ open class MyApp : Application(){
     override fun onCreate() {
         super.onCreate()
         FirebaseApp.initializeApp(this)
-        InternetAvailabilityChecker.init(this);
+       // InternetAvailabilityChecker.init(this);
     }
 
     override fun onLowMemory() {
         super.onLowMemory()
-        InternetAvailabilityChecker.getInstance().removeAllInternetConnectivityChangeListeners()
+       // InternetAvailabilityChecker.getInstance().removeAllInternetConnectivityChangeListeners()
     }
 }
