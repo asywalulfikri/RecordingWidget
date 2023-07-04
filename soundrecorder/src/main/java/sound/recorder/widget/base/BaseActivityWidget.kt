@@ -1,5 +1,7 @@
 package sound.recorder.widget.base
 
+import android.annotation.SuppressLint
+import android.app.Dialog
 import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
@@ -9,11 +11,15 @@ import android.net.NetworkCapabilities
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import android.view.View
+import android.view.Window
 import android.view.inputmethod.InputMethodManager
+import android.widget.RadioButton
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.AppCompatTextView
 import com.google.android.gms.ads.AdError
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdRequest
@@ -32,9 +38,11 @@ import com.google.firebase.FirebaseApp
 import com.google.firebase.messaging.FirebaseMessaging
 import com.google.gson.Gson
 import org.json.JSONObject
+import sound.recorder.widget.R
 import sound.recorder.widget.notes.Note
 import sound.recorder.widget.util.DataSession
 import sound.recorder.widget.util.Toastic
+import java.util.Locale
 import java.util.concurrent.atomic.AtomicReference
 
 
@@ -48,14 +56,134 @@ open class BaseActivityWidget : AppCompatActivity() {
     private var isLoadReward = false
     private var isLoadInterstitialReward = false
     private var rewardedInterstitialAd : RewardedInterstitialAd? =null
+    var language = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         FirebaseApp.initializeApp(this)
         MobileAds.initialize(this) {}
         dataSession = DataSession(this)
+
+        language = dataSession?.getLanguage().toString()
+        if(language.isEmpty()){
+            if(getCurrentLanguage().lowercase()=="indonesia"){
+                setLocale("id")
+            }else{
+                setLocale("en")
+            }
+        }else{
+            setLocale(language)
+        }
     }
 
+
+    @SuppressLint("SetTextI18n")
+    fun showDialogLanguage() {
+
+        // custom dialog
+        var type = ""
+        val dialog = Dialog(this)
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setContentView(R.layout.dialog_choose_language)
+        dialog.setCancelable(true)
+
+        // set the custom dialog components - text, image and button
+        val rbIndonesia = dialog.findViewById<View>(R.id.rbIndonesia) as RadioButton
+        val rbEnglish = dialog.findViewById<View>(R.id.rbEnglish) as RadioButton
+        val btnSave = dialog.findViewById<View>(R.id.btn_submit) as AppCompatTextView
+
+
+
+        if(language.isEmpty()){
+            if(getCurrentLanguage().lowercase()=="indonesia"){
+                rbIndonesia.isChecked = true
+            }else{
+                rbEnglish.isChecked = true
+            }
+        }else{
+            if(dataSession?.getLanguage()=="en"){
+                rbEnglish.isChecked = true
+            }else{
+                rbIndonesia.isChecked = true
+            }
+        }
+
+
+        // if button is clicked, close the custom dialog
+        btnSave.setOnClickListener {
+
+            if(rbIndonesia.isChecked){
+                type = "id"
+            }
+
+            if(rbEnglish.isChecked){
+                type = "en"
+            }
+
+
+            if(type.isNotEmpty()){
+                dataSession?.setLanguage(type)
+                changeLanguage(type)
+            }
+
+            dialog.dismiss()
+        }
+
+        dialog.show()
+    }
+
+
+    private fun changeLanguage(type : String) {
+        val locale = Locale(type) // Ganti "en" dengan kode bahasa yang diinginkan
+        Locale.setDefault(locale)
+
+        val configuration = Configuration()
+        configuration.locale = locale
+
+        resources.updateConfiguration(configuration, resources.displayMetrics)
+        this.recreate()
+    }
+
+
+    private fun getCurrentLanguage(): String {
+        val locale: Locale = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            this.resources.configuration.locales[0]
+        } else {
+            this.resources.configuration.locale
+        }
+        return locale.displayLanguage
+    }
+
+    private fun setLocale(language : String) {
+        val locale = Locale(language) // Ganti "en" dengan kode bahasa yang diinginkan
+        Locale.setDefault(locale)
+
+        val config = Configuration()
+        config.locale = locale
+        resources.updateConfiguration(config, resources.displayMetrics)
+    }
+
+
+
+    @SuppressLint("SetTextI18n")
+    fun showLoadingLayout(long : Long) {
+
+        // custom dialog
+        val dialog = Dialog(this)
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setContentView(R.layout.loading_layout)
+        dialog.setCancelable(false)
+        dialog.show()
+
+
+        val handler = Handler()
+        handler.postDelayed({
+            dialog.dismiss()
+        },
+            long)
+
+
+    }
     fun isInternetConnected(context: Context): Boolean {
         val connectivityManager = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
 
@@ -326,20 +454,16 @@ open class BaseActivityWidget : AppCompatActivity() {
 
     fun showReward(){
         if(isLoadReward){
-            Log.d("yametere", "show")
             rewardedAd?.let { ad ->
                 ad.show(this) { rewardItem ->
                     // Handle the reward.
                     val rewardAmount = rewardItem.amount
                     val rewardType = rewardItem.type
-                    Log.d("yametere", "User earned the reward.$rewardAmount--$rewardType")
                 }
             } ?: run {
-                Log.d("yametere", "The rewarded ad wasn't ready yet.")
                 showInterstitial()
             }
         }else{
-            Log.d("yametere", "nall")
         }
     }
 

@@ -34,6 +34,10 @@ open class DataSession(private val mContext: Context) {
         return sharedPref.getBoolean(Constant.keyShared.animation, false)
     }
 
+    fun isCoverSong(): Boolean{
+        return sharedPref.getBoolean("showSong", false)
+    }
+
     fun getVersionCode(): Int{
         return sharedPref.getInt("versionCode", 0)
     }
@@ -52,6 +56,10 @@ open class DataSession(private val mContext: Context) {
 
     fun getShowNote(): Boolean{
         return sharedPref.getBoolean("showNote",false)
+    }
+
+    fun getBackgroundRecord(): String{
+        return sharedPref.getString("llRecordBackground","#FFF9AA").toString()
     }
 
     fun getJsonName(): String?{
@@ -75,7 +83,7 @@ open class DataSession(private val mContext: Context) {
         editor.apply()
     }
 
-    fun setInfoApp(versionCode : Int,versionName : String,appName: String, jsonName : String,splashScreenType: String,showNote: Boolean){
+    fun setInfoApp(versionCode : Int,versionName : String,appName: String, jsonName : String,splashScreenType: String,showNote: Boolean,showSong : Boolean, llRecordBackground : String){
         val editor = sharedPref.edit()
         editor.putInt("versionCode", versionCode)
         editor.putString("backgroundSplashScreen", splashScreenType)
@@ -83,6 +91,8 @@ open class DataSession(private val mContext: Context) {
         editor.putString("versionName",versionName)
         editor.putString("jsonName",jsonName)
         editor.putBoolean("showNote",showNote)
+        editor.putBoolean("showSong",showSong)
+        editor.putString("llRecordBackground",llRecordBackground)
 
         editor.apply()
     }
@@ -97,6 +107,11 @@ open class DataSession(private val mContext: Context) {
             editor.putInt(Constant.keyShared.colorRunningText, colorRunningText)
         }
         editor.apply()
+    }
+
+
+    fun getLanguage(): String{
+        return sharedPref.getString("language","").toString()
     }
 
     fun getColorWidget(): Int{
@@ -114,6 +129,12 @@ open class DataSession(private val mContext: Context) {
     fun initiateSong(status: Boolean){
         val editor = sharedPref.edit()
         editor.putBoolean("addSong", status)
+        editor.apply()
+    }
+
+    fun setLanguage(language : String){
+        val editor = sharedPref.edit()
+        editor.putString("language",language)
         editor.apply()
     }
 

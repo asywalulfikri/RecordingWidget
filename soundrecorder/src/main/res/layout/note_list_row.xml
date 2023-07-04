@@ -34,10 +34,10 @@
             android:text="Indonesia Raya "
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/rimouski"
+            android:fontFamily="@font/ooredoo"
             android:textStyle="bold"
             android:textColor="@color/black_de"
-            android:textSize="16sp" />
+            android:textSize="20sp" />
 
         <TextView
             android:id="@+id/note"

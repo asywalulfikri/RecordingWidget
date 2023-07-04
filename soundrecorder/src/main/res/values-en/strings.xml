@@ -2,8 +2,8 @@
     <string name="app_names">RecordingWidget</string>
     <string name="default_notification_channel_id">Channel ID</string>
 
-    <string name="colorpicker_dialog_title">Pilih Warna</string>
-    <string name="colorpicker_dialog_cancel">Batal</string>
+    <string name="colorpicker_dialog_title">Choose the color</string>
+    <string name="colorpicker_dialog_cancel">CANCEL</string>
     <string name="colorpicker_dialog_ok">OK</string>
 
     <string name="please_wait_dialog_default_title" />
@@ -60,29 +60,28 @@
     <color name="window_background">#00000000</color>
     <color name="black_de">#000000</color>
 
-    <string name="dialog_maintenance">Maff..Aplikasi dalam perbaikan, Coba Lagi nanti</string>
-    <string name="dialog_msg_update_app_version">Versi Baru telah tersedia di Playstore, Silakan Update Aplikasi Anda</string>
-    <string name="dialog_msg_update_app">Silahkan Update Aplikasi Anda</string>
+    <string name="dialog_maintenance">Sorry..The application is under maintenance, Please try again later</string>
+    <string name="dialog_msg_update_app_version">The new version is available in Play Store, please update your application</string>
+    <string name="dialog_msg_update_app">Please update your Application</string>
 
-    <string name="lbl_new_note_title">Note Lagu Baru</string>
-    <string name="lbl_edit_note_title">Edit Note Lagu</string>
+    <string name="lbl_new_note_title">New Note Song</string>
+    <string name="lbl_edit_note_title">Edit Note Song</string>
 
-    <string name="cover_song">Cover\nLagu</string>
-    <string name="record">Rekam</string>
-    <string name="text_continue">Lanjutkan</string>
-    <string name="record_started">Rekaman telah dimulai</string>
-    <string name="record_paused">Rekaman telah dijeda</string>
-    <string name="record_resumed">Rekaman dilanjutkan</string>
-    <string name="record_saved">Rekaman berhasil disimpan</string>
-    <string name="record_canceled">Rekaman di batalkan</string>
-    <string name="no_internet_connection">Tidak ada koneksi Internet, Coba Lagi</string>
-    <string name="device_not_support">Hp kamu tidak mendukung untuk merekam audio</string>
-    <string name="allow_permission">Setujui izin aplikasi di setting</string>
+    <string name="cover_song">Cover\nSong</string>
+    <string name="record">Record</string>
+    <string name="text_continue">Continue</string>
+    <string name="record_started">Recorded Started</string>
+    <string name="record_paused">Recorded Paused</string>
+    <string name="record_resumed">Recorded Resumed</string>
+    <string name="record_saved">Successfully saved the recording</string>
+    <string name="record_canceled">The recording has been cancelled</string>
+    <string name="no_internet_connection">No Internet Connection, Try again</string>
+    <string name="device_not_support">Your device not support to record audio</string>
+    <string name="allow_permission">Allow Permission in Setting Audio In Setting</string>
 
-    <string name="choose_languange">Pilih Bahasa</string>
-
+    <string name="choose_languange">Choose Language</string>
     <string name="indonesia">Indonesia</string>
     <string name="english">English</string>
-    <string name="choose">Pilih</string>
-    <string name="save">Simpan</string>
+    <string name="choose">Choose</string>
+    <string name="save">Save</string>
 </resources>
