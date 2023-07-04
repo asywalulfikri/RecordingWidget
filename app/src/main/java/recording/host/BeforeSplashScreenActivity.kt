@@ -12,7 +12,7 @@ class BeforeSplashScreenActivity : BaseActivityWidget() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        RecordingSDK.addInfo(this,BuildConfig.VERSION_CODE,BuildConfig.VERSION_NAME,getString(R.string.app_name),"recording_json","#FB8C00",true,true,"#1D7FFF")
+        RecordingSDK.addInfo(this,BuildConfig.VERSION_CODE,BuildConfig.VERSION_NAME,getString(R.string.app_name),"recording_json","#FB8C00",false,true,"#1D7FFF")
         val intent = Intent(this, SplashScreenSDKActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
         startActivityForResult(intent,1212)

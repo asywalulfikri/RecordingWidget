@@ -174,6 +174,11 @@ class VoiceRecorderFragmentWidgetHorizontal : Fragment, BottomSheet.OnClickListe
                 binding.songBtn.visibility = View.VISIBLE
             }
 
+
+            binding.coverBtn.setOnClickListener {
+                startPermissionSong()
+            }
+
             binding.deleteBtn.isClickable = false
 
             binding.settingBtn.setOnClickListener {
