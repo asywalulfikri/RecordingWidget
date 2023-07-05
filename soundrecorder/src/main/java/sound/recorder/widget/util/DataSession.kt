@@ -83,11 +83,12 @@ open class DataSession(private val mContext: Context) {
         editor.apply()
     }
 
-    fun setInfoApp(versionCode : Int,versionName : String,appName: String, jsonName : String,splashScreenType: String,showNote: Boolean,showSong : Boolean, llRecordBackground : String){
+    fun setInfoApp(versionCode : Int,versionName : String,appId : String,appName: String, jsonName : String,splashScreenType: String,showNote: Boolean,showSong : Boolean, llRecordBackground : String){
         val editor = sharedPref.edit()
         editor.putInt("versionCode", versionCode)
         editor.putString("backgroundSplashScreen", splashScreenType)
         editor.putString("appName",appName)
+        editor.putString("appId",appId)
         editor.putString("versionName",versionName)
         editor.putString("jsonName",jsonName)
         editor.putBoolean("showNote",showNote)
@@ -112,6 +113,10 @@ open class DataSession(private val mContext: Context) {
 
     fun getLanguage(): String{
         return sharedPref.getString("language","").toString()
+    }
+
+    fun getAppId(): String{
+        return sharedPref.getString("appId","").toString()
     }
 
     fun getColorWidget(): Int{

@@ -48,8 +48,8 @@ object RecordingSDK {
         EventBus.getDefault().postSticky(listSong)
     }
 
-    fun addInfo(context: Context,versionCode : Int,versionName : String, appName : String,jsonName : String,backgroundSplashScreen : String, isNote : Boolean,showSong : Boolean, llRecordBackground : String){
-        DataSession(context).setInfoApp(versionCode,versionName,appName,jsonName,backgroundSplashScreen,isNote,showSong,llRecordBackground)
+    fun addInfo(context: Context,versionCode : Int,versionName : String, appId : String,appName : String,jsonName : String,backgroundSplashScreen : String, isNote : Boolean,showSong : Boolean, llRecordBackground : String){
+        DataSession(context).setInfoApp(versionCode,versionName,appId,appName,jsonName,backgroundSplashScreen,isNote,showSong,llRecordBackground)
     }
 
     fun isHaveSong(context: Context): Boolean{

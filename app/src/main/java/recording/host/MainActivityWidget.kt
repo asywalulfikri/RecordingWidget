@@ -16,8 +16,11 @@ import sound.recorder.widget.RecordingSDK
 import sound.recorder.widget.base.BaseActivityWidget
 import sound.recorder.widget.internet.InternetAvailabilityChecker
 import sound.recorder.widget.model.Song
+import sound.recorder.widget.ui.bottomSheet.BottomSheetVideo
+import sound.recorder.widget.ui.fragment.FragmentSetting
 import sound.recorder.widget.util.Constant
 import sound.recorder.widget.util.DataSession
+import kotlin.system.exitProcess
 
 
 class MainActivityWidget : BaseActivityWidget(),SharedPreferences.OnSharedPreferenceChangeListener{
@@ -95,11 +98,22 @@ class MainActivityWidget : BaseActivityWidget(),SharedPreferences.OnSharedPrefer
 
         binding.btnKlik.setOnClickListener {
             showDialogLanguage()
-           /* val bottomSheet = BottomSheetVideo(firebaseFirestore)
-            bottomSheet.show(this.supportFragmentManager, "")*/
+        }
+
+        binding.btnVideo.setOnClickListener {
+             val bottomSheet = BottomSheetVideo(firebaseFirestore)
+             bottomSheet.show(this.supportFragmentManager, "")
             //RecordingSDK.showDialogColorPicker(this,"background")
             // val intent = Intent(this,ListVideoActivity::class.java)
-            //startActivity(intent)
+            //startActivity(intent
+        }
+
+        binding.btnSetting.setOnClickListener {
+            val fragment = FragmentSetting()
+
+            supportFragmentManager.beginTransaction()
+                .add(R.id.fragment_file_viewer, fragment)
+                .commit()
         }
 
         getFirebaseToken()
@@ -174,6 +188,24 @@ class MainActivityWidget : BaseActivityWidget(),SharedPreferences.OnSharedPrefer
            setToastInfo("ilang")
         }
     }*/
+
+
+    override fun onBackPressed() {
+        val fragment = supportFragmentManager.findFragmentById(R.id.fragment_file_viewer)
+
+        if (fragment is FragmentSetting) {
+            val consumed = fragment.onBackPressed()
+            if (consumed) {
+                // The back press event was consumed by the fragment
+                return
+            }
+        }else{
+            super.onBackPressed()
+            moveTaskToBack(true)
+            finish()
+            exitProcess(0)
+        }
+    }
 
 
 }

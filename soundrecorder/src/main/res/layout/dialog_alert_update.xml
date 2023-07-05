@@ -37,7 +37,7 @@
                 android:layout_marginBottom="10dp"
                 android:textSize="20sp"
                 android:textStyle="bold"
-                android:text="Information"/>
+                android:text="@string/information"/>
 
             <TextView
                 android:id="@+id/tv_message"
@@ -49,12 +49,10 @@
 
             <TextView
                 android:id="@+id/tv_message2"
-                android:gravity="center"
-                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                tools:text="Message" />
+                tools:text="* Update Lagu" />
 
 
             <LinearLayout
@@ -71,11 +69,10 @@
                     android:textAllCaps="false"
                     android:fontFamily="@font/rimouski"
                     android:textColor="@color/white"
-                    android:text="Update"
+                    android:text="@string/update"
                     />
 
                 <Button
-                    android:visibility="gone"
                     android:id="@+id/btn_cancel"
                     android:layout_marginStart="10dp"
                     android:layout_weight="1"
@@ -84,7 +81,7 @@
                     android:layout_height="wrap_content"
                     android:textAllCaps="false"
                     android:textColor="@color/white"
-                    android:text="No"
+                    android:text="@string/no"
                     />
 
             </LinearLayout>

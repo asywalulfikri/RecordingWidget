@@ -84,4 +84,15 @@
     <string name="english">English</string>
     <string name="choose">Choose</string>
     <string name="save">Save</string>
+    <string name="information">Information</string>
+    <string name="update">Update</string>
+    <string name="no">No</string>
+
+    <string name="setting">Setting</string>
+    <string name="language">Language</string>
+    <string name="rate_us">Rate Us</string>
+    <string name="help_suggest">Help and Suggest</string>
+    <string name="share_with_friends">Share with Friends</string>
+    <string name="choose_one">Choose One</string>
+    <string name="text_video">Video</string>
 </resources>

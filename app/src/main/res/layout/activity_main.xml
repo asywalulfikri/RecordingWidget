@@ -1,118 +1,150 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     android:orientation="vertical"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/rlBackground"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivityWidget">
 
 
-    <Button
-        android:id="@+id/btnKlik"
-        android:text="klik"
-        android:background="@color/teal_200"
-        android:layout_width="wrap_content"
-        android:layout_height="20dp" />
-
-    <TextView
-        android:id="@+id/running_text"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text=""
-        android:singleLine="true"
-        android:ellipsize="marquee"
-        android:marqueeRepeatLimit="marquee_forever"
-        android:focusable="true"
-        android:focusableInTouchMode="true"
-        android:scrollHorizontally="true"
-        android:padding="10dp"
-        android:textSize="18sp"
-        android:textColor="@android:color/black"
-        />
-
     <LinearLayout
-        android:orientation="horizontal"
-        android:id="@+id/widgetVoice"
+        android:id="@+id/rlBackground"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_marginTop="3dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <sound.recorder.widget.RecordWidgetV
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"
+            <Button
+                android:textColor="@color/white"
+                android:id="@+id/btnKlik"
+                android:text="@string/choose_languange"
+                android:background="@color/teal_200"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="20dp" />
 
-            <sound.recorder.widget.RecordWidgetVBA
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"
+            <Button
+                android:textColor="@color/white"
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="10dp"
+                android:id="@+id/btnSetting"
+                android:text="@string/action_settings"
+                android:background="@color/teal_200"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="20dp" />
 
-            <sound.recorder.widget.RecordWidgetVB
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"
+            <Button
+                android:textColor="@color/white"
+                android:id="@+id/btnVideo"
+                android:text="Video"
+                android:background="@color/teal_200"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="20dp" />
 
         </LinearLayout>
+
+
+        <TextView
+            android:id="@+id/running_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:singleLine="true"
+            android:ellipsize="marquee"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:scrollHorizontally="true"
+            android:padding="10dp"
+            android:textSize="18sp"
+            android:textColor="@android:color/black"
+            />
 
         <LinearLayout
-            android:layout_marginTop="10dp"
-            android:orientation="vertical"
-            android:layout_width="wrap_content"
+            android:orientation="horizontal"
+            android:id="@+id/widgetVoice"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-          <sound.recorder.widget.RecordWidgetHB
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"
+            <LinearLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
 
+                <sound.recorder.widget.RecordWidgetV
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
 
-            <sound.recorder.widget.RecordWidgetH
+                <sound.recorder.widget.RecordWidgetVBA
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <sound.recorder.widget.RecordWidgetVB
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+            <LinearLayout
                 android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:orientation="vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
 
-            <sound.recorder.widget.RecordWidgetHN
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                <sound.recorder.widget.RecordWidgetHB
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+
+                <sound.recorder.widget.RecordWidgetH
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <sound.recorder.widget.RecordWidgetHN
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
 
         </LinearLayout>
 
-
     </LinearLayout>
-
-
-
-   <!-- <sound.recorder.widget.util.MusicAnimationView
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/fragment_file_viewer"
         android:layout_width="match_parent"
-        android:id="@+id/musicView"
-        android:layout_height="wrap_content"
-        app:fallCount="40"
-        app:fallSpeed="0.1"
-        />-->
-</LinearLayout>
+        android:layout_height="match_parent"/>
+
+</RelativeLayout>

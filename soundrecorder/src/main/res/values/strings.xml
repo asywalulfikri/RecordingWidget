@@ -85,4 +85,15 @@
     <string name="english">English</string>
     <string name="choose">Pilih</string>
     <string name="save">Simpan</string>
+    <string name="information">Informasi</string>
+    <string name="update">Perbarui</string>
+    <string name="no">Tidak</string>
+
+    <string name="setting">Pengaturan</string>
+    <string name="language">Bahasa</string>
+    <string name="rate_us">Beri Rating</string>
+    <string name="help_suggest">Bantuan dan Saran</string>
+    <string name="share_with_friends">Bagikan dengan Teman</string>
+    <string name="choose_one">Pilih Salah Satu</string>
+    <string name="text_video">Video</string>
 </resources>
