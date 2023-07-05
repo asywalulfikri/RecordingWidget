@@ -141,7 +141,7 @@ class VoiceRecorderFragmentWidgetHorizontalNew : Fragment, BottomSheet.OnClickLi
 
             binding.listBtn.setOnClickListener {
                 if(!isInternetConnected()){
-                    setToastError(requireActivity(),"No Internet Connection, Turn On your Data")
+                    setToastError(requireActivity(),requireActivity().getString(R.string.no_internet_connection))
                 }else{
                     startActivity(Intent(activity, ListingMusicActivity::class.java))
                 }

@@ -13,4 +13,5 @@ class MenuConfig : Serializable {
     var showDialog : Boolean? = null
     var checkForUpdate : Boolean? =null
     var releaseNote : String? =null
+    var releaseNoteEn : String? =null
 }

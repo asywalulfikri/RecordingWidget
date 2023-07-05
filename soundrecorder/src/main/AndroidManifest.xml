@@ -17,12 +17,15 @@
         tools:ignore="UnusedAttribute">
 
         <activity android:name=".ui.activity.PlayerActivityWidget"
+            android:configChanges="orientation|screenSize"
             android:screenOrientation="sensorLandscape"/>
 
         <activity android:name=".ui.activity.ListingActivity"
+            android:configChanges="orientation|screenSize"
             android:screenOrientation="sensorLandscape"/>
 
         <activity android:name=".ui.activity.ListingMusicActivity"
+            android:configChanges="orientation|screenSize"
             android:screenOrientation="sensorLandscape"/>
 
         <service

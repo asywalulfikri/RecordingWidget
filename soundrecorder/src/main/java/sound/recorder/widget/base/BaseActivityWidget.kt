@@ -57,6 +57,7 @@ open class BaseActivityWidget : AppCompatActivity() {
     private var isLoadInterstitialReward = false
     private var rewardedInterstitialAd : RewardedInterstitialAd? =null
     var language = ""
+    var dialogLoading : Dialog? =null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -169,21 +170,29 @@ open class BaseActivityWidget : AppCompatActivity() {
     fun showLoadingLayout(long : Long) {
 
         // custom dialog
-        val dialog = Dialog(this)
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        dialog.setContentView(R.layout.loading_layout)
-        dialog.setCancelable(false)
-        dialog.show()
+        if(dialogLoading==null){
+            dialogLoading = Dialog(this)
+            dialogLoading?.requestWindowFeature(Window.FEATURE_NO_TITLE)
+            dialogLoading?.setContentView(R.layout.loading_layout)
+            dialogLoading?.setCancelable(false)
+        }
+
+        if (dialogLoading != null) {
+            dialogLoading?.show()
+        }
 
 
         val handler = Handler()
         handler.postDelayed({
-            dialog.dismiss()
+            if (dialogLoading != null && dialogLoading?.isShowing ==true) {
+                dialogLoading?.dismiss()
+            }
         },
             long)
 
 
     }
+
     fun isInternetConnected(context: Context): Boolean {
         val connectivityManager = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
 

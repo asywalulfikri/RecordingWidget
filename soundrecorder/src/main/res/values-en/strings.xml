@@ -10,56 +10,6 @@
     <string name="please_wait_dialog_default_message" />
 
 
-    <array name="default_colors">
-        <item>@color/color1</item>
-        <item>@color/color2</item>
-        <item>@color/color3</item>
-        <item>@color/color4</item>
-        <item>@color/color5</item>
-
-        <item>@color/color6</item>
-        <item>@color/color7</item>
-        <item>@color/color8</item>
-        <item>@color/color9</item>
-        <item>@color/color10</item>
-
-        <item>@color/color11</item>
-        <item>@color/color12</item>
-        <item>@color/color13</item>
-        <item>@color/white</item>
-        <item>@color/color15</item>
-
-        <item>#000000</item>
-        <item>#DEC015</item>
-        <item>#15DEBC</item>
-        <item>#1E083F</item>
-        <item>#083F15</item>
-
-    </array>
-
-    <color name="color1">#2062af</color>
-    <color name="color2">#58AEB7</color>
-    <color name="color3">#F4B528</color>
-    <color name="color4">#DD3E48</color>
-    <color name="color5">#BF89AE</color>
-
-    <color name="color6">#5C88BE</color>
-    <color name="color7">#59BC10</color>
-    <color name="color8">#E87034</color>
-    <color name="color9">#f84c44</color>
-    <color name="color10">#8c47fb</color>
-
-    <color name="color11">#51C1EE</color>
-    <color name="color12">#8cc453</color>
-    <color name="color13">#C2987D</color>
-    <color name="color14">#CE7777</color>
-    <color name="color15">#9086BA</color>
-
-    <color name="white">#ffffff</color>
-    <color name="lite_blue">#42a5f5</color>
-    <color name="window_background">#00000000</color>
-    <color name="black_de">#000000</color>
-
     <string name="dialog_maintenance">Sorry..The application is under maintenance, Please try again later</string>
     <string name="dialog_msg_update_app_version">The new version is available in Play Store, please update your application</string>
     <string name="dialog_msg_update_app">Please update your Application</string>
@@ -95,4 +45,15 @@
     <string name="share_with_friends">Share with Friends</string>
     <string name="choose_one">Choose One</string>
     <string name="text_video">Video</string>
+
+    <string name="please_wait">Please Wait</string>
+    <string name="loading_audio">Process Loading Audio....</string>
+
+    <string name="title">Title</string>
+    <string name="write_note_here">Write Note Here</string>
+    <string name="search_record">Search Recorded </string>
+    <string name="delete">Delete</string>
+    <string name="cancel">Cancel</string>
+    <string name="recordings">Recordings</string>
+    <string name="saved_recording_ask">Save Recording ?</string>
 </resources>

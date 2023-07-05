@@ -31,7 +31,7 @@
                 android:id="@+id/title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Please Wait"
+                android:text="@string/please_wait"
                 android:textAppearance="@style/TextAppearance.Material3.TitleLarge"
                 tools:ignore="HardcodedText" />
 
@@ -39,7 +39,7 @@
                 android:id="@+id/message"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Process Loading Audio"
+                android:text="@string/loading_audio"
                 tools:ignore="HardcodedText" />
 
         </LinearLayout>

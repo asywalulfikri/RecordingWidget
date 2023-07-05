@@ -36,7 +36,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="top"
-        android:hint="Enter your note...."
+        android:hint="@write"
         android:inputType="textCapSentences|textMultiLine"
         android:lines="4"
         android:textColorHint="#89c3c3c3"

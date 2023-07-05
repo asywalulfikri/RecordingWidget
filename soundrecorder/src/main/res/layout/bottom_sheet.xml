@@ -10,7 +10,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Save recording?"
+        android:text="@string/saved_recording_ask"
         android:layout_marginTop="40dp"
         android:layout_gravity="center_horizontal"
         android:textSize="24sp"
@@ -54,7 +54,7 @@
             android:textColor="@color/colorGrayDark"
             android:backgroundTint="@color/colorGray"
             app:rippleColor="@color/colorGrayDark"
-            android:text="Cancel"/>
+            android:text="@string/cancel"/>
         <com.google.android.material.button.MaterialButton
             android:id="@+id/okBtn"
             android:layout_width="140dp"
@@ -63,6 +63,6 @@
             android:textColor="@android:color/white"
             android:backgroundTint="@color/colorBox"
             app:rippleColor="@color/colorGrayDark"
-            android:text="OK"/>
+            android:text="@string/colorpicker_dialog_ok"/>
     </LinearLayout>
 </LinearLayout>

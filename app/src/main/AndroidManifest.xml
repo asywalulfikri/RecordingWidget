@@ -24,6 +24,7 @@
 
         <activity
             android:name=".BeforeSplashScreenActivity"
+            android:configChanges="orientation|screenSize"
             android:exported="true"
             android:screenOrientation="sensorLandscape"
             android:label="@string/app_name"
@@ -37,9 +38,11 @@
         </activity>
 
         <activity android:name=".MainActivityWidget"
+            android:configChanges="orientation|screenSize"
             android:screenOrientation="sensorLandscape"/>
 
         <activity android:name="sound.recorder.widget.ui.activity.SplashScreenSDKActivity"
+            android:configChanges="orientation|screenSize"
             android:screenOrientation="sensorLandscape"/>
 
     </application>
