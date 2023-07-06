@@ -54,6 +54,7 @@ class MainActivityWidget : BaseActivityWidget(),SharedPreferences.OnSharedPrefer
         setContentView(binding.root)
 
         showLoadingLayout(5000)
+        binding.llV.addView(RecordWidgetV(this))
         //showLoading(5000)
 
        // mInternetAvailabilityChecker = InternetAvailabilityChecker.getInstance();
@@ -119,23 +120,24 @@ class MainActivityWidget : BaseActivityWidget(),SharedPreferences.OnSharedPrefer
         getFirebaseToken()
         setupBackground()
 
-    }
-
-
-    override fun onResume() {
-        super.onResume()
         recordWidgetHN = RecordWidgetHN(this)
         // recordWidgetHN?.loadData()
 
         recordWidgetHB = RecordWidgetHB(this)
         // recordWidgetHB?.loadData()
 
-        recordWidgetV = RecordWidgetV(this)
+        // recordWidgetV = RecordWidgetV(this)
 
         recordWidgetH = RecordWidgetH(this)
         // recordWidgetH?.loadData()
 
         recordWidgetVB = RecordWidgetVBA(this)
+
+    }
+
+
+    override fun onResume() {
+        super.onResume()
     }
 
     private fun setupBackground(){

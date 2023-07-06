@@ -2,6 +2,7 @@ package sound.recorder.widget.ui.fragment
 
 import android.annotation.SuppressLint
 import android.app.Dialog
+import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.content.res.Configuration
 import android.net.Uri
@@ -52,7 +53,14 @@ open class FragmentSetting : BaseFragmentWidget() {
                     Intent.ACTION_VIEW,
                     Uri.parse("mailto:servicegamec@gmail.com")
                 )
-                startActivity(browserIntent)
+
+                try {
+                    startActivity(browserIntent)
+                } catch (e: ActivityNotFoundException) {
+                    // Handle the case when no activity can handle the email intent
+                    setToastError(requireActivity(),e.message.toString())
+                }
+
             }
 
 

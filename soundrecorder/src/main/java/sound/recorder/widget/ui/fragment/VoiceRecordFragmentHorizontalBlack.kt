@@ -8,6 +8,8 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
+import android.content.res.ColorStateList
+import android.graphics.Color
 import android.media.MediaPlayer
 import android.media.MediaRecorder
 import android.media.ToneGenerator
@@ -26,6 +28,7 @@ import android.view.Window
 import android.widget.Button
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
+import androidx.core.view.ViewCompat
 import androidx.fragment.app.Fragment
 import androidx.room.Room
 import com.google.android.gms.ads.AdError
@@ -82,9 +85,9 @@ class VoiceRecorderFragmentWidgetHorizontalBlack : Fragment, BottomSheet.OnClick
     private var rewardedInterstitialAd : RewardedInterstitialAd? =null
 
     //ScreenRecorder
-    var screenRecorder: ScreenRecorder? =null
-    var recordingScreen = false
-    var pauseRecordScreen = false
+    private var screenRecorder: ScreenRecorder? =null
+    private var recordingScreen = false
+    private var pauseRecordScreen = false
     private var sharedPreferences : SharedPreferences? =null
     private var volumes : Float? =null
     private var showNote : Boolean? =null
@@ -107,6 +110,12 @@ class VoiceRecorderFragmentWidgetHorizontalBlack : Fragment, BottomSheet.OnClick
             sharedPreferences?.registerOnSharedPreferenceChangeListener(this)
             showNote = DataSession(requireActivity()).getShowNote()
 
+
+            val tintList = ColorStateList.valueOf(Color.parseColor(DataSession(requireActivity()).getBackgroundRecord()))
+
+            // Set the background tint list to the LinearLayout
+            ViewCompat.setBackgroundTintList(binding.llRecordBackground, tintList)
+
             val progress = sharedPreferences?.getInt(Constant.keyShared.volume,100)
             volumes = (1 - ln((ToneGenerator.MAX_VOLUME - progress!!).toDouble()) / ln(
                 ToneGenerator.MAX_VOLUME.toDouble())).toFloat()
@@ -122,7 +131,7 @@ class VoiceRecorderFragmentWidgetHorizontalBlack : Fragment, BottomSheet.OnClick
 
             handler = Handler(Looper.myLooper()!!)
 
-            binding.recordBtn.setOnClickListener {
+            binding.rlRecord.setOnClickListener {
                 if(Build.VERSION.SDK_INT> Build.VERSION_CODES.N){
                     when {
                         pauseRecordAudio -> resumeRecordingAudio()
@@ -130,7 +139,7 @@ class VoiceRecorderFragmentWidgetHorizontalBlack : Fragment, BottomSheet.OnClick
                         else -> startPermission()
                     }
                 }else{
-                    setToastError(activity,"Your device not support to record audio")
+                    setToastError(activity,requireActivity().getString(R.string.device_not_support))
                 }
             }
 
@@ -141,7 +150,7 @@ class VoiceRecorderFragmentWidgetHorizontalBlack : Fragment, BottomSheet.OnClick
 
             binding.listBtn.setOnClickListener {
                 if(!isInternetConnected()){
-                    setToastError(requireActivity(),"No Internet Connection, Turn On your Data")
+                    setToastError(requireActivity(),requireActivity().getString(R.string.no_internet_connection))
                 }else{
                     startActivity(Intent(activity, ListingMusicActivity::class.java))
                 }
@@ -149,11 +158,24 @@ class VoiceRecorderFragmentWidgetHorizontalBlack : Fragment, BottomSheet.OnClick
             }
 
             binding.deleteBtn.setOnClickListener {
-                stopRecordingAudio("The recording has been cancelled")
+                stopRecordingAudio(requireActivity().getString(R.string.record_canceled))
                 File(dirPath+fileName).delete()
             }
 
             binding.songBtn.setOnClickListener {
+                startPermissionSong()
+            }
+
+            if(DataSession(requireActivity()).isCoverSong()){
+                binding.coverBtn.visibility = View.VISIBLE
+                binding.songBtn.visibility = View.GONE
+            }else{
+                binding.coverBtn.visibility = View.GONE
+                binding.songBtn.visibility = View.VISIBLE
+            }
+
+
+            binding.coverBtn.setOnClickListener {
                 startPermissionSong()
             }
 
@@ -282,7 +304,7 @@ class VoiceRecorderFragmentWidgetHorizontalBlack : Fragment, BottomSheet.OnClick
 
 
     private fun showAllowPermission(){
-        setToastInfo(activity,"Allow Permission in Setting Audio In Setting")
+        setToastInfo(activity,requireActivity().getString(R.string.allow_permission))
     }
 
 
@@ -308,7 +330,7 @@ class VoiceRecorderFragmentWidgetHorizontalBlack : Fragment, BottomSheet.OnClick
     @SuppressLint("SetTextI18n")
     private fun showLayoutPauseRecord(){
         binding.recordText.visibility = View.VISIBLE
-        binding.recordText.text = "Continue"
+        binding.recordText.text = requireActivity().getString(R.string.text_continue)
         binding.recordBtn.setImageResource(R.drawable.transparant_bg)
         timer.pause()
     }
@@ -316,7 +338,7 @@ class VoiceRecorderFragmentWidgetHorizontalBlack : Fragment, BottomSheet.OnClick
     @SuppressLint("SetTextI18n")
     private fun showLayoutStopRecord(){
         binding.recordBtn.setImageResource(R.drawable.transparant_bg)
-        binding.recordText.text = "Record"
+        binding.recordText.text = requireActivity().getString(R.string.record)
         binding.recordText.visibility = View.VISIBLE
         binding.listBtn.visibility = View.VISIBLE
         binding.doneBtn.visibility = View.GONE
@@ -348,7 +370,7 @@ class VoiceRecorderFragmentWidgetHorizontalBlack : Fragment, BottomSheet.OnClick
     }
 
 
-    fun isInternetConnected(): Boolean {
+    private fun isInternetConnected(): Boolean {
         val connectivityManager = requireActivity().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -376,7 +398,7 @@ class VoiceRecorderFragmentWidgetHorizontalBlack : Fragment, BottomSheet.OnClick
     private fun startRecordingAudio(){
 
         if(!isInternetConnected()){
-            setToastError(requireActivity(),"No Internet Connection, Turn On your Data")
+            setToastError(requireActivity(),requireActivity().getString(R.string.no_internet_connection))
         }else{
             showLayoutStartRecord()
 
@@ -400,7 +422,7 @@ class VoiceRecorderFragmentWidgetHorizontalBlack : Fragment, BottomSheet.OnClick
                     prepare()
                     start()
                     animatePlayerView()
-                    setToastInfo(activity,"Recorded Started")
+                    setToastInfo(activity,requireActivity().getString(R.string.record_started))
                 }
             } catch (e: IllegalStateException) {
                 // Handle IllegalStateException (e.g., recording already started)
@@ -427,9 +449,6 @@ class VoiceRecorderFragmentWidgetHorizontalBlack : Fragment, BottomSheet.OnClick
         if(recordingAudio && !pauseRecordAudio){
             val amp = recorder?.maxAmplitude
             binding.playerView.updateAmps(amp)
-
-            // write maxmap to a file for visualization in player activity
-
             handler.postDelayed(
                 {
                     kotlin.run { animatePlayerView() }
@@ -446,7 +465,7 @@ class VoiceRecorderFragmentWidgetHorizontalBlack : Fragment, BottomSheet.OnClick
                         pause()
                         showLayoutPauseRecord()
                         pauseRecordAudio = true
-                        setToastInfo(activity,"Recording Paused")
+                        setToastInfo(activity,requireActivity().getString(R.string.record_paused))
                     }
                 }
             } catch (e: IllegalStateException) {
@@ -475,7 +494,7 @@ class VoiceRecorderFragmentWidgetHorizontalBlack : Fragment, BottomSheet.OnClick
                 recorder?.apply {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                         resume()
-                        setToastInfo(activity,"Recording Resumed")
+                        setToastInfo(activity,requireActivity().getString(R.string.record_resumed))
                         binding.recordText.visibility = View.GONE
                         pauseRecordAudio = false
 
@@ -571,8 +590,8 @@ class VoiceRecorderFragmentWidgetHorizontalBlack : Fragment, BottomSheet.OnClick
 
     @SuppressLint("SetTextI18n")
     override fun onCancelClicked() {
-        setToastSuccess(activity,"The recording has been cancelled")
-        binding.recordText.text = "Record"
+        setToastSuccess(activity,requireActivity().getString(R.string.record_canceled))
+        binding.recordText.text = requireActivity().getString(R.string.record)
         binding.recordText.visibility = View.VISIBLE
         stopRecordingAudio("")
     }
@@ -596,10 +615,10 @@ class VoiceRecorderFragmentWidgetHorizontalBlack : Fragment, BottomSheet.OnClick
             GlobalScope.launch {
                 db.audioRecordDAO().insert(AudioRecord(filename, filePath, Date().time, duration))
             }
-            setToastSuccess(activity,"Successfully saved the recording")
+            setToastSuccess(activity,requireActivity().getString(R.string.record_saved))
 
             binding.recordText.visibility = View.VISIBLE
-            binding.recordText.text = "Record"
+            binding.recordText.text = requireActivity().getString(R.string.record)
             //showInterstitial(activity)
             showRewardInterstitial()
         }
@@ -734,7 +753,8 @@ class VoiceRecorderFragmentWidgetHorizontalBlack : Fragment, BottomSheet.OnClick
     }
 
 
-    fun setToastError(activity: Activity?,message : String){
+    fun
+            setToastError(activity: Activity?,message : String){
         if(activity!=null){
             Toastic.toastic(activity,
                 message = message,
@@ -791,42 +811,41 @@ class VoiceRecorderFragmentWidgetHorizontalBlack : Fragment, BottomSheet.OnClick
                 override fun onAdLoaded(ad: RewardedInterstitialAd) {
                     //Log.d(TAG, "Ad was loaded.")
                     rewardedInterstitialAd = ad
-                    Log.d("yameteres", ad.rewardItem.type +"--")
                     isLoadInterstitialReward = true
                     rewardedInterstitialAd?.fullScreenContentCallback = object: FullScreenContentCallback() {
                         override fun onAdClicked() {
                             // Called when a click is recorded for an ad.
-                            Log.d("yametere", "Ad was clicked.")
+                            Log.d("response ads", "Ad was clicked.")
                         }
 
                         override fun onAdDismissedFullScreenContent() {
                             // Called when ad is dismissed.
                             // Set the ad reference to null so you don't show the ad a second time.
-                            Log.d("yametere", "Ad dismissed fullscreen content.")
+                            Log.d("response ads", "Ad dismissed fullscreen content.")
                             rewardedInterstitialAd = null
                         }
 
                         override fun onAdFailedToShowFullScreenContent(p0: AdError) {
                             // Called when ad fails to show.
-                            Log.d("yametere", "Ad failed to show fullscreen content.")
+                            Log.d("response ads", "Ad failed to show fullscreen content.")
                             rewardedInterstitialAd = null
                         }
 
                         override fun onAdImpression() {
                             // Called when an impression is recorded for an ad.
-                            Log.d("yametere", "Ad recorded an impression.")
+                            Log.d("response ads", "Ad recorded an impression.")
                         }
 
                         override fun onAdShowedFullScreenContent() {
                             // Called when ad is shown.
-                            Log.d("yametere","Ad showed fullscreen content.")
+                            Log.d("response ads","Ad showed fullscreen content.")
                         }
                     }
                 }
 
                 override fun onAdFailedToLoad(adError: LoadAdError) {
                    // Log.d(TAG, adError?.toString())
-                    Log.d("yameterex", adError.message)
+                    Log.d("response ads", adError.message)
                     rewardedInterstitialAd = null
                 }
             })
@@ -844,21 +863,21 @@ class VoiceRecorderFragmentWidgetHorizontalBlack : Fragment, BottomSheet.OnClick
     private fun showRewardInterstitial(){
         if(activity!=null){
             if(isLoadInterstitialReward){
-                Log.d("yametere", "show")
+                Log.d("response ads", "show")
                 rewardedInterstitialAd?.let { ad ->
                     ad.show(requireActivity()) { rewardItem ->
                         // Handle the reward.
                         val rewardAmount = rewardItem.amount
                         val rewardType = rewardItem.type
-                        Log.d("yametere", "User earned the reward.$rewardAmount--$rewardType")
+                        Log.d("response ads", "User earned the reward.$rewardAmount--$rewardType")
                     }
                 } ?: run {
-                    Log.d("yametere", "The rewarded ad wasn't ready yet.")
+                    Log.d("response ads", "The rewarded ad wasn't ready yet.")
                     showInterstitial()
                 }
             }
         }else{
-            Log.d("yametere", "null")
+            Log.d("response ads", "null")
         }
     }
 }
