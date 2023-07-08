@@ -165,6 +165,22 @@ open class DataSession(private val mContext: Context) {
         return sharedPref.getInt(Constant.keyShared.backgroundColor, -1)
     }
 
+
+    fun resetBackgroundColor(){
+        val editor = sharedPref.edit()
+        editor.putInt(Constant.keyShared.backgroundColor,-1)
+        editor.apply()
+    }
+
+
+    fun updateBackgroundColor(color:Int){
+        val editor = sharedPref.edit()
+        editor.putInt(Constant.keyShared.backgroundColor,color)
+        editor.apply()
+    }
+
+
+
     fun getBannerId(): String {
         return sharedPref.getString(bannerIdName, "").toString()
     }
