@@ -166,8 +166,17 @@ open class BaseActivityWidget : AppCompatActivity() {
 
 
 
+    fun showLoadingLayout(long : Long){
+        try {
+            showLoadingProgress(long)
+        } catch (e: IllegalArgumentException) {
+            e.printStackTrace()
+            Log.d("errornya",e.message.toString())
+        }
+    }
+
     @SuppressLint("SetTextI18n")
-    fun showLoadingLayout(long : Long) {
+    fun showLoadingProgress(long : Long) {
 
         // custom dialog
         if(dialogLoading==null){
