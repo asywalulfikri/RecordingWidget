@@ -60,4 +60,5 @@
     <string name="send">Send</string>
     <string name="input_message_here">Input Message Here</string>
     <string name="message_cannot_empty">Message Cannot Empty</string>
+    <string name="more_apps">More Apps</string>
 </resources>
