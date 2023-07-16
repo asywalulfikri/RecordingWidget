@@ -3,6 +3,7 @@ package sound.recorder.widget.base
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.AlertDialog
+import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.net.ConnectivityManager
@@ -11,12 +12,18 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
+import android.view.View
+import android.view.Window
+import android.widget.Button
+import android.widget.EditText
 import androidx.core.text.HtmlCompat
 import androidx.fragment.app.Fragment
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
+import sound.recorder.widget.R
+import sound.recorder.widget.RecordingSDK
 import sound.recorder.widget.util.DataSession
 import sound.recorder.widget.util.Toastic
 
@@ -149,5 +156,42 @@ open class BaseFragmentWidget : Fragment(){
     }
 
 
+    @SuppressLint("SetTextI18n")
+    fun showDialogEmail(appName : String ,info : String) {
+
+        // custom dialog
+        val dialog = Dialog(requireActivity())
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setContentView(R.layout.dialog_input_email)
+        dialog.setCancelable(true)
+
+        // set the custom dialog components - text, image and button
+        val etMessage = dialog.findViewById<View>(R.id.etMessage) as EditText
+        val btnSend = dialog.findViewById<View>(R.id.btnSend) as Button
+        val btnCancel = dialog.findViewById<View>(R.id.btnCancel) as Button
+
+
+        // if button is clicked, close the custom dialog
+        btnSend.setOnClickListener {
+            var message = etMessage.text.toString().trim()
+            if(message.isEmpty()){
+                setToastWarning(requireActivity(),getString(R.string.message_cannot_empty))
+                return@setOnClickListener
+            }else{
+                sendEmail("Feed Back $appName", "$message\n\n\n\nfrom $info")
+                dialog.dismiss()
+            }
+        }
+
+        btnCancel.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        dialog.show()
+    }
+
+    private fun sendEmail(subject: String, body: String) {
+        RecordingSDK.openEmail(requireActivity(),subject,body)
+    }
 
 }

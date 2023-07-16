@@ -57,4 +57,7 @@
     <string name="recordings">Recordings</string>
     <string name="saved_recording_ask">Save Recording ?</string>
     <string name="exit">Exit</string>
+    <string name="send">Send</string>
+    <string name="input_message_here">Input Message Here</string>
+    <string name="message_cannot_empty">Message Cannot Empty</string>
 </resources>

@@ -62,4 +62,7 @@
     <string name="recordings">Rekaman</string>
     <string name="saved_recording_ask">Simpan Rekaman ?</string>
     <string name="exit">Keluar</string>
+    <string name="send">Kirim</string>
+    <string name="input_message_here">Masukan Pesan disini</string>
+    <string name="message_cannot_empty">Pesan Tidak Boleh Kosong</string>
 </resources>

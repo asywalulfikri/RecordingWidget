@@ -1,6 +1,7 @@
 package recording.host
 
 import android.content.SharedPreferences
+import android.os.Build
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -53,7 +54,7 @@ class MainActivityWidget : BaseActivityWidget(),SharedPreferences.OnSharedPrefer
        // window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         setContentView(binding.root)
 
-        showLoadingLayout(5000)
+       // showLoadingLayout(5000)
         binding.llV.addView(RecordWidgetV(this))
         //showLoading(5000)
 
@@ -98,7 +99,8 @@ class MainActivityWidget : BaseActivityWidget(),SharedPreferences.OnSharedPrefer
         recordWidgetV.loadData()*/
 
         binding.btnKlik.setOnClickListener {
-            showDialogLanguage()
+           // showDialogLanguage()
+            showDialogEmail(getString(R.string.app_name),getInfo())
         }
 
         binding.btnVideo.setOnClickListener {
@@ -133,6 +135,14 @@ class MainActivityWidget : BaseActivityWidget(),SharedPreferences.OnSharedPrefer
 
         recordWidgetVB = RecordWidgetVBA(this)
 
+    }
+
+    private fun getInfo(): String {
+        val appInfo = "VC" + BuildConfig.VERSION_CODE
+        val androidVersion = "SDK" + Build.VERSION.SDK_INT
+        val androidOS = "OS" + Build.VERSION.RELEASE
+
+        return Build.MANUFACTURER + " " + Build.MODEL + " , " + androidOS + ", " + appInfo + ", " + androidVersion
     }
 
 
