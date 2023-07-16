@@ -138,6 +138,19 @@ open class BaseActivityWidget : AppCompatActivity() {
     }
 
 
+    fun openPlayStoreForMoreApps(devName : String) {
+        try {
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse("market://developer?id=$devName"))
+            intent.setPackage("com.android.vending") // Specify the Play Store app package name
+
+            startActivity(intent)
+        } catch (e: android.content.ActivityNotFoundException) {
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/developer?id=$devName"))
+
+            startActivity(intent)
+        }
+    }
+
 
     @SuppressLint("SetTextI18n")
     fun showDialogEmail(appName : String ,info : String) {
