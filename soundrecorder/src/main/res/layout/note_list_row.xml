@@ -12,51 +12,68 @@
 
     <TextView
         android:id="@+id/dot"
-        android:text="."
+        android:text="1."
         android:layout_width="wrap_content"
         android:layout_height="30dp"
+        android:fontFamily="@font/ooredoo"
         android:layout_marginEnd="10dp"
-        android:layout_marginTop="10dp"
         android:includeFontPadding="false"
-        android:textColor="@color/colorAccent"
+        android:textColor="@color/colorPrimary"
         android:lineSpacingExtra="0dp"
-        android:textSize="40sp"
+        android:textSize="20sp"
         tools:ignore="HardcodedText" />
 
     <LinearLayout
-        android:layout_toRightOf="@id/dot"
+        android:layout_toEndOf="@id/dot"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <TextView
-            android:id="@+id/title"
-            android:text="Indonesia Raya "
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/ooredoo"
-            android:textStyle="bold"
-            android:textColor="@color/black_de"
-            android:textSize="20sp" />
+            android:orientation="horizontal">
+
+            <TextView
+                android:text="@string/title"
+                android:layout_marginEnd="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/ooredoo"
+                android:textStyle="bold"
+                android:textColor="@color/colorPrimary"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/title"
+                tools:text="Indonesia Raya "
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/ooredoo"
+                android:textStyle="bold"
+                android:textColor="@color/black_de"
+                android:textSize="20sp" />
+
+        </LinearLayout>
 
         <TextView
             android:id="@+id/note"
-            android:text="1 4 6 5 1 | 3 4 | "
+            tools:text="Mari Lah Kemari hei hei k"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/timestamp"
+            android:layout_marginTop="5dp"
             android:fontFamily="@font/rimouski"
             android:maxLines="3"
             android:ellipsize="end"
-            android:textColor="#7C7C7C"
             android:textSize="16sp" />
 
         <TextView
+            android:layout_marginTop="5dp"
             android:id="@+id/timestamp"
-            android:text="14 Mei"
-            android:layout_width="match_parent"
+            tools:text="14 Mei"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="#858585"
+            android:textColor="#000000"
             android:textSize="14sp" />
 
     </LinearLayout>

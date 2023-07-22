@@ -34,3 +34,9 @@
 
 -keep class sound.recorder.widget.model.MyEventBus$* { *; }
 -keepclassmembers class sound.recorder.widget.model.MyEventBus { *; }
+
+
+-keep class sound.recorder.widget.notes.Note { *; }
+-keepclassmembers class sound.recorder.widget.notes.Note { *; }
+
+

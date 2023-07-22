@@ -50,14 +50,20 @@ class NotesAdapter(private val notesList: ArrayList<Note>) :
         } catch (e: Exception) {
             // The JSON string is not valid
             holder.note.text = note.note
-            holder.title.visibility = View.GONE
+            if(note.title!=null){
+                holder.title.text = note.title
+            }
         }
 
         // Displaying dot from HTML character code
         holder.dot.text = Html.fromHtml("&#8226;")
 
         // Formatting and displaying timestamp
-        holder.timestamp.text = formatDate(note.timestamp)
+        if(note.timestamp!=null){
+            holder.timestamp.text = formatDate(note.timestamp)
+        }else{
+            holder.timestamp.visibility =View.GONE
+        }
     }
 
     override fun getItemCount(): Int {

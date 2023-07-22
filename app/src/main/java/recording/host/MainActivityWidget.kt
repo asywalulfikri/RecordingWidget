@@ -17,8 +17,10 @@ import sound.recorder.widget.RecordingSDK
 import sound.recorder.widget.base.BaseActivityWidget
 import sound.recorder.widget.internet.InternetAvailabilityChecker
 import sound.recorder.widget.model.Song
+import sound.recorder.widget.ui.bottomSheet.BottomSheetNoteFirebase
 import sound.recorder.widget.ui.bottomSheet.BottomSheetVideo
 import sound.recorder.widget.ui.fragment.FragmentSetting
+import sound.recorder.widget.ui.fragment.NoteFragmentFirebase
 import sound.recorder.widget.util.Constant
 import sound.recorder.widget.util.DataSession
 import kotlin.system.exitProcess
@@ -104,7 +106,7 @@ class MainActivityWidget : BaseActivityWidget(),SharedPreferences.OnSharedPrefer
         }
 
         binding.btnVideo.setOnClickListener {
-             val bottomSheet = BottomSheetVideo(firebaseFirestore)
+             val bottomSheet = BottomSheetNoteFirebase()
              bottomSheet.show(this.supportFragmentManager, "")
             //RecordingSDK.showDialogColorPicker(this,"background")
             // val intent = Intent(this,ListVideoActivity::class.java)
@@ -112,7 +114,7 @@ class MainActivityWidget : BaseActivityWidget(),SharedPreferences.OnSharedPrefer
         }
 
         binding.btnSetting.setOnClickListener {
-            val fragment = FragmentSetting()
+            val fragment = NoteFragmentFirebase()
 
             supportFragmentManager.beginTransaction()
                 .add(R.id.fragment_file_viewer, fragment)
