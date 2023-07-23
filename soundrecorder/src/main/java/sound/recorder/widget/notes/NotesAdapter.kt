@@ -43,7 +43,11 @@ class NotesAdapter(private val notesList: ArrayList<Note>) :
             val jsonObject = JSONObject(note.note.toString())
             val value = Gson().fromJson(note.note,Note::class.java)
             // The JSON string is valid
-            holder.note.text = value.note.toString()
+            if(note.timestamp!=null){
+                holder.timestamp.text = formatDate(note.timestamp)
+            }else{
+                holder.timestamp.visibility =View.GONE
+            }
             holder.title.text = value.title.toString()
             holder.title.visibility = View.VISIBLE
 
