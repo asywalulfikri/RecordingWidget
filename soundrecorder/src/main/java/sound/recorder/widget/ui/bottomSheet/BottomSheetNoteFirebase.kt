@@ -1,8 +1,10 @@
 package sound.recorder.widget.ui.bottomSheet
 
 import android.app.Activity
+import android.content.Context
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import android.widget.*
 import androidx.core.view.WindowCompat
@@ -37,7 +39,7 @@ class BottomSheetNoteFirebase : BottomSheetDialogFragment {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = BottomSheetNotesBinding.inflate(layoutInflater)
-        if(activity!=null&&requireActivity()!=null){
+        if(activity!=null){
             (dialog as? BottomSheetDialog)?.behavior?.state = STATE_EXPANDED
             (dialog as? BottomSheetDialog)?.behavior?.isDraggable = false
 
@@ -79,7 +81,11 @@ class BottomSheetNoteFirebase : BottomSheetDialogFragment {
                     }
                 }
 
-                songNote()
+                try {
+                    songNote()
+                }catch (e :Exception){
+                    Log.d("message",e.message.toString())
+                }
                 // Here, you have the list of documents in 'documentList'
             }
             .addOnFailureListener { exception ->
@@ -98,31 +104,33 @@ class BottomSheetNoteFirebase : BottomSheetDialogFragment {
     }
 
     private fun songNote() {
-        mAdapter = NotesAdapter(notesList)
-        val mLayoutManager: RecyclerView.LayoutManager = LinearLayoutManager(requireActivity())
-        binding.recyclerView.layoutManager = mLayoutManager
-        binding.recyclerView.itemAnimator = DefaultItemAnimator()
-        binding.recyclerView.addItemDecoration(
-            MyDividerItemDecoration(
-                requireActivity(),
-                LinearLayoutManager.VERTICAL,
-                16
+        if(activity!=null){
+            mAdapter = NotesAdapter(notesList)
+            val mLayoutManager: RecyclerView.LayoutManager = LinearLayoutManager(requireActivity())
+            binding.recyclerView.layoutManager = mLayoutManager
+            binding.recyclerView.itemAnimator = DefaultItemAnimator()
+            binding.recyclerView.addItemDecoration(
+                MyDividerItemDecoration(
+                    activity as Context,
+                    LinearLayoutManager.VERTICAL,
+                    16
+                )
             )
-        )
-        binding.recyclerView.adapter = mAdapter
-        toggleEmptyNotes()
-        binding.recyclerView.addOnItemTouchListener(
-            RecyclerTouchListener(requireActivity(),
-                binding.recyclerView, object : RecyclerTouchListener.ClickListener {
-                    override fun onClick(view: View?, position: Int) {
-                        showActionsDialog(position)
-                    }
+            binding.recyclerView.adapter = mAdapter
+            toggleEmptyNotes()
+            binding.recyclerView.addOnItemTouchListener(
+                RecyclerTouchListener(requireActivity(),
+                    binding.recyclerView, object : RecyclerTouchListener.ClickListener {
+                        override fun onClick(view: View?, position: Int) {
+                            showActionsDialog(position)
+                        }
 
-                    override fun onLongClick(view: View?, position: Int) {
-                        showActionsDialog(position)
-                    }
-                })
-        )
+                        override fun onLongClick(view: View?, position: Int) {
+                            showActionsDialog(position)
+                        }
+                    })
+            )
+        }
     }
 
     private fun showActionsDialog(position: Int) {

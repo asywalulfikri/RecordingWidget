@@ -1,10 +1,12 @@
 package sound.recorder.widget.base
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
@@ -22,6 +24,7 @@ import android.widget.RadioButton
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatTextView
+import androidx.core.content.ContextCompat
 import com.google.android.gms.ads.AdError
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdRequest
@@ -348,10 +351,10 @@ open class BaseActivityWidget : AppCompatActivity() {
 
     private fun permissionNotification(){
         if (Build.VERSION.SDK_INT >= 33) {
-            /*if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
                 // Pass any permission you want while launching
                 requestPermissionNotification.launch(Manifest.permission.POST_NOTIFICATIONS)
-            }*/
+            }
         }
     }
 
