@@ -1,7 +1,7 @@
 package sound.recorder.widget
 
+import android.annotation.SuppressLint
 import android.app.Activity
-import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.util.Log
@@ -57,7 +57,8 @@ object RecordingSDK {
     }
 
 
-    fun openEmail(context: Context,appName : String,info : String){
+    @SuppressLint("QueryPermissionsNeeded")
+    fun openEmail(context: Context, appName : String, info : String){
         val emailIntent = Intent(Intent.ACTION_SEND)
         emailIntent.type = "text/plain"
         emailIntent.putExtra(Intent.EXTRA_EMAIL, arrayOf("feedbackmygame@gmail.com"))
@@ -65,7 +66,14 @@ object RecordingSDK {
         emailIntent.putExtra(Intent.EXTRA_TEXT, info)
         emailIntent.type = "message/rfc822"
 
-        try {
+        if (emailIntent.resolveActivity(context.packageManager) != null) {
+            context.startActivity(emailIntent)
+        } else {
+            Toast.makeText(context,"No email clients installed.",Toast.LENGTH_SHORT).show()
+            // Handle the case when no email app is available
+            // You can display a toast or show an error message
+        }
+        /*try {
             context.startActivity(
                 Intent.createChooser(
                     emailIntent,
@@ -74,7 +82,7 @@ object RecordingSDK {
             )
         } catch (ex: ActivityNotFoundException) {
             Toast.makeText(context,"No email clients installed.",Toast.LENGTH_SHORT).show()
-        }
+        }*/
     }
 
     fun showDialogColorPicker(context: Context){

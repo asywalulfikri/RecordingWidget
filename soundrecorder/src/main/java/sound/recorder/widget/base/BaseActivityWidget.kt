@@ -385,7 +385,6 @@ open class BaseActivityWidget : AppCompatActivity() {
                 override fun onAdLoaded(ad: RewardedInterstitialAd) {
                     //Log.d(TAG, "Ad was loaded.")
                     rewardedInterstitialAd = ad
-                    Log.d("yameteres", ad.rewardItem.type.toString()+"--")
                     isLoadInterstitialReward = true
                     rewardedInterstitialAd?.fullScreenContentCallback = object: FullScreenContentCallback() {
                         override fun onAdClicked() {
