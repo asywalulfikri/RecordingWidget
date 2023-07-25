@@ -89,7 +89,7 @@ class BottomSheetNoteFirebase : BottomSheetDialogFragment {
                 // Here, you have the list of documents in 'documentList'
             }
             .addOnFailureListener { exception ->
-                Toast.makeText(requireActivity(),exception.message,Toast.LENGTH_SHORT).show()
+                Toast.makeText(activity,exception.message,Toast.LENGTH_SHORT).show()
                 // Handle any errors that occurred while retrieving data
             }
     }
@@ -106,7 +106,7 @@ class BottomSheetNoteFirebase : BottomSheetDialogFragment {
     private fun songNote() {
         if(activity!=null){
             mAdapter = NotesAdapter(notesList)
-            val mLayoutManager: RecyclerView.LayoutManager = LinearLayoutManager(requireActivity())
+            val mLayoutManager: RecyclerView.LayoutManager = LinearLayoutManager(activity)
             binding.recyclerView.layoutManager = mLayoutManager
             binding.recyclerView.itemAnimator = DefaultItemAnimator()
             binding.recyclerView.addItemDecoration(
@@ -119,7 +119,7 @@ class BottomSheetNoteFirebase : BottomSheetDialogFragment {
             binding.recyclerView.adapter = mAdapter
             toggleEmptyNotes()
             binding.recyclerView.addOnItemTouchListener(
-                RecyclerTouchListener(requireActivity(),
+                RecyclerTouchListener(activity,
                     binding.recyclerView, object : RecyclerTouchListener.ClickListener {
                         override fun onClick(view: View?, position: Int) {
                             showActionsDialog(position)
