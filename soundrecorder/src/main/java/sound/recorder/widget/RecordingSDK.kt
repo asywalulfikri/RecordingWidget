@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.util.Log
 import android.widget.Toast
 import org.greenrobot.eventbus.EventBus
@@ -57,32 +58,16 @@ object RecordingSDK {
     }
 
 
-    @SuppressLint("QueryPermissionsNeeded")
+    @SuppressLint("QueryPermissionsNeeded", "IntentReset")
     fun openEmail(context: Context, appName : String, info : String){
-        val emailIntent = Intent(Intent.ACTION_SEND)
-        emailIntent.type = "text/plain"
-        emailIntent.putExtra(Intent.EXTRA_EMAIL, arrayOf("feedbackmygame@gmail.com"))
-        emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Feedback $appName")
-        emailIntent.putExtra(Intent.EXTRA_TEXT, info)
-        emailIntent.type = "message/rfc822"
-
-        if (emailIntent.resolveActivity(context.packageManager) != null) {
-            context.startActivity(emailIntent)
-        } else {
-            Toast.makeText(context,"No email clients installed.",Toast.LENGTH_SHORT).show()
-            // Handle the case when no email app is available
-            // You can display a toast or show an error message
-        }
-        /*try {
-            context.startActivity(
-                Intent.createChooser(
-                    emailIntent,
-                    "Send email using..."
-                )
-            )
-        } catch (ex: ActivityNotFoundException) {
-            Toast.makeText(context,"No email clients installed.",Toast.LENGTH_SHORT).show()
-        }*/
+        val email = Intent(Intent.ACTION_VIEW)
+        email.setType("message/rfc822")
+            .setData(Uri.parse("mailto:feedbackmygame@gmail.com"))
+            .putExtra(Intent.EXTRA_EMAIL, "feedbackmygame@gmail.com")
+            .putExtra(Intent.EXTRA_SUBJECT, appName)
+            .putExtra(Intent.EXTRA_TEXT, info)
+            .setPackage("com.google.android.gm")
+        context.startActivity(email)
     }
 
     fun showDialogColorPicker(context: Context){

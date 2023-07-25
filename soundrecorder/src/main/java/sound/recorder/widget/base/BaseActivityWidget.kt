@@ -189,6 +189,7 @@ open class BaseActivityWidget : AppCompatActivity() {
         dialog.show()
     }
 
+    @SuppressLint("IntentReset")
     private fun sendEmail(subject: String, body: String) {
         RecordingSDK.openEmail(this,subject,body)
     }
