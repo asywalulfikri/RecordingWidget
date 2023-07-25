@@ -21,6 +21,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.EditText
 import android.widget.RadioButton
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatTextView
@@ -189,7 +190,6 @@ open class BaseActivityWidget : AppCompatActivity() {
         dialog.show()
     }
 
-    @SuppressLint("IntentReset")
     private fun sendEmail(subject: String, body: String) {
         RecordingSDK.openEmail(this,subject,body)
     }

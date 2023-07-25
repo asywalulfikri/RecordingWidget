@@ -58,16 +58,20 @@ object RecordingSDK {
     }
 
 
-    @SuppressLint("QueryPermissionsNeeded", "IntentReset")
-    fun openEmail(context: Context, appName : String, info : String){
-        val email = Intent(Intent.ACTION_VIEW)
-        email.setType("message/rfc822")
-            .setData(Uri.parse("mailto:feedbackmygame@gmail.com"))
-            .putExtra(Intent.EXTRA_EMAIL, "feedbackmygame@gmail.com")
-            .putExtra(Intent.EXTRA_SUBJECT, appName)
-            .putExtra(Intent.EXTRA_TEXT, info)
-            .setPackage("com.google.android.gm")
-        context.startActivity(email)
+    @SuppressLint("QueryPermissionsNeeded")
+    fun openEmail(context: Context, subject : String, body : String){
+        try {
+            val email = Intent(Intent.ACTION_SEND)
+            email.setType("message/rfc822")
+                .putExtra(Intent.EXTRA_EMAIL, arrayOf("feedbackmygame@gmail.com"))
+                .putExtra(Intent.EXTRA_SUBJECT, subject)
+                .putExtra(Intent.EXTRA_TEXT, body)
+                .setPackage("com.google.android.gm")
+            context.startActivity(email)
+        }catch (e :Exception){
+            Log.d("yamete",e.message.toString())
+            Toast.makeText(context,e.message.toString(), Toast.LENGTH_SHORT).show()
+        }
     }
 
     fun showDialogColorPicker(context: Context){
