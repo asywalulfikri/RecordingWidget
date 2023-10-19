@@ -93,6 +93,24 @@ class VoiceRecorderFragmentWidgetVerticalBasuri : Fragment, BottomSheet.OnClickL
         // Required empty public constructor
     }
 
+    fun VoiceRecorderFragmentWidgetVerticalBasuri() {
+        // Required empty public constructor
+    }
+
+    companion object {
+        fun newInstance() = VoiceRecorderFragmentWidgetVerticalBasuri().apply {
+            arguments = Bundle(1).apply {
+                // putInt("ORDER_ID", orderId)
+            }
+        }
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        newInstance()
+        val b = Bundle()
+        super.onCreate(b)
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = WidgetRecordVerticalBasuriBinding.inflate(inflater, container, false)
         return binding.root

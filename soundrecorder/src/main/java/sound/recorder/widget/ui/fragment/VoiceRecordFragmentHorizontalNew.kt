@@ -82,15 +82,33 @@ class VoiceRecorderFragmentWidgetHorizontalNew : Fragment, BottomSheet.OnClickLi
     private var rewardedInterstitialAd : RewardedInterstitialAd? =null
 
     //ScreenRecorder
-    var screenRecorder: ScreenRecorder? =null
-    var recordingScreen = false
-    var pauseRecordScreen = false
+    private var screenRecorder: ScreenRecorder? =null
+    private var recordingScreen = false
+    private var pauseRecordScreen = false
     private var sharedPreferences : SharedPreferences? =null
     private var volumes : Float? =null
     private var showNote : Boolean? =null
 
     constructor() : super() {
         // Required empty public constructor
+    }
+
+    fun VoiceRecorderFragmentWidgetHorizontalNew() {
+        // Required empty public constructor
+    }
+
+    companion object {
+        fun newInstance() = VoiceRecorderFragmentWidgetHorizontalNew().apply {
+            arguments = Bundle(1).apply {
+                // putInt("ORDER_ID", orderId)
+            }
+        }
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        newInstance()
+        val b = Bundle()
+        super.onCreate(b)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {

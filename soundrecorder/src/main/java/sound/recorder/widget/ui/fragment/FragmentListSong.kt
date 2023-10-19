@@ -7,8 +7,6 @@ import android.provider.MediaStore
 import android.view.*
 import android.widget.*
 import androidx.fragment.app.Fragment
-import com.google.android.material.bottomsheet.BottomSheetBehavior.STATE_HIDDEN
-import com.google.android.material.bottomsheet.BottomSheetDialog
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
@@ -36,6 +34,12 @@ class FragmentListSong(private var showBtnStop: Boolean, private var listener: O
         fun onPlaySong(filePath: String)
         fun onStopSong()
     }
+
+
+    fun FragmentListSong() {
+        // Required empty public constructor
+    }
+
 
     private lateinit var binding : BottomSheetSongBinding
     private var sharedPreferences : SharedPreferences? =null

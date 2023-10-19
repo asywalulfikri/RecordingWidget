@@ -96,6 +96,24 @@ class VoiceRecorderFragmentWidgetHorizontal : Fragment, BottomSheet.OnClickListe
         // Required empty public constructor
     }
 
+    fun VoiceRecorderFragmentWidgetHorizontal() {
+        // Required empty public constructor
+    }
+
+    companion object {
+        fun newInstance() = VoiceRecorderFragmentWidgetHorizontal().apply {
+            arguments = Bundle(1).apply {
+                // putInt("ORDER_ID", orderId)
+            }
+        }
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        newInstance()
+        val b = Bundle()
+        super.onCreate(b)
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = WidgetRecordHorizontalBinding.inflate(inflater, container, false)
         return binding.root

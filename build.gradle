@@ -3,7 +3,7 @@
 buildscript {
     dependencies {
         // Add our classpath
-        classpath 'com.google.firebase:firebase-crashlytics-gradle:2.9.7'
+        classpath 'com.google.firebase:firebase-crashlytics-gradle:2.9.9'
     }
 }
 

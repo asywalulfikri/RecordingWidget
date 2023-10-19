@@ -27,6 +27,25 @@ open class FragmentSetting : BaseFragmentWidget() {
     var language = ""
     private var dataSession: DataSession? = null
 
+
+    fun FragmentSetting() {
+        // Required empty public constructor
+    }
+
+    companion object {
+        fun newInstance() = FragmentSetting().apply {
+            arguments = Bundle(1).apply {
+                // putInt("ORDER_ID", orderId)
+            }
+        }
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        newInstance()
+        val b = Bundle()
+        super.onCreate(b)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,

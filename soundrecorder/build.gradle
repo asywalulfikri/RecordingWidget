@@ -62,20 +62,21 @@ android {
 
 dependencies {
 
-    implementation 'androidx.core:core-ktx:1.10.1'
+    implementation 'androidx.core:core-ktx:1.12.0'
     implementation 'androidx.appcompat:appcompat:1.6.1'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
-    implementation 'com.google.android.gms:play-services-ads:22.2.0'
+    implementation 'com.google.android.gms:play-services-ads:22.4.0'
 
-    implementation 'com.google.android.material:material:1.9.0'
+    implementation 'com.google.android.material:material:1.10.0'
     implementation 'com.karumi:dexter:6.2.3'
     // implementation "org.koin:koin-android:2.1.6"
     //implementation "io.insert-koin:koin-core:3.0.1"
     implementation 'com.airbnb.android:lottie:6.0.0'
 
     implementation 'androidx.room:room-runtime:2.5.2'
+    //noinspection KaptUsageInsteadOfKsp
     kapt 'androidx.room:room-compiler:2.5.2'
     implementation 'androidx.room:room-ktx:2.5.2'
     annotationProcessor "androidx.room:room-compiler:2.5.2"
@@ -91,9 +92,9 @@ dependencies {
 
     // Add the dependencies for the Firebase Cloud Messaging and Analytics libraries
     // When using the BoM, you don't specify versions in Firebase library dependencies
-    implementation 'com.google.firebase:firebase-messaging:23.2.0'
+    implementation 'com.google.firebase:firebase-messaging:23.2.1'
     implementation 'com.google.firebase:firebase-analytics:21.3.0'
-    implementation 'com.google.firebase:firebase-firestore:24.7.0'
+    implementation 'com.google.firebase:firebase-firestore:24.8.1'
     implementation 'com.google.firebase:firebase-config:21.4.1'
     implementation 'androidx.work:work-runtime-ktx:2.8.1'
     implementation 'com.google.code.gson:gson:2.10.1'
@@ -108,7 +109,7 @@ project.afterEvaluate {
                 from components.release
                 groupId = 'recording'
                 artifactId = 'recordingSDK'
-                version = '0.0.93'
+                version = '0.0.98'
             }
         }
     }

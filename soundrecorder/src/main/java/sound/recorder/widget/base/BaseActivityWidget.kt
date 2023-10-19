@@ -14,12 +14,14 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
+import android.util.DisplayMetrics
 import android.util.Log
 import android.view.View
 import android.view.Window
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.EditText
+import android.widget.FrameLayout
 import android.widget.RadioButton
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
@@ -29,10 +31,14 @@ import androidx.core.content.ContextCompat
 import com.google.android.gms.ads.AdError
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.AdSize
 import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.FullScreenContentCallback
 import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.MobileAds
+import com.google.android.gms.ads.RequestConfiguration
+import com.google.android.gms.ads.admanager.AdManagerAdRequest
+import com.google.android.gms.ads.admanager.AdManagerAdView
 import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 import com.google.android.gms.ads.rewarded.RewardedAd
@@ -46,12 +52,14 @@ import com.google.gson.Gson
 import org.json.JSONObject
 import sound.recorder.widget.R
 import sound.recorder.widget.RecordingSDK
+import sound.recorder.widget.ads.GoogleMobileAdsConsentManager
 import sound.recorder.widget.notes.Note
 import sound.recorder.widget.util.DataSession
 import sound.recorder.widget.util.Toastic
 import java.util.Locale
 import java.util.concurrent.atomic.AtomicReference
 import java.util.*
+import java.util.concurrent.atomic.AtomicBoolean
 
 
 open class BaseActivityWidget : AppCompatActivity() {
@@ -66,6 +74,12 @@ open class BaseActivityWidget : AppCompatActivity() {
     private var rewardedInterstitialAd : RewardedInterstitialAd? =null
     var language = ""
     var dialogLoading : Dialog? =null
+
+
+    private val isMobileAdsInitializeCalled = AtomicBoolean(false)
+    private val initialLayoutComplete = AtomicBoolean(false)
+    private lateinit var adView: AdManagerAdView
+    private lateinit var googleMobileAdsConsentManager: GoogleMobileAdsConsentManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -83,6 +97,87 @@ open class BaseActivityWidget : AppCompatActivity() {
         }else{
             setLocale(language)
         }
+    }
+
+    private fun loadBanner(adViewContainer: FrameLayout,unitId : String) {
+        adView.adUnitId = unitId
+        adView.setAdSizes(getSize(adViewContainer))
+        val adRequest = AdManagerAdRequest.Builder().build()
+        adView.loadAd(adRequest)
+    }
+
+    private fun getSize(adViewContainer: FrameLayout): AdSize{
+        val display = windowManager.defaultDisplay
+        val outMetrics = DisplayMetrics()
+        display.getMetrics(outMetrics)
+
+        val density = outMetrics.density
+
+        var adWidthPixels = adViewContainer.width.toFloat()
+        if (adWidthPixels == 0f) {
+            adWidthPixels = outMetrics.widthPixels.toFloat()
+        }
+
+        val adWidth = (adWidthPixels / density).toInt()
+        return AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(this, adWidth)
+    }
+
+    private fun initializeMobileAdsSdk(adViewContainer: FrameLayout,unitId: String) {
+        if (isMobileAdsInitializeCalled.getAndSet(true)) {
+            return
+        }
+
+        // Initialize the Mobile Ads SDK.
+        MobileAds.initialize(this) {}
+
+        // Load an ad.
+        if (initialLayoutComplete.get()) {
+            loadBanner(adViewContainer,unitId)
+        }
+    }
+
+    fun newBannerSetup(adViewContainer: FrameLayout,unitId: String){
+        adView = AdManagerAdView(this)
+        adViewContainer.addView(adView)
+
+
+       /* googleMobileAdsConsentManager = GoogleMobileAdsConsentManager.getInstance(applicationContext)
+        googleMobileAdsConsentManager.gatherConsent(this) { error ->
+            if (error != null) {
+                // Consent not obtained in current session.
+               // Log.d(TAG, "${error.errorCode}: ${error.message}")
+            }
+
+            if (googleMobileAdsConsentManager.canRequestAds) {
+                initializeMobileAdsSdk()
+            }
+
+            if (googleMobileAdsConsentManager.isPrivacyOptionsRequired) {
+                // Regenerate the options menu to include a privacy setting.
+                invalidateOptionsMenu()
+            }
+        }*/
+
+        // This sample attempts to load ads using consent obtained in the previous session.
+        if (googleMobileAdsConsentManager.canRequestAds()) {
+            initializeMobileAdsSdk(adViewContainer,unitId)
+        }
+
+        // Since we're loading the banner based on the adContainerView size, we need to wait until this
+        // view is laid out before we can get the width.
+        adViewContainer.viewTreeObserver.addOnGlobalLayoutListener {
+            if (!initialLayoutComplete.getAndSet(true) && googleMobileAdsConsentManager.canRequestAds()) {
+                loadBanner(adViewContainer,unitId)
+            }
+        }
+
+        // Set your test devices. Check your logcat output for the hashed device ID to
+        // get test ads on a physical device. e.g.
+        // "Use RequestConfiguration.Builder().setTestDeviceIds(Arrays.asList("ABCDEF012345"))
+        // to get test ads on this device."
+        MobileAds.setRequestConfiguration(
+            RequestConfiguration.Builder().setTestDeviceIds(listOf("ABCDEF012345")).build()
+        )
     }
 
 

@@ -17,7 +17,6 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.firebase.firestore.FirebaseFirestore
 import sound.recorder.widget.databinding.ListNoteBinding
-import sound.recorder.widget.notes.DatabaseHelper
 import sound.recorder.widget.notes.Note
 
 import sound.recorder.widget.notes.NotesAdapter
@@ -38,6 +37,28 @@ open class NoteFragmentFirebase : BottomSheetDialogFragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = ListNoteBinding.inflate(inflater, container, false)
         return binding.root
+    }
+
+   /* constructor() : super() {
+        // Required empty public constructor
+    }*/
+
+    fun NoteFragmentFirebase() {
+        // Required empty public constructor
+    }
+
+    companion object {
+        fun newInstance() = NoteFragmentFirebase().apply {
+            arguments = Bundle(1).apply {
+                // putInt("ORDER_ID", orderId)
+            }
+        }
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        newInstance()
+        val b = Bundle()
+        super.onCreate(b)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
