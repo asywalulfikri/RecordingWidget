@@ -50,6 +50,8 @@ class NotesAdapter(private val notesList: ArrayList<Note>) :
             }
             holder.title.text = value.title.toString()
             holder.title.visibility = View.VISIBLE
+            holder.note.text = value.note.toString()
+            holder.note.visibility = View.VISIBLE
 
         } catch (e: Exception) {
             // The JSON string is not valid
