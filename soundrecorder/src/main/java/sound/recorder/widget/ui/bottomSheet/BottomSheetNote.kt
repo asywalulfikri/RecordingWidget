@@ -108,9 +108,9 @@ class BottomSheetNote : BottomSheetDialogFragment {
     }
 
     private fun showActionsDialog(position: Int) {
-        val colors = arrayOf<CharSequence>("1. Use Note", "2. Edit Note", "3. Delete Note")
+        val colors = arrayOf<CharSequence>(getString(R.string.use_note), getString(R.string.edit_note),getString(R.string.delete_not))
         val builder = AlertDialog.Builder(requireActivity())
-        builder.setTitle("Choose option")
+        builder.setTitle(getString(R.string.choose))
         builder.setItems(colors) { _, which ->
             when (which) {
                 0 -> {

@@ -66,4 +66,8 @@
     <string name="input_message_here">Masukan Pesan disini</string>
     <string name="message_cannot_empty">Pesan Tidak Boleh Kosong</string>
     <string name="more_apps">Aplikasi Lainya</string>
+
+    <string name="use_note">Gunakan Not</string>
+    <string name="edit_note">Ubah Not</string>
+    <string name="delete_not">Hapus Not</string>
 </resources>
