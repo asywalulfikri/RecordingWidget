@@ -56,6 +56,8 @@ class MainActivityWidget : BaseActivityWidget(),SharedPreferences.OnSharedPrefer
        // window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         setContentView(binding.root)
 
+        showLoadingProgress(6000)
+
        // showLoadingLayout(5000)
         binding.llV.addView(RecordWidgetV(this))
         //showLoading(5000)

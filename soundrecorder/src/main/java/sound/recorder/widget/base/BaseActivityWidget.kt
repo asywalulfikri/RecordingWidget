@@ -334,28 +334,21 @@ open class BaseActivityWidget : AppCompatActivity() {
     @SuppressLint("SetTextI18n")
     fun showLoadingProgress(long : Long) {
 
-        // custom dialog
-        if(dialogLoading==null){
-            dialogLoading = Dialog(this)
-            dialogLoading?.requestWindowFeature(Window.FEATURE_NO_TITLE)
-            dialogLoading?.setContentView(R.layout.loading_layout)
-            dialogLoading?.setCancelable(false)
-        }
+        var dialogLoading: Dialog? = Dialog(this)
+        dialogLoading?.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialogLoading?.setContentView(R.layout.loading_layout)
+        dialogLoading?.setCancelable(false)
 
-        if (dialogLoading != null) {
-            dialogLoading?.show()
-        }
-
+        dialogLoading?.show()
 
         val handler = Handler()
         handler.postDelayed({
-            if (dialogLoading != null && dialogLoading?.isShowing ==true) {
-                dialogLoading?.dismiss()
+            val dialog = dialogLoading
+            if (dialog != null && dialog.isShowing) {
+                dialog.dismiss()
+                dialogLoading = null // Release the dialog instance
             }
-        },
-            long)
-
-
+        }, long)
     }
 
     fun isInternetConnected(context: Context): Boolean {
