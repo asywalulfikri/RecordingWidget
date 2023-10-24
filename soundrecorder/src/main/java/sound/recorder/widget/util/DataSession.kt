@@ -112,7 +112,11 @@ open class DataSession(private val mContext: Context) {
 
 
     fun getLanguage(): String{
-        return sharedPref.getString("language","").toString()
+        return sharedPref.getString("languageCode","").toString()
+    }
+
+    fun getDefaultLanguage() : String{
+        return sharedPref.getString("defaultLanguage","").toString()
     }
 
     fun getAppId(): String{
@@ -139,13 +143,25 @@ open class DataSession(private val mContext: Context) {
 
     fun setLanguage(language : String){
         val editor = sharedPref.edit()
-        editor.putString("language",language)
+        editor.putString("languageCode",language)
         editor.apply()
     }
 
     fun saveColor(color : Int,name : String){
         val editor = sharedPref.edit()
         editor.putInt(name,color)
+        editor.apply()
+    }
+
+    fun saveFirstLanguage(value : String){
+        val editor = sharedPref.edit()
+        editor.putString("firstLanguage",value)
+        editor.apply()
+    }
+
+    fun saveDefaultLanguage(idLanguage : String){
+        val editor = sharedPref.edit()
+        editor.putString("defaultLanguage",idLanguage)
         editor.apply()
     }
 
@@ -195,6 +211,10 @@ open class DataSession(private val mContext: Context) {
 
     fun getRewardId(): String {
         return sharedPref.getString(rewardName, "").toString()
+    }
+
+    fun getFirstLanguage(): String {
+        return sharedPref.getString("firstLanguage", "").toString()
     }
 
     fun getNativeId(): String {

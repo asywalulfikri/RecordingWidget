@@ -22,7 +22,7 @@
             android:layout_width="30dp"
             android:layout_height="30dp"
             app:srcCompat="@drawable/ic_close"
-            android:contentDescription="@string/app_names"
+            android:contentDescription="@string/app_name"
             tools:ignore="RtlHardcoded" />
 
         <ListView

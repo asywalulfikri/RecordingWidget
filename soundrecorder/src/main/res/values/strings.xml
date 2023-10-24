@@ -1,73 +1,87 @@
 <resources>
-    <string name="app_names">RecordingWidget</string>
     <string name="default_notification_channel_id">Channel ID</string>
 
-    <string name="colorpicker_dialog_title">Pilih Warna</string>
-    <string name="colorpicker_dialog_cancel">Batal</string>
+    <string name="colorpicker_dialog_title">Choose the color</string>
+    <string name="colorpicker_dialog_cancel">CANCEL</string>
     <string name="colorpicker_dialog_ok">OK</string>
 
     <string name="please_wait_dialog_default_title" />
     <string name="please_wait_dialog_default_message" />
 
 
-    <color name="white">#ffffff</color>
-    <color name="lite_blue">#42a5f5</color>
-    <color name="window_background">#00000000</color>
-    <color name="black_de">#000000</color>
+    <string name="dialog_maintenance">Sorry..The application is under maintenance, Please try again later</string>
+    <string name="dialog_msg_update_app_version">The new version is available in Play Store, please update your application</string>
+    <string name="dialog_msg_update_app">Please update your Application</string>
 
-    <string name="dialog_maintenance">Maff..Aplikasi dalam perbaikan, Coba Lagi nanti</string>
-    <string name="dialog_msg_update_app_version">Versi Baru telah tersedia di Playstore, Silakan Update Aplikasi Anda</string>
-    <string name="dialog_msg_update_app">Silahkan Update Aplikasi Anda</string>
+    <string name="lbl_new_note_title">New Note Song</string>
+    <string name="lbl_edit_note_title">Edit Note Song</string>
 
-    <string name="lbl_new_note_title">Note Lagu Baru</string>
-    <string name="lbl_edit_note_title">Edit Note Lagu</string>
+    <string name="cover_song">Cover\nSong</string>
+    <string name="record">Record</string>
+    <string name="text_continue">Continue</string>
+    <string name="record_started">Recorded Started</string>
+    <string name="record_paused">Recorded Paused</string>
+    <string name="record_resumed">Recorded Resumed</string>
+    <string name="record_saved">Successfully saved the recording</string>
+    <string name="record_canceled">The recording has been cancelled</string>
+    <string name="no_internet_connection">No Internet Connection, Try again</string>
+    <string name="device_not_support">Your device not support to record audio</string>
+    <string name="allow_permission">Allow Permission in Setting Audio In Setting</string>
 
-    <string name="cover_song">Cover\nLagu</string>
-    <string name="record">Rekam</string>
-    <string name="text_continue">Lanjutkan</string>
-    <string name="record_started">Rekaman telah dimulai</string>
-    <string name="record_paused">Rekaman telah dijeda</string>
-    <string name="record_resumed">Rekaman dilanjutkan</string>
-    <string name="record_saved">Rekaman berhasil disimpan</string>
-    <string name="record_canceled">Rekaman di batalkan</string>
-    <string name="no_internet_connection">Tidak ada koneksi Internet, Coba Lagi</string>
-    <string name="device_not_support">Hp kamu tidak mendukung untuk merekam audio</string>
-    <string name="allow_permission">Setujui izin aplikasi di setting</string>
-
-    <string name="choose_languange">Pilih Bahasa</string>
-
+    <string name="choose_language">Choose Language</string>
     <string name="indonesia">Indonesia</string>
-    <string name="english">English</string>
-    <string name="choose">Pilih</string>
-    <string name="save">Simpan</string>
-    <string name="information">Informasi</string>
-    <string name="update">Perbarui</string>
-    <string name="no">Tidak</string>
+    <string name="choose">Choose</string>
+    <string name="save">Save</string>
+    <string name="information">Information</string>
+    <string name="update">Update</string>
+    <string name="no">No</string>
 
-    <string name="setting">Pengaturan</string>
-    <string name="language">Bahasa</string>
-    <string name="rate_us">Beri Rating</string>
-    <string name="help_suggest">Bantuan dan Saran</string>
-    <string name="share_with_friends">Bagikan dengan Teman</string>
-    <string name="choose_one">Pilih Salah Satu</string>
+    <string name="setting">Setting</string>
+    <string name="language">Language</string>
+    <string name="rate_us">Rate Us</string>
+    <string name="help_suggest">Help and Suggest</string>
+    <string name="share_with_friends">Share with Friends</string>
+    <string name="choose_one">Choose One</string>
     <string name="text_video">Video</string>
-    <string name="please_wait">Mohon Tunggu</string>
-    <string name="loading_audio">Proses Loading Audio....</string>
 
-    <string name="title">Judul</string>
-    <string name="write_note_here">Buat Catatan disini</string>
-    <string name="search_record">Cari rekaman </string>
-    <string name="delete">Hapus</string>
-    <string name="cancel">Batal</string>
-    <string name="recordings">Rekaman</string>
-    <string name="saved_recording_ask">Simpan Rekaman ?</string>
-    <string name="exit">Keluar</string>
-    <string name="send">Kirim</string>
-    <string name="input_message_here">Masukan Pesan disini</string>
-    <string name="message_cannot_empty">Pesan Tidak Boleh Kosong</string>
-    <string name="more_apps">Aplikasi Lainya</string>
+    <string name="please_wait">Please Wait</string>
+    <string name="loading_audio">Process Loading Audio....</string>
 
-    <string name="use_note">Gunakan Not</string>
-    <string name="edit_note">Ubah Not</string>
-    <string name="delete_not">Hapus Not</string>
+    <string name="title">Title</string>
+    <string name="write_note_here">Write Note Here</string>
+    <string name="search_record">Search Recorded </string>
+    <string name="delete">Delete</string>
+    <string name="cancel">Cancel</string>
+    <string name="recordings">Recordings</string>
+    <string name="saved_recording_ask">Save Recording ?</string>
+    <string name="exit">Exit</string>
+    <string name="send">Send</string>
+    <string name="input_message_here">Input Message Here</string>
+    <string name="message_cannot_empty">Message Cannot Empty</string>
+    <string name="more_apps">More Apps</string>
+
+    <string name="use_note">Use Note</string>
+    <string name="edit_note">Edit Note</string>
+    <string name="delete_not">Delete Note</string>
+
+    <string name="default_language">Default Language</string>
+
+    <string name="background_color">Background Color</string>
+    <string name="song_volume">Song Volume</string>
+
+    <string name="note">Note</string>
+
+    <string name="indonesian">Indonesian</string>
+    <string name="english">English</string>
+    <string name="filipino">Filipino</string>
+    <string name="japanese">Japanese</string>
+    <string name="korean">Korean</string>
+    <string name="vietnamese">Vietnamese</string>
+    <string name="thai">Thai</string>
+    <string name="Portuguese">Portuguese</string>
+    <string name="dutch">Dutch</string>
+    <string name="malay">Malay</string>
+    <string name="spanish">Spanish</string>
+    <string name="arabic">Arabic</string>
+
 </resources>

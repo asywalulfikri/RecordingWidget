@@ -1,5 +1,4 @@
 <resources>
-    <string name="app_names">RecordingWidget</string>
     <string name="default_notification_channel_id">Channel ID</string>
 
     <string name="colorpicker_dialog_title">Choose the color</string>
@@ -29,9 +28,8 @@
     <string name="device_not_support">Your device not support to record audio</string>
     <string name="allow_permission">Allow Permission in Setting Audio In Setting</string>
 
-    <string name="choose_languange">Choose Language</string>
+    <string name="choose_language">Choose Language</string>
     <string name="indonesia">Indonesia</string>
-    <string name="english">English</string>
     <string name="choose">Choose</string>
     <string name="save">Save</string>
     <string name="information">Information</string>
@@ -65,4 +63,26 @@
     <string name="use_note">Use Note</string>
     <string name="edit_note">Edit Note</string>
     <string name="delete_not">Delete Note</string>
+
+    <string name="default_language">Default Language</string>
+
+    <string name="background_color">Background Color</string>
+    <string name="song_volume">Song Volume</string>
+
+    <string name="note">Note</string>
+
+    <string name="indonesian">Indonesian</string>
+    <string name="english">English</string>
+    <string name="filipino">Filipino</string>
+    <string name="japanese">Japanese</string>
+    <string name="korean">Korean</string>
+    <string name="vietnamese">Vietnamese</string>
+    <string name="thai">Thai</string>
+    <string name="Portuguese">Portuguese</string>
+    <string name="dutch">Dutch</string>
+    <string name="malay">Malay</string>
+    <string name="spanish">Spanish</string>
+    <string name="arabic">Arabic</string>
+
+
 </resources>

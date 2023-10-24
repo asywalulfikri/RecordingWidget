@@ -8,7 +8,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/choose_languange"
+        android:text="@string/choose_language"
         android:textSize="30sp"
         android:fontFamily="@font/ooredoo"
         android:textStyle="bold" />
@@ -22,10 +22,10 @@
         <RadioButton
             android:textSize="20sp"
             android:fontFamily="@font/ooredoo"
-            android:id="@+id/rbIndonesia"
+            android:id="@+id/rbDefaultLanguage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/indonesia" />
+            android:text="@string/default_language" />
 
         <RadioButton
             android:layout_marginTop="10dp"

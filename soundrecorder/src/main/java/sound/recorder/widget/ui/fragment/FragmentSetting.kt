@@ -116,7 +116,7 @@ open class FragmentSetting : BaseFragmentWidget() {
         dialog.setCancelable(true)
 
         // set the custom dialog components - text, image and button
-        val rbIndonesia = dialog.findViewById<View>(sound.recorder.widget.R.id.rbIndonesia) as RadioButton
+        val rbIndonesia = dialog.findViewById<View>(sound.recorder.widget.R.id.rbDefaultLanguage) as RadioButton
         val rbEnglish = dialog.findViewById<View>(sound.recorder.widget.R.id.rbEnglish) as RadioButton
         val btnSave = dialog.findViewById<View>(sound.recorder.widget.R.id.btn_submit) as AppCompatTextView
 

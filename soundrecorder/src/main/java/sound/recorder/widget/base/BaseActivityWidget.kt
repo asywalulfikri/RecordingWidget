@@ -2,6 +2,7 @@ package sound.recorder.widget.base
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.app.AlertDialog
 import android.app.Dialog
 import android.content.ActivityNotFoundException
 import android.content.Context
@@ -64,7 +65,6 @@ import java.util.concurrent.atomic.AtomicBoolean
 
 open class BaseActivityWidget : AppCompatActivity() {
 
-    private var dataSession: DataSession? = null
     private var mInterstitialAd: InterstitialAd? = null
     var id: String? = null
     private var isLoad = false
@@ -72,31 +72,28 @@ open class BaseActivityWidget : AppCompatActivity() {
     private var isLoadReward = false
     private var isLoadInterstitialReward = false
     private var rewardedInterstitialAd : RewardedInterstitialAd? =null
-    var language = ""
-    var dialogLoading : Dialog? =null
-
 
     private val isMobileAdsInitializeCalled = AtomicBoolean(false)
     private val initialLayoutComplete = AtomicBoolean(false)
     private lateinit var adView: AdManagerAdView
     private lateinit var googleMobileAdsConsentManager: GoogleMobileAdsConsentManager
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         FirebaseApp.initializeApp(this)
         MobileAds.initialize(this) {}
-        dataSession = DataSession(this)
 
-        language = dataSession?.getLanguage().toString()
-        if(language.isEmpty()){
-            if(getCurrentLanguage().lowercase()=="indonesia"){
-                setLocale("id")
-            }else{
-                setLocale("en")
-            }
-        }else{
-            setLocale(language)
-        }
+        val languageCode = Locale.getDefault().language
+        getDataSession().saveDefaultLanguage(languageCode)
+
+        //setToastInfo("$languageCode--"--"+ getDataSession().getDefaultLanguage())
+
+        setLocale(getDataSession().getDefaultLanguage())
+    }
+
+    private fun getDataSession() : DataSession{
+        return DataSession(this)
     }
 
     private fun loadBanner(adViewContainer: FrameLayout,unitId : String) {
@@ -180,10 +177,43 @@ open class BaseActivityWidget : AppCompatActivity() {
         )
     }
 
+    fun showArrayLanguage(){
+        val languageArray = resources.getStringArray(R.array.language_array)
+        val languageArrayCode = resources.getStringArray(R.array.language_code)
+        val selectedLanguages = BooleanArray(languageArray.size) // Untuk melacak status CheckBox
+
+        var selectedLanguage = "" // Untuk melacak bahasa yang dipilih
+
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle(R.string.choose_language)
+
+
+        builder.setSingleChoiceItems(languageArray, -1) { _, which ->
+            selectedLanguage = languageArrayCode[which]
+        }
+
+
+        builder.setPositiveButton(getString(R.string.colorpicker_dialog_ok)) { _, _ ->
+            if (selectedLanguage.isNotEmpty()) {
+                getDataSession().saveDefaultLanguage(selectedLanguage)
+                changeLanguage(selectedLanguage)
+                // Lakukan sesuatu dengan bahasa yang dipilih
+               // Toast.makeText(this, "Anda memilih bahasa: $selectedLanguage", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        builder.setNegativeButton(getString(R.string.cancel)) { dialog, _ ->
+            dialog.dismiss()
+        }
+
+        val dialog = builder.create()
+        dialog.show()
+    }
+
 
     @SuppressLint("SetTextI18n")
     fun showDialogLanguage() {
-
+        val language = getDataSession().getLanguage()
         // custom dialog
         var type = ""
         val dialog = Dialog(this)
@@ -192,32 +222,23 @@ open class BaseActivityWidget : AppCompatActivity() {
         dialog.setCancelable(true)
 
         // set the custom dialog components - text, image and button
-        val rbIndonesia = dialog.findViewById<View>(R.id.rbIndonesia) as RadioButton
+        val rbDefault = dialog.findViewById<View>(R.id.rbDefaultLanguage) as RadioButton
         val rbEnglish = dialog.findViewById<View>(R.id.rbEnglish) as RadioButton
         val btnSave = dialog.findViewById<View>(R.id.btn_submit) as AppCompatTextView
 
 
-
-        if(language.isEmpty()){
-            if(getCurrentLanguage().lowercase()=="indonesia"){
-                rbIndonesia.isChecked = true
-            }else{
-                rbEnglish.isChecked = true
-            }
+        if(getDataSession().getLanguage()=="en"){
+            rbEnglish.isChecked = true
         }else{
-            if(dataSession?.getLanguage()=="en"){
-                rbEnglish.isChecked = true
-            }else{
-                rbIndonesia.isChecked = true
-            }
+            rbDefault.isChecked = true
         }
 
 
         // if button is clicked, close the custom dialog
         btnSave.setOnClickListener {
 
-            if(rbIndonesia.isChecked){
-                type = "id"
+            if(rbDefault.isChecked){
+                type = getDataSession().getDefaultLanguage()
             }
 
             if(rbEnglish.isChecked){
@@ -225,11 +246,10 @@ open class BaseActivityWidget : AppCompatActivity() {
             }
 
 
-            if(type.isNotEmpty()){
-                dataSession?.setLanguage(type)
+            if(type.isNotEmpty()&&type!=getDataSession().getLanguage()){
+                getDataSession().setLanguage(type)
                 changeLanguage(type)
             }
-
             dialog.dismiss()
         }
 
@@ -303,12 +323,14 @@ open class BaseActivityWidget : AppCompatActivity() {
 
 
     private fun getCurrentLanguage(): String {
-        val locale: Locale = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+       /* val locale: Locale = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             this.resources.configuration.locales[0]
         } else {
             this.resources.configuration.locale
         }
-        return locale.displayLanguage
+        return locale.displayLanguage*/
+        val currentLocale: Locale = Locale.getDefault()
+        return currentLocale.language
     }
 
     private fun setLocale(language : String) {
@@ -453,7 +475,7 @@ open class BaseActivityWidget : AppCompatActivity() {
     fun setupInterstitial() {
         val adRequest = AdRequest.Builder().build()
         adRequest.let {
-            InterstitialAd.load(this, dataSession?.getInterstitialId().toString(), it,
+            InterstitialAd.load(this, getDataSession().getInterstitialId(), it,
                 object : InterstitialAdLoadCallback() {
                     override fun onAdLoaded(interstitialAd: InterstitialAd) {
                         mInterstitialAd = interstitialAd

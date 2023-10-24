@@ -50,6 +50,7 @@ class BottomSheetNoteFirebase : BottomSheetDialogFragment {
                 dialog?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
             }
 
+
             fetchDocumentsFromCollection()
 
             binding.fab.visibility = View.GONE
@@ -60,6 +61,46 @@ class BottomSheetNoteFirebase : BottomSheetDialogFragment {
         }
         return binding.root
 
+    }
+
+
+    private fun fetchDocumentsFromCollectionByLanguage(languageCode : String) {
+        if(activity!=null){
+            try {
+                db.collection(collectionPath)
+                    .whereArrayContains("language",languageCode)
+                    .get()
+                    .addOnSuccessListener { querySnapshot ->
+                        // Process the list of documents here
+
+                        for (document in querySnapshot) {
+                            if (document.exists()) {
+                                val data = document.data
+
+                                val note = Note()
+                                note.title = data["title"].toString()
+                                note.note = data["note"].toString()
+                                // Add more fields as needed
+                                notesList.add(note)
+                            }
+
+                            try {
+                                songNote()
+                            }catch (e :Exception){
+                                Log.d("message",e.message.toString())
+                            }
+                        }
+
+                        // Here, you have the list of documents in 'documentList'
+                    }
+                    .addOnFailureListener { exception ->
+                        Toast.makeText(activity,exception.message.toString(),Toast.LENGTH_SHORT).show()
+                        // Handle any errors that occurred while retrieving data
+                    }
+            }catch (e : Exception){
+                Toast.makeText(activity,e.message.toString(),Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 
     private fun fetchDocumentsFromCollection() {

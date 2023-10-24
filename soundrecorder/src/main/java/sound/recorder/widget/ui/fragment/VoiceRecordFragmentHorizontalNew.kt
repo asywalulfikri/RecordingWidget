@@ -148,7 +148,7 @@ class VoiceRecorderFragmentWidgetHorizontalNew : Fragment, BottomSheet.OnClickLi
                         else -> startPermission()
                     }
                 }else{
-                    setToastError(activity,"Your device not support to record audio")
+                    setToastError(activity,getString(R.string.device_not_support))
                 }
             }
 
@@ -167,7 +167,7 @@ class VoiceRecorderFragmentWidgetHorizontalNew : Fragment, BottomSheet.OnClickLi
             }
 
             binding.deleteBtn.setOnClickListener {
-                stopRecordingAudio("The recording has been cancelled")
+                stopRecordingAudio(getString(R.string.record_canceled))
                 File(dirPath+fileName).delete()
             }
 
@@ -300,7 +300,7 @@ class VoiceRecorderFragmentWidgetHorizontalNew : Fragment, BottomSheet.OnClickLi
 
 
     private fun showAllowPermission(){
-        setToastInfo(activity,"Allow Permission in Setting Audio In Setting")
+        setToastInfo(activity,getString(R.string.allow_permission))
     }
 
 
@@ -326,7 +326,7 @@ class VoiceRecorderFragmentWidgetHorizontalNew : Fragment, BottomSheet.OnClickLi
     @SuppressLint("SetTextI18n")
     private fun showLayoutPauseRecord(){
         binding.recordText.visibility = View.VISIBLE
-        binding.recordText.text = "Continue"
+        binding.recordText.text = getString(R.string.text_continue)
         binding.recordBtn.setImageResource(R.drawable.transparant_bg)
         timer.pause()
     }
@@ -334,7 +334,7 @@ class VoiceRecorderFragmentWidgetHorizontalNew : Fragment, BottomSheet.OnClickLi
     @SuppressLint("SetTextI18n")
     private fun showLayoutStopRecord(){
         binding.recordBtn.setImageResource(R.drawable.transparant_bg)
-        binding.recordText.text = "Record"
+        binding.recordText.text = getString(R.string.record)
         binding.recordText.visibility = View.VISIBLE
         binding.listBtn.visibility = View.VISIBLE
         binding.doneBtn.visibility = View.GONE
@@ -418,7 +418,7 @@ class VoiceRecorderFragmentWidgetHorizontalNew : Fragment, BottomSheet.OnClickLi
                     prepare()
                     start()
                     animatePlayerView()
-                    setToastInfo(activity,"Recorded Started")
+                    setToastInfo(activity,getString(R.string.record_started))
                 }
             } catch (e: IllegalStateException) {
                 // Handle IllegalStateException (e.g., recording already started)
@@ -464,7 +464,7 @@ class VoiceRecorderFragmentWidgetHorizontalNew : Fragment, BottomSheet.OnClickLi
                         pause()
                         showLayoutPauseRecord()
                         pauseRecordAudio = true
-                        setToastInfo(activity,"Recording Paused")
+                        setToastInfo(activity,getString(R.string.record_paused))
                     }
                 }
             } catch (e: IllegalStateException) {
@@ -493,7 +493,7 @@ class VoiceRecorderFragmentWidgetHorizontalNew : Fragment, BottomSheet.OnClickLi
                 recorder?.apply {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                         resume()
-                        setToastInfo(activity,"Recording Resumed")
+                        setToastInfo(activity,getString(R.string.record_resumed))
                         binding.recordText.visibility = View.GONE
                         pauseRecordAudio = false
 
@@ -589,8 +589,8 @@ class VoiceRecorderFragmentWidgetHorizontalNew : Fragment, BottomSheet.OnClickLi
 
     @SuppressLint("SetTextI18n")
     override fun onCancelClicked() {
-        setToastSuccess(activity,"The recording has been cancelled")
-        binding.recordText.text = "Record"
+        setToastSuccess(activity,getString(R.string.record_canceled))
+        binding.recordText.text = getString(R.string.record)
         binding.recordText.visibility = View.VISIBLE
         stopRecordingAudio("")
     }
@@ -614,10 +614,10 @@ class VoiceRecorderFragmentWidgetHorizontalNew : Fragment, BottomSheet.OnClickLi
             GlobalScope.launch {
                 db.audioRecordDAO().insert(AudioRecord(filename, filePath, Date().time, duration))
             }
-            setToastSuccess(activity,"Successfully saved the recording")
+            setToastSuccess(activity,getString(R.string.record_saved))
 
             binding.recordText.visibility = View.VISIBLE
-            binding.recordText.text = "Record"
+            binding.recordText.text = getString(R.string.record)
             //showInterstitial(activity)
             showRewardInterstitial()
         }

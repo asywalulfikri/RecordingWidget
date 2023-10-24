@@ -34,7 +34,7 @@
                 android:layout_height="30dp"
                 android:layout_marginTop="3dp"
                 android:layout_marginBottom="3dp"
-                android:contentDescription="@string/app_names"
+                android:contentDescription="@string/app_name"
                 app:srcCompat="@drawable/baseline_note_add_black"
                 tools:ignore="DuplicateSpeakableTextCheck" />
 
@@ -44,7 +44,7 @@
                 android:layout_height="40dp"
                 android:layout_marginTop="3dp"
                 android:layout_marginBottom="3dp"
-                android:contentDescription="@string/app_names"
+                android:contentDescription="@string/app_name"
                 android:background="@drawable/ic_record_black"
                 tools:ignore="DuplicateSpeakableTextCheck">
 
@@ -54,7 +54,7 @@
                     android:layout_centerInParent="true"
                     android:layout_marginTop="3dp"
                     android:layout_marginBottom="3dp"
-                    android:contentDescription="@string/app_names"
+                    android:contentDescription="@string/app_name"
                     android:fontFamily="@font/rimouski"
                     android:gravity="center"
                     android:text="Klakson"
@@ -76,7 +76,7 @@
                     android:layout_centerInParent="true"
                     android:layout_weight="1"
                     android:clickable="false"
-                    android:contentDescription="@string/app_names"
+                    android:contentDescription="@string/app_name"
                     app:srcCompat="@drawable/ic_cancel" />
             </RelativeLayout>
 
@@ -93,7 +93,7 @@
                     android:layout_marginTop="5dp"
                     android:layout_marginBottom="5dp"
                     app:srcCompat="@drawable/ic_record_black"
-                    android:contentDescription="@string/app_names"
+                    android:contentDescription="@string/app_name"
                     tools:ignore="DuplicateSpeakableTextCheck" />
 
                 <ImageView
@@ -103,7 +103,7 @@
                     android:layout_centerInParent="true"
                     android:layout_marginTop="3dp"
                     android:layout_marginBottom="3dp"
-                    android:contentDescription="@string/app_names"
+                    android:contentDescription="@string/app_name"
                     tools:ignore="DuplicateSpeakableTextCheck" />
 
                 <TextView
@@ -112,7 +112,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
                     android:fontFamily="@font/rimouski"
-                    android:text="Record"
+                    android:text="@string/record"
                     android:textColor="#FFFFFF"
                     android:textSize="8sp"
                     tools:ignore="HardcodedText,SmallSp" />

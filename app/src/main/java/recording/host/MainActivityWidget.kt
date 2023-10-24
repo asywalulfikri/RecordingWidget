@@ -56,7 +56,7 @@ class MainActivityWidget : BaseActivityWidget(),SharedPreferences.OnSharedPrefer
        // window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         setContentView(binding.root)
 
-        showLoadingProgress(6000)
+        //showLoadingProgress(6000)
 
        // showLoadingLayout(5000)
         binding.llV.addView(RecordWidgetV(this))
@@ -102,7 +102,7 @@ class MainActivityWidget : BaseActivityWidget(),SharedPreferences.OnSharedPrefer
        /* val recordWidgetV = RecordWidgetV(this)
         recordWidgetV.loadData()*/
 
-        binding.btnKlik.setOnClickListener {
+        binding.btnLanguage.setOnClickListener {
            // showDialogLanguage()
             showDialogEmail(getString(R.string.app_name),getInfo())
         }
@@ -116,6 +116,11 @@ class MainActivityWidget : BaseActivityWidget(),SharedPreferences.OnSharedPrefer
         }
 
         binding.btnSetting.setOnClickListener {
+           // showDialogLanguage()
+            showArrayLanguage()
+        }
+
+        binding.btnNote.setOnClickListener {
             val fragment = NoteFragmentFirebase()
 
             supportFragmentManager.beginTransaction()
