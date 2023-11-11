@@ -24,7 +24,6 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.FrameLayout
 import android.widget.RadioButton
-import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatTextView
@@ -47,6 +46,10 @@ import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback
 import com.google.android.gms.ads.rewardedinterstitial.RewardedInterstitialAd
 import com.google.android.gms.ads.rewardedinterstitial.RewardedInterstitialAdLoadCallback
 import com.google.android.gms.tasks.Task
+import com.google.android.ump.ConsentDebugSettings
+import com.google.android.ump.ConsentForm
+import com.google.android.ump.ConsentInformation
+import com.google.android.ump.ConsentRequestParameters
 import com.google.firebase.FirebaseApp
 import com.google.firebase.messaging.FirebaseMessaging
 import com.google.gson.Gson
@@ -62,6 +65,8 @@ import java.util.concurrent.atomic.AtomicReference
 import java.util.*
 import java.util.concurrent.atomic.AtomicBoolean
 
+import com.google.android.ump.UserMessagingPlatform
+import java.lang.Exception
 
 open class BaseActivityWidget : AppCompatActivity() {
 
@@ -77,6 +82,11 @@ open class BaseActivityWidget : AppCompatActivity() {
     private val initialLayoutComplete = AtomicBoolean(false)
     private lateinit var adView: AdManagerAdView
     private lateinit var googleMobileAdsConsentManager: GoogleMobileAdsConsentManager
+    private lateinit var consentInformation: ConsentInformation
+    private var TAG = "GDPR_App"
+
+    private var isPrivacyOptionsRequired: Boolean = false
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -86,11 +96,72 @@ open class BaseActivityWidget : AppCompatActivity() {
 
         val languageCode = Locale.getDefault().language
         getDataSession().saveDefaultLanguage(languageCode)
-
-        //setToastInfo("$languageCode--"--"+ getDataSession().getDefaultLanguage())
-
         setLocale(getDataSession().getDefaultLanguage())
+
     }
+
+
+    fun setupGDPR(){
+        // Set tag for under age of consent. false means users are not under age
+        // of consent.
+
+       /*  val debugSettings = ConsentDebugSettings.Builder(this)
+             .setDebugGeography(ConsentDebugSettings.DebugGeography.DEBUG_GEOGRAPHY_EEA)
+             .addTestDeviceHashedId("0c302266-17a0-4f2a-a11a-10ca1ad1abe1")
+             .build()*/
+
+        val params = ConsentRequestParameters
+            .Builder()
+           // .setConsentDebugSettings(debugSettings)
+            .setTagForUnderAgeOfConsent(false)
+            .build()
+
+        consentInformation = UserMessagingPlatform.getConsentInformation(this)
+        isPrivacyOptionsRequired  = consentInformation.privacyOptionsRequirementStatus == ConsentInformation.PrivacyOptionsRequirementStatus.REQUIRED
+
+        consentInformation.requestConsentInfoUpdate(
+            this,
+            params, {
+                UserMessagingPlatform.loadAndShowConsentFormIfRequired(
+                    this,
+                    ConsentForm.OnConsentFormDismissedListener {
+
+                            loadAndShowError ->
+                        run {
+                            Log.w(
+                                TAG, String.format(
+                                    "%s: %s",
+                                    loadAndShowError?.errorCode,
+                                    loadAndShowError?.message
+                                )
+                            )
+
+                        }
+                        if (isPrivacyOptionsRequired) {
+                            // Regenerate the options menu to include a privacy setting.
+                            UserMessagingPlatform.showPrivacyOptionsForm(this) { formError ->
+                                formError?.let {
+                                    setToastError(it.message.toString())
+                                }
+                            }
+                        }
+                    }
+                )
+            },
+            {
+                    requestConsentError ->
+                // Consent gathering failed.
+                Log.w(TAG, String.format("%s: %s",
+                    requestConsentError.errorCode,
+                    requestConsentError.message))
+            })
+
+        if (consentInformation.canRequestAds()) {
+            MobileAds.initialize(this) {}
+        }
+
+    }
+
 
     private fun getDataSession() : DataSession{
         return DataSession(this)
@@ -138,22 +209,22 @@ open class BaseActivityWidget : AppCompatActivity() {
         adViewContainer.addView(adView)
 
 
-       /* googleMobileAdsConsentManager = GoogleMobileAdsConsentManager.getInstance(applicationContext)
-        googleMobileAdsConsentManager.gatherConsent(this) { error ->
-            if (error != null) {
-                // Consent not obtained in current session.
-               // Log.d(TAG, "${error.errorCode}: ${error.message}")
-            }
+        /* googleMobileAdsConsentManager = GoogleMobileAdsConsentManager.getInstance(applicationContext)
+         googleMobileAdsConsentManager.gatherConsent(this) { error ->
+             if (error != null) {
+                 // Consent not obtained in current session.
+                // Log.d(TAG, "${error.errorCode}: ${error.message}")
+             }
 
-            if (googleMobileAdsConsentManager.canRequestAds) {
-                initializeMobileAdsSdk()
-            }
+             if (googleMobileAdsConsentManager.canRequestAds) {
+                 initializeMobileAdsSdk()
+             }
 
-            if (googleMobileAdsConsentManager.isPrivacyOptionsRequired) {
-                // Regenerate the options menu to include a privacy setting.
-                invalidateOptionsMenu()
-            }
-        }*/
+             if (googleMobileAdsConsentManager.isPrivacyOptionsRequired) {
+                 // Regenerate the options menu to include a privacy setting.
+                 invalidateOptionsMenu()
+             }
+         }*/
 
         // This sample attempts to load ads using consent obtained in the previous session.
         if (googleMobileAdsConsentManager.canRequestAds()) {
@@ -173,7 +244,7 @@ open class BaseActivityWidget : AppCompatActivity() {
         // "Use RequestConfiguration.Builder().setTestDeviceIds(Arrays.asList("ABCDEF012345"))
         // to get test ads on this device."
         MobileAds.setRequestConfiguration(
-            RequestConfiguration.Builder().setTestDeviceIds(listOf("ABCDEF012345")).build()
+            RequestConfiguration.Builder().setTestDeviceIds(listOf("0c302266-17a0-4f2a-a11a-10ca1ad1abe1")).build()
         )
     }
 
@@ -198,7 +269,7 @@ open class BaseActivityWidget : AppCompatActivity() {
                 getDataSession().saveDefaultLanguage(selectedLanguage)
                 changeLanguage(selectedLanguage)
                 // Lakukan sesuatu dengan bahasa yang dipilih
-               // Toast.makeText(this, "Anda memilih bahasa: $selectedLanguage", Toast.LENGTH_SHORT).show()
+                // Toast.makeText(this, "Anda memilih bahasa: $selectedLanguage", Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -323,12 +394,12 @@ open class BaseActivityWidget : AppCompatActivity() {
 
 
     private fun getCurrentLanguage(): String {
-       /* val locale: Locale = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            this.resources.configuration.locales[0]
-        } else {
-            this.resources.configuration.locale
-        }
-        return locale.displayLanguage*/
+        /* val locale: Locale = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+             this.resources.configuration.locales[0]
+         } else {
+             this.resources.configuration.locale
+         }
+         return locale.displayLanguage*/
         val currentLocale: Locale = Locale.getDefault()
         return currentLocale.language
     }

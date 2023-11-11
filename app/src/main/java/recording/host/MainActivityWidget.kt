@@ -92,6 +92,8 @@ class MainActivityWidget : BaseActivityWidget(),SharedPreferences.OnSharedPrefer
         }
         RecordingSDK.addSong(this,song)
 
+        setupGDPR()
+
 
         //setSupportActionBar(binding.toolbar)
 
