@@ -56,7 +56,11 @@ class BottomSheetNote : BottomSheetDialogFragment {
             songNote()
 
             binding.fab.setOnClickListener {
-                showNoteDialog(false, null, -1)
+                try {
+                    showNoteDialog(false, null, -1)
+                }catch (e : Exception){
+                    Toast.makeText(activity,e.message.toString(),Toast.LENGTH_SHORT).show()
+                }
             }
 
             binding.ivClose.setOnClickListener {
@@ -97,11 +101,20 @@ class BottomSheetNote : BottomSheetDialogFragment {
             RecyclerTouchListener(requireActivity(),
                 binding.recyclerView, object : RecyclerTouchListener.ClickListener {
                     override fun onClick(view: View?, position: Int) {
-                        showActionsDialog(position)
+                        try {
+                            showActionsDialog(position)
+                        }catch (e : Exception){
+                            Toast.makeText(activity,e.message.toString(),Toast.LENGTH_SHORT).show()
+                        }
+
                     }
 
                     override fun onLongClick(view: View?, position: Int) {
-                        showActionsDialog(position)
+                        try {
+                            showActionsDialog(position)
+                        }catch (e : Exception){
+                            Toast.makeText(activity,e.message.toString(),Toast.LENGTH_SHORT).show()
+                        }
                     }
                 })
         )
@@ -109,7 +122,7 @@ class BottomSheetNote : BottomSheetDialogFragment {
 
     private fun showActionsDialog(position: Int) {
         val colors = arrayOf<CharSequence>(getString(R.string.use_note), getString(R.string.edit_note),getString(R.string.delete_not))
-        val builder = AlertDialog.Builder(requireActivity())
+        val builder = AlertDialog.Builder(activity)
         builder.setTitle(getString(R.string.choose))
         builder.setItems(colors) { _, which ->
             when (which) {
@@ -144,7 +157,7 @@ class BottomSheetNote : BottomSheetDialogFragment {
 
 
     private fun showNoteDialog(shouldUpdate: Boolean, note: Note?, position: Int) {
-        val layoutInflaterAndroid = LayoutInflater.from(requireActivity())
+        val layoutInflaterAndroid = LayoutInflater.from(activity)
         @SuppressLint("InflateParams") val view =
             layoutInflaterAndroid.inflate(R.layout.note_dialog, null)
         val alertDialogBuilderUserInput = AlertDialog.Builder(requireActivity())

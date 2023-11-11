@@ -66,7 +66,6 @@ import java.util.*
 import java.util.concurrent.atomic.AtomicBoolean
 
 import com.google.android.ump.UserMessagingPlatform
-import java.lang.Exception
 
 open class BaseActivityWidget : AppCompatActivity() {
 
@@ -102,64 +101,67 @@ open class BaseActivityWidget : AppCompatActivity() {
 
 
     fun setupGDPR(){
-        // Set tag for under age of consent. false means users are not under age
-        // of consent.
+        try {
+            // Set tag for under age of consent. false means users are not under age
+            // of consent.
 
-       /*  val debugSettings = ConsentDebugSettings.Builder(this)
-             .setDebugGeography(ConsentDebugSettings.DebugGeography.DEBUG_GEOGRAPHY_EEA)
-             .addTestDeviceHashedId("0c302266-17a0-4f2a-a11a-10ca1ad1abe1")
-             .build()*/
+            /*  val debugSettings = ConsentDebugSettings.Builder(this)
+                  .setDebugGeography(ConsentDebugSettings.DebugGeography.DEBUG_GEOGRAPHY_EEA)
+                  .addTestDeviceHashedId("0c302266-17a0-4f2a-a11a-10ca1ad1abe1")
+                  .build()*/
 
-        val params = ConsentRequestParameters
-            .Builder()
-           // .setConsentDebugSettings(debugSettings)
-            .setTagForUnderAgeOfConsent(false)
-            .build()
+            val params = ConsentRequestParameters
+                .Builder()
+                // .setConsentDebugSettings(debugSettings)
+                .setTagForUnderAgeOfConsent(false)
+                .build()
 
-        consentInformation = UserMessagingPlatform.getConsentInformation(this)
-        isPrivacyOptionsRequired  = consentInformation.privacyOptionsRequirementStatus == ConsentInformation.PrivacyOptionsRequirementStatus.REQUIRED
+            consentInformation = UserMessagingPlatform.getConsentInformation(this)
+            isPrivacyOptionsRequired  = consentInformation.privacyOptionsRequirementStatus == ConsentInformation.PrivacyOptionsRequirementStatus.REQUIRED
 
-        consentInformation.requestConsentInfoUpdate(
-            this,
-            params, {
-                UserMessagingPlatform.loadAndShowConsentFormIfRequired(
-                    this,
-                    ConsentForm.OnConsentFormDismissedListener {
+            consentInformation.requestConsentInfoUpdate(
+                this,
+                params, {
+                    UserMessagingPlatform.loadAndShowConsentFormIfRequired(
+                        this,
+                        ConsentForm.OnConsentFormDismissedListener {
 
-                            loadAndShowError ->
-                        run {
-                            Log.w(
-                                TAG, String.format(
-                                    "%s: %s",
-                                    loadAndShowError?.errorCode,
-                                    loadAndShowError?.message
+                                loadAndShowError ->
+                            run {
+                                Log.w(
+                                    TAG, String.format(
+                                        "%s: %s",
+                                        loadAndShowError?.errorCode,
+                                        loadAndShowError?.message
+                                    )
                                 )
-                            )
 
-                        }
-                        if (isPrivacyOptionsRequired) {
-                            // Regenerate the options menu to include a privacy setting.
-                            UserMessagingPlatform.showPrivacyOptionsForm(this) { formError ->
-                                formError?.let {
-                                    setToastError(it.message.toString())
+                            }
+                            if (isPrivacyOptionsRequired) {
+                                // Regenerate the options menu to include a privacy setting.
+                                UserMessagingPlatform.showPrivacyOptionsForm(this) { formError ->
+                                    formError?.let {
+                                        setToastError(it.message.toString())
+                                    }
                                 }
                             }
                         }
-                    }
-                )
-            },
-            {
-                    requestConsentError ->
-                // Consent gathering failed.
-                Log.w(TAG, String.format("%s: %s",
-                    requestConsentError.errorCode,
-                    requestConsentError.message))
-            })
+                    )
+                },
+                {
+                        requestConsentError ->
+                    // Consent gathering failed.
+                    Log.w(TAG, String.format("%s: %s",
+                        requestConsentError.errorCode,
+                        requestConsentError.message))
+                })
 
-        if (consentInformation.canRequestAds()) {
-            MobileAds.initialize(this) {}
+            if (consentInformation.canRequestAds()) {
+                MobileAds.initialize(this) {}
+            }
+        }catch (e :Exception){
+            Log.d("message",e.message.toString())
         }
-
     }
 
 
@@ -419,29 +421,32 @@ open class BaseActivityWidget : AppCompatActivity() {
         try {
             showLoadingProgress(long)
         } catch (e: IllegalArgumentException) {
-            e.printStackTrace()
-            Log.d("errornya",e.message.toString())
+            Log.d("error",e.message.toString())
         }
     }
 
     @SuppressLint("SetTextI18n")
     fun showLoadingProgress(long : Long) {
 
-        var dialogLoading: Dialog? = Dialog(this)
-        dialogLoading?.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        dialogLoading?.setContentView(R.layout.loading_layout)
-        dialogLoading?.setCancelable(false)
+        try {
+            var dialogLoading: Dialog? = Dialog(this)
+            dialogLoading?.requestWindowFeature(Window.FEATURE_NO_TITLE)
+            dialogLoading?.setContentView(R.layout.loading_layout)
+            dialogLoading?.setCancelable(false)
 
-        dialogLoading?.show()
+            dialogLoading?.show()
 
-        val handler = Handler()
-        handler.postDelayed({
-            val dialog = dialogLoading
-            if (dialog != null && dialog.isShowing) {
-                dialog.dismiss()
-                dialogLoading = null // Release the dialog instance
-            }
-        }, long)
+            val handler = Handler()
+            handler.postDelayed({
+                val dialog = dialogLoading
+                if (dialog != null && dialog.isShowing) {
+                    dialog.dismiss()
+                    dialogLoading = null // Release the dialog instance
+                }
+            }, long)
+        }catch (e : Exception){
+            Log.d("message",e.message.toString())
+        }
     }
 
     fun isInternetConnected(context: Context): Boolean {

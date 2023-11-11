@@ -141,32 +141,41 @@ internal class PlayerActivityWidget : BaseActivityWidget() {
     }
 
     private fun playPausePlayer(){
-        if(!mediaPlayer.isPlaying){
-            mediaPlayer.start()
-            binding.btnPlay.background = ResourcesCompat.getDrawable(resources,
-                R.drawable.ic_pause_circle, theme)
+        try {
+            if(!mediaPlayer.isPlaying){
+                mediaPlayer.start()
+                binding.btnPlay.background = ResourcesCompat.getDrawable(resources,
+                    R.drawable.ic_pause_circle, theme)
 
-            runnable = Runnable {
-                val progress = mediaPlayer.currentPosition
-                Log.d("progress", progress.toString())
-                binding.seekBar.progress = progress
+                runnable = Runnable {
+                    val progress = mediaPlayer.currentPosition
+                    Log.d("progress", progress.toString())
+                    binding.seekBar.progress = progress
 
-                val amp = 80 + Math.random()*300
-                binding.playerView.updateAmps(amp.toInt())
+                    val amp = 80 + Math.random()*300
+                    binding.playerView.updateAmps(amp.toInt())
 
+                    handler.postDelayed(runnable, delay)
+                }
                 handler.postDelayed(runnable, delay)
-            }
-            handler.postDelayed(runnable, delay)
-        }else{
-            mediaPlayer.pause()
-            binding.btnPlay.background = ResourcesCompat.getDrawable(resources,
-                R.drawable.ic_play_circle, theme)
+            }else{
+                mediaPlayer.pause()
+                binding.btnPlay.background = ResourcesCompat.getDrawable(resources,
+                    R.drawable.ic_play_circle, theme)
 
-            handler.removeCallbacks(runnable)
+                handler.removeCallbacks(runnable)
+            }
+        }catch (e : Exception){
+            setToastError(e.message.toString())
         }
     }
 
     private fun stopPlayer(){
+        try {
+
+        }catch (e : Exception){
+
+        }
         binding.btnPlay.background = ResourcesCompat.getDrawable(resources,
             R.drawable.ic_play_circle, theme)
         handler.removeCallbacks(runnable)
