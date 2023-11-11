@@ -75,11 +75,11 @@ dependencies {
     //implementation "io.insert-koin:koin-core:3.0.1"
     implementation 'com.airbnb.android:lottie:6.0.0'
 
-    implementation 'androidx.room:room-runtime:2.6.0'
+    implementation 'androidx.room:room-runtime:2.5.2'
     //noinspection KaptUsageInsteadOfKsp
-    kapt 'androidx.room:room-compiler:2.6.0'
-    implementation 'androidx.room:room-ktx:2.6.0'
-    annotationProcessor "androidx.room:room-compiler:2.6.0"
+    kapt 'androidx.room:room-compiler:2.5.2'
+    implementation 'androidx.room:room-ktx:2.5.2'
+    annotationProcessor "androidx.room:room-compiler:2.5.2"
 
     implementation 'com.squareup.picasso:picasso:2.71828'
 
