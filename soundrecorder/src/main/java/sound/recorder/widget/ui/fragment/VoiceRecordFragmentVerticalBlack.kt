@@ -47,7 +47,7 @@ import sound.recorder.widget.databinding.WidgetRecordVerticalBlackBinding
 import sound.recorder.widget.db.AppDatabase
 import sound.recorder.widget.db.AudioRecord
 import sound.recorder.widget.tools.Timer
-import sound.recorder.widget.ui.activity.ListingMusicActivity
+import sound.recorder.widget.ui.activity.ListMusicActivity
 import sound.recorder.widget.ui.bottomSheet.BottomSheet
 import sound.recorder.widget.ui.bottomSheet.BottomSheetListSong
 import sound.recorder.widget.ui.bottomSheet.BottomSheetNote
@@ -61,7 +61,7 @@ import kotlin.math.ln
 
 private const val LOG_TAG = "AudioRecordTest"
 
-class VoiceRecorderFragmentWidgetVerticalBlack : Fragment, BottomSheet.OnClickListener,
+class VoiceRecordFragmentVerticalBlack : Fragment, BottomSheet.OnClickListener,
     BottomSheetListSong.OnClickListener, Timer.OnTimerUpdateListener,SharedPreferences.OnSharedPreferenceChangeListener {
 
     private var fileName =  ""
@@ -96,12 +96,12 @@ class VoiceRecorderFragmentWidgetVerticalBlack : Fragment, BottomSheet.OnClickLi
         // Required empty public constructor
     }
 
-    fun VoiceRecorderFragmentWidgetVerticalBlack() {
+    fun VoiceRecordFragmentVerticalBlack() {
         // Required empty public constructor
     }
 
     companion object {
-        fun newInstance() = VoiceRecorderFragmentWidgetVerticalBlack().apply {
+        fun newInstance() = VoiceRecordFragmentVerticalBlack().apply {
             arguments = Bundle(1).apply {
                 // putInt("ORDER_ID", orderId)
             }
@@ -170,7 +170,7 @@ class VoiceRecorderFragmentWidgetVerticalBlack : Fragment, BottomSheet.OnClickLi
                 if(!isInternetConnected()){
                     setToastError(requireActivity(),requireActivity().getString(R.string.no_internet_connection))
                 }else{
-                    startActivity(Intent(activity, ListingMusicActivity::class.java))
+                    startActivity(Intent(activity, ListMusicActivity::class.java))
                 }
 
             }

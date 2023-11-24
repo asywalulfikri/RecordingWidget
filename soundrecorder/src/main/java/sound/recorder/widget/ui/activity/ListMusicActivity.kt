@@ -24,7 +24,7 @@ import sound.recorder.widget.db.AudioRecord
 import java.io.File
 
 
-internal class ListingMusicActivity : BaseActivityWidget(), AudioRecorderAdapter.OnItemClickListener {
+internal class ListMusicActivity : BaseActivityWidget(), AudioRecorderAdapter.OnItemClickListener {
     private lateinit var audioRecorderAdapter : AudioRecorderAdapter
     private lateinit var audioRecords : List<AudioRecord>
     private lateinit var db : AppDatabase
@@ -157,6 +157,7 @@ internal class ListingMusicActivity : BaseActivityWidget(), AudioRecorderAdapter
         nbSelected = 0
     }
 
+    @SuppressLint("MissingSuperCall")
     @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
         val intent = Intent()

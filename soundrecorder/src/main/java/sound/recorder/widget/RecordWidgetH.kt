@@ -6,7 +6,7 @@ import android.view.LayoutInflater
 import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentManager
-import sound.recorder.widget.ui.fragment.VoiceRecorderFragmentWidgetHorizontal
+import sound.recorder.widget.ui.fragment.VoiceRecordFragmentHorizontal
 
 class RecordWidgetH @JvmOverloads constructor(
     context: Context,
@@ -27,7 +27,7 @@ class RecordWidgetH @JvmOverloads constructor(
             fragmentManager = (context as AppCompatActivity).supportFragmentManager
 
             val containerViewId = R.id.recordWidgetHorizontal
-            val myFragment = VoiceRecorderFragmentWidgetHorizontal()
+            val myFragment = VoiceRecordFragmentHorizontal()
 
             fragmentManager?.beginTransaction()
                 ?.replace(containerViewId, myFragment)

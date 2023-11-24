@@ -9,12 +9,12 @@ import android.widget.Toast
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import sound.recorder.widget.databinding.LayoutEmptyVerticalBinding
-import sound.recorder.widget.ui.fragment.VoiceRecorderFragmentWidgetVertical
+import sound.recorder.widget.ui.fragment.VoiceRecordFragmentVertical
 
 class RecordWidgetBAckup : LinearLayout {
 
     private var fragmentManagers: FragmentManager? =null
-    private val imkasFragment = VoiceRecorderFragmentWidgetVertical()
+    private val imkasFragment = VoiceRecordFragmentVertical()
     private var isAdd = false
     private var binding: LayoutEmptyVerticalBinding
 

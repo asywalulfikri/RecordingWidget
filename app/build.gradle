@@ -12,8 +12,8 @@ android {
         applicationId "recording.host"
         minSdk 19
         targetSdk 34
-        versionCode 5
-        versionName "0.0.1001"
+        versionCode 6
+        versionName "0.0.1002"
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -60,10 +60,10 @@ dependencies {
     implementation 'com.android.support:multidex:1.0.3'
     implementation("androidx.multidex:multidex:2.0.1")
 
-    implementation 'com.google.firebase:firebase-crashlytics-ktx:18.5.1'
+    implementation 'com.google.firebase:firebase-crashlytics-ktx:18.6.0'
     implementation 'com.google.firebase:firebase-analytics-ktx:21.5.0'
     implementation 'com.google.firebase:firebase-firestore:24.9.1'
-    implementation 'com.google.firebase:firebase-config:21.5.0'
+    implementation 'com.google.firebase:firebase-config:21.6.0'
 
     implementation project(path: ':soundrecorder')
 }
