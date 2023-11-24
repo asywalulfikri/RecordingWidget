@@ -61,7 +61,7 @@ import kotlin.math.ln
 
 private const val LOG_TAG = "AudioRecordTest"
 
-class VoiceRecorderFragmentWidgetVertical : Fragment, BottomSheet.OnClickListener,
+class VoiceRecorderFragmentVertical : Fragment, BottomSheet.OnClickListener,
     BottomSheetListSong.OnClickListener, Timer.OnTimerUpdateListener,SharedPreferences.OnSharedPreferenceChangeListener {
 
     private var fileName =  ""
@@ -101,7 +101,7 @@ class VoiceRecorderFragmentWidgetVertical : Fragment, BottomSheet.OnClickListene
     }
 
     companion object {
-        fun newInstance() = VoiceRecorderFragmentWidgetVertical().apply {
+        fun newInstance() = VoiceRecorderFragmentVertical().apply {
             arguments = Bundle(1).apply {
                // putInt("ORDER_ID", orderId)
             }
@@ -464,13 +464,17 @@ class VoiceRecorderFragmentWidgetVertical : Fragment, BottomSheet.OnClickListene
 
     private fun animatePlayerView(){
         if(recordingAudio && !pauseRecordAudio){
-            val amp = recorder?.maxAmplitude
-            binding.playerView.updateAmps(amp)
-            handler.postDelayed(
-                {
-                    kotlin.run { animatePlayerView() }
-                }, refreshRate
-            )
+            try {
+                val amp = recorder?.maxAmplitude
+                binding.playerView.updateAmps(amp)
+                handler.postDelayed(
+                    {
+                        kotlin.run { animatePlayerView() }
+                    }, refreshRate
+                )
+            }catch (e : Exception){
+                setToastError(activity,e.message.toString())
+            }
         }
     }
 
@@ -560,18 +564,18 @@ class VoiceRecorderFragmentWidgetVertical : Fragment, BottomSheet.OnClickListene
                 recorder = null
             } catch (e: IllegalStateException) {
                 // Handle IllegalStateException (e.g., recording already started)
-                e.printStackTrace()
+                //e.printStackTrace()
                 setToastError(activity,e.message.toString())
 
                 // Perform error handling or show appropriate message to the user
             } catch (e: IOException) {
                 // Handle IOException (e.g., failed to prepare or write to file)
-                e.printStackTrace()
+                //e.printStackTrace()
                 setToastError(activity,e.message.toString())
                 // Perform error handling or show appropriate message to the user
             } catch (e: Exception) {
                 // Handle other exceptions
-                e.printStackTrace()
+                //e.printStackTrace()
                 setToastError(activity,e.message.toString())
                 // Perform error handling or show appropriate message to the user
             }

@@ -3,6 +3,7 @@ package sound.recorder.widget.ui.bottomSheet
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.AlertDialog
+import android.content.Context
 import android.os.Build
 import android.os.Bundle
 import android.text.TextUtils
@@ -32,7 +33,7 @@ class BottomSheetNote : BottomSheetDialogFragment {
 
     private lateinit var binding : BottomSheetNotesBinding
 
-    private val notesList: ArrayList<Note> = ArrayList()
+    private var notesList: ArrayList<Note> = ArrayList()
     private var db: DatabaseHelper? = null
     private var mAdapter: NotesAdapter? = null
 
@@ -42,33 +43,45 @@ class BottomSheetNote : BottomSheetDialogFragment {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = BottomSheetNotesBinding.inflate(layoutInflater)
-        if(activity!=null&&requireActivity()!=null){
-            (dialog as? BottomSheetDialog)?.behavior?.state = STATE_EXPANDED
-            (dialog as? BottomSheetDialog)?.behavior?.isDraggable = false
+        if(activity!=null){
+            try {
+                (dialog as? BottomSheetDialog)?.behavior?.state = STATE_EXPANDED
+                (dialog as? BottomSheetDialog)?.behavior?.isDraggable = false
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                dialog?.window?.let { WindowCompat.setDecorFitsSystemWindows(it, false) }
-            } else {
-                @Suppress("DEPRECATION")
-                dialog?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
-            }
-
-            songNote()
-
-            binding.fab.setOnClickListener {
-                try {
-                    showNoteDialog(false, null, -1)
-                }catch (e : Exception){
-                    Toast.makeText(activity,e.message.toString(),Toast.LENGTH_SHORT).show()
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                    dialog?.window?.let { WindowCompat.setDecorFitsSystemWindows(it, false) }
+                } else {
+                    @Suppress("DEPRECATION")
+                    dialog?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
                 }
-            }
 
-            binding.ivClose.setOnClickListener {
-                dismiss()
+                try {
+                    songNote()
+                }catch (e : Exception){
+                    showToast(e.message.toString())
+                }
+
+                binding.fab.setOnClickListener {
+                    try {
+                        showNoteDialog(false, null, -1)
+                    }catch (e : Exception){
+                        Toast.makeText(activity,e.message.toString(),Toast.LENGTH_SHORT).show()
+                    }
+                }
+
+                binding.ivClose.setOnClickListener {
+                    dismiss()
+                }
+            }catch (e : Exception){
+                Toast.makeText(activity,e.message.toString(),Toast.LENGTH_SHORT).show()
             }
         }
         return binding.root
 
+    }
+
+    private fun showToast(message : String){
+        Toast.makeText(activity, message,Toast.LENGTH_SHORT).show()
     }
 
 
@@ -85,12 +98,12 @@ class BottomSheetNote : BottomSheetDialogFragment {
         notesList.addAll(db!!.allNotes)
 
         mAdapter = NotesAdapter(notesList)
-        val mLayoutManager: RecyclerView.LayoutManager = LinearLayoutManager(requireActivity())
+        val mLayoutManager: RecyclerView.LayoutManager = LinearLayoutManager(activity)
         binding.recyclerView.layoutManager = mLayoutManager
         binding.recyclerView.itemAnimator = DefaultItemAnimator()
         binding.recyclerView.addItemDecoration(
             MyDividerItemDecoration(
-                requireActivity(),
+                activity as Context,
                 LinearLayoutManager.VERTICAL,
                 16
             )
@@ -98,7 +111,7 @@ class BottomSheetNote : BottomSheetDialogFragment {
         binding.recyclerView.adapter = mAdapter
         toggleEmptyNotes()
         binding.recyclerView.addOnItemTouchListener(
-            RecyclerTouchListener(requireActivity(),
+            RecyclerTouchListener(activity,
                 binding.recyclerView, object : RecyclerTouchListener.ClickListener {
                     override fun onClick(view: View?, position: Int) {
                         try {
@@ -121,23 +134,29 @@ class BottomSheetNote : BottomSheetDialogFragment {
     }
 
     private fun showActionsDialog(position: Int) {
-        val colors = arrayOf<CharSequence>(getString(R.string.use_note), getString(R.string.edit_note),getString(R.string.delete_not))
-        val builder = AlertDialog.Builder(activity)
-        builder.setTitle(getString(R.string.choose))
-        builder.setItems(colors) { _, which ->
-            when (which) {
-                0 -> {
-                    useNote(notesList[position])
+        try {
+            if(activity!=null){
+                val colors = arrayOf<CharSequence>(getString(R.string.use_note), getString(R.string.edit_note),getString(R.string.delete_not))
+                val builder = AlertDialog.Builder(activity)
+                builder.setTitle(getString(R.string.choose))
+                builder.setItems(colors) { _, which ->
+                    when (which) {
+                        0 -> {
+                            useNote(notesList[position])
+                        }
+                        1 -> {
+                            showNoteDialog(true, notesList[position], position)
+                        }
+                        else -> {
+                            deleteNote(position)
+                        }
+                    }
                 }
-                1 -> {
-                    showNoteDialog(true, notesList[position], position)
-                }
-                else -> {
-                    deleteNote(position)
-                }
+                builder.show()
             }
+        }catch (e : Exception){
+            showToast(e.message.toString())
         }
-        builder.show()
     }
 
     private fun deleteNote(position: Int) {
@@ -160,7 +179,7 @@ class BottomSheetNote : BottomSheetDialogFragment {
         val layoutInflaterAndroid = LayoutInflater.from(activity)
         @SuppressLint("InflateParams") val view =
             layoutInflaterAndroid.inflate(R.layout.note_dialog, null)
-        val alertDialogBuilderUserInput = AlertDialog.Builder(requireActivity())
+        val alertDialogBuilderUserInput = AlertDialog.Builder(activity)
         alertDialogBuilderUserInput.setView(view)
         val inputNote = view.findViewById<EditText>(R.id.note)
         val inputTitle = view.findViewById<EditText>(R.id.title)

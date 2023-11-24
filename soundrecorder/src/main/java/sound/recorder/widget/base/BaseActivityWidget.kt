@@ -93,10 +93,13 @@ open class BaseActivityWidget : AppCompatActivity() {
         FirebaseApp.initializeApp(this)
         MobileAds.initialize(this) {}
 
-        val languageCode = Locale.getDefault().language
-        getDataSession().saveDefaultLanguage(languageCode)
-        setLocale(getDataSession().getDefaultLanguage())
-
+        try {
+            val languageCode = Locale.getDefault().language
+            getDataSession().saveDefaultLanguage(languageCode)
+            setLocale(getDataSession().getDefaultLanguage())
+        }catch (e : Exception){
+            setToastError(e.message.toString())
+        }
     }
 
 
@@ -361,7 +364,7 @@ open class BaseActivityWidget : AppCompatActivity() {
 
         // if button is clicked, close the custom dialog
         btnSend.setOnClickListener {
-            var message = etMessage.text.toString().trim()
+            val message = etMessage.text.toString().trim()
             if(message.isEmpty()){
                 setToastWarning(getString(R.string.message_cannot_empty))
                 return@setOnClickListener
@@ -417,19 +420,19 @@ open class BaseActivityWidget : AppCompatActivity() {
 
 
 
-    fun showLoadingLayout(long : Long){
+    fun showLoadingLayout(context: Context,long : Long){
         try {
-            showLoadingProgress(long)
+            showLoadingProgress(context,long)
         } catch (e: IllegalArgumentException) {
             Log.d("error",e.message.toString())
         }
     }
 
     @SuppressLint("SetTextI18n")
-    fun showLoadingProgress(long : Long) {
+    fun showLoadingProgress(context: Context,long : Long) {
 
         try {
-            var dialogLoading: Dialog? = Dialog(this)
+            var dialogLoading: Dialog? = Dialog(context)
             dialogLoading?.requestWindowFeature(Window.FEATURE_NO_TITLE)
             dialogLoading?.setContentView(R.layout.loading_layout)
             dialogLoading?.setCancelable(false)

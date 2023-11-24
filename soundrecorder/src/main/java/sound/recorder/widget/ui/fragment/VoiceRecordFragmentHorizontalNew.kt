@@ -443,16 +443,17 @@ class VoiceRecorderFragmentWidgetHorizontalNew : Fragment, BottomSheet.OnClickLi
 
     private fun animatePlayerView(){
         if(recordingAudio && !pauseRecordAudio){
-            val amp = recorder?.maxAmplitude
-            binding.playerView.updateAmps(amp)
-
-            // write maxmap to a file for visualization in player activity
-
-            handler.postDelayed(
-                {
-                    kotlin.run { animatePlayerView() }
-                }, refreshRate
-            )
+            try {
+                val amp = recorder?.maxAmplitude
+                binding.playerView.updateAmps(amp)
+                handler.postDelayed(
+                    {
+                        kotlin.run { animatePlayerView() }
+                    }, refreshRate
+                )
+            }catch (e : Exception){
+                setToastError(activity,e.message.toString())
+            }
         }
     }
 
