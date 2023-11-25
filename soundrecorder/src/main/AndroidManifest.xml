@@ -29,7 +29,7 @@
             android:configChanges="orientation|screenSize"
             android:screenOrientation="sensorLandscape"/>
 
-        <activity android:name=".ui.activity.ListingMusicActivity"
+        <activity android:name=".ui.activity.ListMusicActivity"
             android:configChanges="orientation|screenSize"
             android:screenOrientation="sensorLandscape"/>
 
