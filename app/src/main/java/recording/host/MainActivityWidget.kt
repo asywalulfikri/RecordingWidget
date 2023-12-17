@@ -1,10 +1,12 @@
 package recording.host
 
+import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Build
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import com.google.android.gms.ads.MobileAds
 import com.google.firebase.firestore.FirebaseFirestore
 import recording.host.databinding.ActivityMainBinding
@@ -14,6 +16,7 @@ import sound.recorder.widget.RecordWidgetHN
 import sound.recorder.widget.RecordWidgetV
 import sound.recorder.widget.RecordWidgetVBA
 import sound.recorder.widget.RecordingSDK
+import sound.recorder.widget.animation.ParticleSystem
 import sound.recorder.widget.base.BaseActivityWidget
 import sound.recorder.widget.internet.InternetAvailabilityChecker
 import sound.recorder.widget.model.Song
@@ -106,20 +109,22 @@ class MainActivityWidget : BaseActivityWidget(),SharedPreferences.OnSharedPrefer
 
         binding.btnLanguage.setOnClickListener {
            // showDialogLanguage()
-            showDialogEmail(getString(R.string.app_name),getInfo())
+           // showDialogEmail(getString(R.string.app_name),getInfo())
+            simpleAnimation(binding.btnLanguage)
         }
 
         binding.btnVideo.setOnClickListener {
-             val bottomSheet = BottomSheetNoteFirebase()
-             bottomSheet.show(this.supportFragmentManager, "")
-            //RecordingSDK.showDialogColorPicker(this,"background")
-            // val intent = Intent(this,ListVideoActivity::class.java)
-            //startActivity(intent
+            advanceAnimation(binding.btnVideo)
+            /* val bottomSheet = BottomSheetNoteFirebase()
+             bottomSheet.show(this.supportFragmentManager, "")*/
+            // RecordingSDK.showDialogColorPicker(this)
+
         }
 
         binding.btnSetting.setOnClickListener {
+            starAnimation(binding.btnSetting)
            // showDialogLanguage()
-            showArrayLanguage()
+           // showArrayLanguage()
         }
 
         binding.btnNote.setOnClickListener {
@@ -147,6 +152,22 @@ class MainActivityWidget : BaseActivityWidget(),SharedPreferences.OnSharedPrefer
         recordWidgetVB = RecordWidgetVBA(this)
 
     }
+
+   /* private fun simpleAnimations(view: View , drawable:Int? = null) {
+        try {
+            var icon  = sound.recorder.widget.R.drawable.star_pink
+            if(drawable!=null){
+                icon = drawable
+            }
+            ParticleSystem(this, 100, icon, 800)
+                .setSpeedRange(0.1f, 0.25f)
+                .oneShot(view, 100)
+        }catch (e : Exception){
+            setLog(e.message.toString())
+        }
+
+    }*/
+
 
     private fun getInfo(): String {
         val appInfo = "VC" + BuildConfig.VERSION_CODE

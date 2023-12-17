@@ -160,13 +160,18 @@ class BottomSheetNote : BottomSheetDialogFragment {
     }
 
     private fun deleteNote(position: Int) {
-        // deleting the note from db
-        db?.deleteNote(notesList[position])
+        try {
+            // deleting the note from db
+            db?.deleteNote(notesList[position])
 
-        // removing the note from the list
-        notesList.removeAt(position)
-        mAdapter?.notifyItemRemoved(position)
-        toggleEmptyNotes()
+            // removing the note from the list
+            notesList.removeAt(position)
+            mAdapter?.notifyItemRemoved(position)
+            toggleEmptyNotes()
+        }catch (e : Exception){
+            showToast(e.message.toString())
+        }
+
     }
 
     private fun useNote(note: Note) {

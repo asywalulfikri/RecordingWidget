@@ -19,6 +19,7 @@ import android.util.DisplayMetrics
 import android.util.Log
 import android.view.View
 import android.view.Window
+import android.view.animation.AccelerateInterpolator
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.EditText
@@ -66,6 +67,8 @@ import java.util.*
 import java.util.concurrent.atomic.AtomicBoolean
 
 import com.google.android.ump.UserMessagingPlatform
+import sound.recorder.widget.animation.ParticleSystem
+import sound.recorder.widget.animation.modifiers.ScaleModifier
 
 open class BaseActivityWidget : AppCompatActivity() {
 
@@ -127,7 +130,7 @@ open class BaseActivityWidget : AppCompatActivity() {
                 params, {
                     UserMessagingPlatform.loadAndShowConsentFormIfRequired(
                         this,
-                        ConsentForm.OnConsentFormDismissedListener {
+                        {
 
                                 loadAndShowError ->
                             run {
@@ -719,7 +722,7 @@ open class BaseActivityWidget : AppCompatActivity() {
         }
     }
 
-    fun showReward(){
+    protected fun showReward(){
         if(isLoadReward){
             rewardedAd?.let { ad ->
                 ad.show(this) { rewardItem ->
@@ -730,7 +733,6 @@ open class BaseActivityWidget : AppCompatActivity() {
             } ?: run {
                 showInterstitial()
             }
-        }else{
         }
     }
 
@@ -780,6 +782,61 @@ open class BaseActivityWidget : AppCompatActivity() {
         Log.d("response", "$message - ")
     }
 
+    protected fun simpleAnimation(view: View , drawable:Int? = null) {
+        try {
+            var icon  = R.drawable.star_pink
+            if(drawable!=null){
+                icon = drawable
+            }
+            ParticleSystem(this, 100, icon, 800)
+                .setSpeedRange(0.1f, 0.25f)
+                .oneShot(view, 100)
+        }catch (e : Exception){
+            setLog(e.message.toString())
+        }
+
+    }
+
+    protected fun advanceAnimation(view: View , drawable:Int? = null) {
+        // Launch 2 particle systems one for each image
+        try {
+            var icon  = R.drawable.star_white_border
+            if(drawable!=null){
+                icon = drawable
+            }
+            val ps = ParticleSystem(this, 100, icon, 800)
+            ps.setScaleRange(0.7f, 1.3f)
+            ps.setSpeedRange(0.1f, 0.25f)
+            ps.setAcceleration(0.0001f, 90)
+            ps.setRotationSpeedRange(90f, 180f)
+            ps.setFadeOut(200, AccelerateInterpolator())
+            ps.oneShot(view, 100)
+        }catch (e : Exception){
+            setLog(e.message.toString())
+        }
+    }
+
+    open fun starAnimation(view: View , drawable:Int? = null) {
+
+        try{
+            var icon  = R.drawable.star_white_border
+            if(drawable!=null){
+                icon = drawable
+            }
+            ParticleSystem(this, 10, icon, 3000)
+                .setSpeedByComponentsRange(-0.1f, 0.1f, -0.1f, 0.02f)
+                .setAcceleration(0.000003f, 90)
+                .setInitialRotationRange(0, 360)
+                .setRotationSpeed(120f)
+                .setFadeOut(2000)
+                .addModifier(ScaleModifier(0f, 1.5f, 0, 1500))
+                .oneShot(view, 10)
+        }catch (e : Exception){
+            setLog(e.message.toString())
+        }
+
+    }
+
     open fun getActivity(): BaseActivityWidget? {
         return this
     }
@@ -794,7 +851,7 @@ open class BaseActivityWidget : AppCompatActivity() {
                     Uri.parse("market://details?id=$appPackageName")
                 )
             )
-        } catch (anfe: ActivityNotFoundException) {
+        } catch (e: ActivityNotFoundException) {
             startActivity(
                 Intent(
                     Intent.ACTION_VIEW,
