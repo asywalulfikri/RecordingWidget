@@ -97,6 +97,8 @@ class MainActivityWidget : BaseActivityWidget(),SharedPreferences.OnSharedPrefer
 
         setupGDPR()
 
+        checkUpdate()
+
 
         //setSupportActionBar(binding.toolbar)
 

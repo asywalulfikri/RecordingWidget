@@ -83,5 +83,6 @@
     <string name="spanish">Tiếng Tây Ban Nha</string>
     <string name="arabic">Tiếng Ả Rập</string>
 
+    <string name="download_success">Tải về thành công, Vui lòng đợi 5 giây</string>
 
 </resources>

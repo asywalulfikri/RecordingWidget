@@ -7,6 +7,7 @@ import android.app.Dialog
 import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
+import android.content.IntentSender
 import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.net.ConnectivityManager
@@ -29,6 +30,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.lifecycleScope
 import com.google.android.gms.ads.AdError
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdRequest
@@ -47,6 +49,14 @@ import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback
 import com.google.android.gms.ads.rewardedinterstitial.RewardedInterstitialAd
 import com.google.android.gms.ads.rewardedinterstitial.RewardedInterstitialAdLoadCallback
 import com.google.android.gms.tasks.Task
+import com.google.android.play.core.appupdate.AppUpdateManager
+import com.google.android.play.core.appupdate.AppUpdateManagerFactory
+import com.google.android.play.core.install.InstallStateUpdatedListener
+import com.google.android.play.core.install.model.AppUpdateType
+import com.google.android.play.core.install.model.InstallStatus
+import com.google.android.play.core.install.model.UpdateAvailability
+import com.google.android.play.core.ktx.isFlexibleUpdateAllowed
+import com.google.android.play.core.ktx.isImmediateUpdateAllowed
 import com.google.android.ump.ConsentDebugSettings
 import com.google.android.ump.ConsentForm
 import com.google.android.ump.ConsentInformation
@@ -67,8 +77,11 @@ import java.util.*
 import java.util.concurrent.atomic.AtomicBoolean
 
 import com.google.android.ump.UserMessagingPlatform
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import sound.recorder.widget.animation.ParticleSystem
 import sound.recorder.widget.animation.modifiers.ScaleModifier
+import kotlin.time.Duration.Companion.seconds
 
 open class BaseActivityWidget : AppCompatActivity() {
 
@@ -89,6 +102,8 @@ open class BaseActivityWidget : AppCompatActivity() {
 
     private var isPrivacyOptionsRequired: Boolean = false
 
+    private lateinit var appUpdateManager: AppUpdateManager       // in app update
+    private val updateType = AppUpdateType.FLEXIBLE
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -102,6 +117,72 @@ open class BaseActivityWidget : AppCompatActivity() {
             setLocale(getDataSession().getDefaultLanguage())
         }catch (e : Exception){
             setToastError(e.message.toString())
+        }
+    }
+
+    protected fun checkUpdate(){
+        try {
+            appUpdateManager = AppUpdateManagerFactory.create(this)
+
+            if (updateType == AppUpdateType.FLEXIBLE) {
+                appUpdateManager.registerListener(installStateUpdatedListener)
+            }
+
+            appUpdateManager.appUpdateInfo.addOnSuccessListener { info ->
+                val isUpdateAvailable = info.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE
+
+                val isUpdateAllowed = when (updateType) {
+                    AppUpdateType.FLEXIBLE -> info.isFlexibleUpdateAllowed
+                    AppUpdateType.IMMEDIATE -> info.isImmediateUpdateAllowed
+                    else -> false
+                }
+
+                if (isUpdateAvailable && isUpdateAllowed) {
+
+                    try {
+                        appUpdateManager.startUpdateFlowForResult(
+                            info,
+                            updateType,
+                            this,
+                            123
+                        )
+                    } catch (e: IntentSender.SendIntentException) {
+                        // Handle the exception, log, or display an error message
+                        //e.printStackTrace()
+                        Log.d("not","support")
+                        // You can also perform additional error handling here
+                    }
+                }
+            }
+        }catch (e : Exception){
+            setLog(e.message.toString())
+        }
+
+    }
+
+
+    fun onDestroyUpdate() {
+        try {
+            if (updateType == AppUpdateType.FLEXIBLE) {
+                appUpdateManager.unregisterListener(installStateUpdatedListener)
+            }
+        }catch (e : Exception){
+            Log.d("not","support")
+        }
+    }
+
+
+    private val installStateUpdatedListener = InstallStateUpdatedListener{ state ->
+        if (state.installStatus() == InstallStatus.DOWNLOADED) {
+            try {
+                setToastInfo(getString(R.string.download_success))
+                lifecycleScope.launch {
+                    delay(5.seconds)
+                    appUpdateManager.completeUpdate()
+                }
+            }catch (e : Exception){
+                Log.d("not","support")
+            }
         }
     }
 
@@ -128,31 +209,27 @@ open class BaseActivityWidget : AppCompatActivity() {
             consentInformation.requestConsentInfoUpdate(
                 this,
                 params, {
-                    UserMessagingPlatform.loadAndShowConsentFormIfRequired(
-                        this,
-                        {
+                    UserMessagingPlatform.loadAndShowConsentFormIfRequired(this) {
 
-                                loadAndShowError ->
-                            run {
-                                Log.w(
-                                    TAG, String.format(
-                                        "%s: %s",
-                                        loadAndShowError?.errorCode,
-                                        loadAndShowError?.message
-                                    )
+                            loadAndShowError -> run {
+                            Log.w(
+                                TAG, String.format(
+                                    "%s: %s",
+                                    loadAndShowError?.errorCode,
+                                    loadAndShowError?.message
                                 )
+                            )
 
-                            }
-                            if (isPrivacyOptionsRequired) {
-                                // Regenerate the options menu to include a privacy setting.
-                                UserMessagingPlatform.showPrivacyOptionsForm(this) { formError ->
-                                    formError?.let {
-                                        setToastError(it.message.toString())
-                                    }
+                        }
+                        if (isPrivacyOptionsRequired) {
+                            // Regenerate the options menu to include a privacy setting.
+                            UserMessagingPlatform.showPrivacyOptionsForm(this) { formError ->
+                                formError?.let {
+                                    setToastError(it.message.toString())
                                 }
                             }
                         }
-                    )
+                    }
                 },
                 {
                         requestConsentError ->
@@ -737,7 +814,7 @@ open class BaseActivityWidget : AppCompatActivity() {
     }
 
 
-    fun setToastError(message : String){
+    protected fun setToastError(message : String){
         Toastic.toastic(
             context = this,
             message = message,
@@ -747,7 +824,7 @@ open class BaseActivityWidget : AppCompatActivity() {
         ).show()
     }
 
-    fun setToastWarning(message : String){
+    protected fun setToastWarning(message : String){
         Toastic.toastic(
             context = this,
             message = message,
@@ -757,7 +834,7 @@ open class BaseActivityWidget : AppCompatActivity() {
         ).show()
     }
 
-    fun setToastSuccess(message : String){
+    protected fun setToastSuccess(message : String){
         Toastic.toastic(
             context = this,
             message = message,

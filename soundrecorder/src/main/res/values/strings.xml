@@ -84,4 +84,7 @@
     <string name="spanish">Spanish</string>
     <string name="arabic">Arabic</string>
 
+    <string name="download_success">Download Successful, Please Wait 5 Seconds</string>
+
+
 </resources>
