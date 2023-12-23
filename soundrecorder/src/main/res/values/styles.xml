@@ -8,6 +8,20 @@
         <item name="android:splitMotionEvents">false</item>
     </style>
 
+    <style name="AppThemeNewG" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryVariant">@color/colorPrimary</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/colorPrimary</item>
+        <item name="colorSecondaryVariant">@color/colorPrimaryDark</item>
+        <item name="colorOnSecondary">@color/colorPrimary</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
+    </style>
+
+
     <style name="TextAppearance.App.CollapsingToolbar.Expanded" parent="TextAppearance.MaterialComponents.Headline5">
         <item name="android:textColor">@color/colorText</item>
         <item name="android:textSize">34sp</item>

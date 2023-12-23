@@ -2,6 +2,7 @@ package sound.recorder.widget.util
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.util.Log
 import sound.recorder.widget.R
 
 open class DataSession(private val mContext: Context) {
@@ -160,9 +161,13 @@ open class DataSession(private val mContext: Context) {
     }
 
     fun saveDefaultLanguage(idLanguage : String){
-        val editor = sharedPref.edit()
-        editor.putString("defaultLanguage",idLanguage)
-        editor.apply()
+        try {
+            val editor = sharedPref.edit()
+            editor.putString("defaultLanguage",idLanguage)
+            editor.apply()
+        }catch (e : Exception){
+            setLog(e.message)
+        }
     }
 
     fun saveAnimation(value : Boolean){
@@ -223,5 +228,9 @@ open class DataSession(private val mContext: Context) {
 
     fun getAdmobId(): String {
         return sharedPref.getString(admobIdName, "").toString()
+    }
+
+    fun setLog(message : String?=null){
+        Log.d("error",message.toString()+".")
     }
 }
