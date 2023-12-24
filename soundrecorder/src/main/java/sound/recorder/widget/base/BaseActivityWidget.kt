@@ -126,7 +126,7 @@ open class BaseActivityWidget : AppCompatActivity() {
     }
 
 
-    private fun setupWidgetWithFragment(id : Int, fragment : Fragment){
+    protected fun setupWidgetWithFragment(id : Int, fragment : Fragment){
         try {
             val fragmentManager = supportFragmentManager
             val fragmentTransaction = fragmentManager.beginTransaction()
