@@ -1,44 +1,37 @@
 package recording.host
 
-import android.content.Intent
 import android.content.SharedPreferences
+import android.media.MediaPlayer
 import android.os.Build
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import androidx.fragment.app.Fragment
 import com.google.android.gms.ads.MobileAds
 import com.google.firebase.firestore.FirebaseFirestore
 import recording.host.databinding.ActivityMainBinding
-import sound.recorder.widget.RecordWidgetH
-import sound.recorder.widget.RecordWidgetHB
-import sound.recorder.widget.RecordWidgetHN
-import sound.recorder.widget.RecordWidgetV
-import sound.recorder.widget.RecordWidgetVBA
 import sound.recorder.widget.RecordingSDK
-import sound.recorder.widget.animation.ParticleSystem
 import sound.recorder.widget.base.BaseActivityWidget
 import sound.recorder.widget.internet.InternetAvailabilityChecker
+import sound.recorder.widget.listener.FragmentListener
+import sound.recorder.widget.listener.MusicListener
+import sound.recorder.widget.listener.MyFragmentListener
+import sound.recorder.widget.listener.MyMusicListener
+import sound.recorder.widget.listener.MyPauseListener
 import sound.recorder.widget.model.Song
-import sound.recorder.widget.ui.bottomSheet.BottomSheetNoteFirebase
-import sound.recorder.widget.ui.bottomSheet.BottomSheetVideo
-import sound.recorder.widget.ui.fragment.FragmentSetting
+import sound.recorder.widget.ui.fragment.ListRecordFragment
 import sound.recorder.widget.ui.fragment.NoteFragmentFirebase
+import sound.recorder.widget.ui.fragment.VoiceRecordFragmentVertical
 import sound.recorder.widget.util.Constant
 import sound.recorder.widget.util.DataSession
 import kotlin.system.exitProcess
 
 
-class MainActivityWidget : BaseActivityWidget(),SharedPreferences.OnSharedPreferenceChangeListener{
+class MainActivityWidget : BaseActivityWidget(),SharedPreferences.OnSharedPreferenceChangeListener,MusicListener,FragmentListener{
 
 
     private var mInternetAvailabilityChecker: InternetAvailabilityChecker? = null
-    private var recordWidgetHN : RecordWidgetHN? =null
-    private var recordWidgetHB : RecordWidgetHB? =null
-    private var recordWidgetH : RecordWidgetH? =null
-    private var recordWidgetV : RecordWidgetV? =null
-    private var recordWidgetVB : RecordWidgetVBA? =null
-
     private lateinit var binding: ActivityMainBinding
     private val listTitle = arrayOf(
         "Jaran Goyang"
@@ -52,17 +45,20 @@ class MainActivityWidget : BaseActivityWidget(),SharedPreferences.OnSharedPrefer
     private var sharedPreferences : SharedPreferences? =null
     private var firebaseFirestore: FirebaseFirestore? = null
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
        // window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         setContentView(binding.root)
 
+        MyMusicListener.setMyListener(this)
+        MyFragmentListener.setMyListener(this)
+
+
         //showLoadingProgress(6000)
 
        // showLoadingLayout(5000)
-        binding.llV.addView(RecordWidgetV(this))
+       // binding.llV.addView(RecordWidgetV(this))
         //showLoading(5000)
 
        // mInternetAvailabilityChecker = InternetAvailabilityChecker.getInstance();
@@ -109,6 +105,8 @@ class MainActivityWidget : BaseActivityWidget(),SharedPreferences.OnSharedPrefer
        /* val recordWidgetV = RecordWidgetV(this)
         recordWidgetV.loadData()*/
 
+        setupFragment(binding.recordVertical.id,VoiceRecordFragmentVertical())
+
         binding.btnLanguage.setOnClickListener {
            // showDialogLanguage()
            // showDialogEmail(getString(R.string.app_name),getInfo())
@@ -124,9 +122,10 @@ class MainActivityWidget : BaseActivityWidget(),SharedPreferences.OnSharedPrefer
         }
 
         binding.btnSetting.setOnClickListener {
-            starAnimation(binding.btnSetting)
+           // starAnimation(binding.btnSetting)
            // showDialogLanguage()
            // showArrayLanguage()
+
         }
 
         binding.btnNote.setOnClickListener {
@@ -140,18 +139,6 @@ class MainActivityWidget : BaseActivityWidget(),SharedPreferences.OnSharedPrefer
         getFirebaseToken()
         setupBackground()
 
-        recordWidgetHN = RecordWidgetHN(this)
-        // recordWidgetHN?.loadData()
-
-        recordWidgetHB = RecordWidgetHB(this)
-        // recordWidgetHB?.loadData()
-
-        // recordWidgetV = RecordWidgetV(this)
-
-        recordWidgetH = RecordWidgetH(this)
-        // recordWidgetH?.loadData()
-
-        recordWidgetVB = RecordWidgetVBA(this)
 
     }
 
@@ -239,7 +226,7 @@ class MainActivityWidget : BaseActivityWidget(),SharedPreferences.OnSharedPrefer
     override fun onBackPressed() {
         val fragment = supportFragmentManager.findFragmentById(R.id.fragment_file_viewer)
 
-        if (fragment is FragmentSetting) {
+        if (fragment is ListRecordFragment) {
             val consumed = fragment.onBackPressed()
             if (consumed) {
                 // The back press event was consumed by the fragment
@@ -253,5 +240,41 @@ class MainActivityWidget : BaseActivityWidget(),SharedPreferences.OnSharedPrefer
         }
     }
 
+    override fun onMusic(mediaPlayer: MediaPlayer?) {
+
+        if(mediaPlayer!=null){
+            if(mediaPlayer.isPlaying){
+                //setToastInfo("Lagu Main")
+                binding.ivStop.visibility = View.VISIBLE
+            }else{
+                binding.ivStop.visibility = View.GONE
+                //setToastInfo("Berhenti")
+            }
+
+            binding.ivStop.setOnClickListener {
+                try {
+                    mediaPlayer.pause()
+                    MyMusicListener.postAction(mediaPlayer)
+                }catch (e : Exception){
+                    setToastError(e.message.toString())
+                }
+
+                try {
+                    MyPauseListener.postAction(true)
+                }catch (e : Exception){
+                    setToastError(e.message.toString())
+                }
+
+            }
+        }else{
+            binding.ivStop.visibility = View.GONE
+        }
+
+
+    }
+
+    override fun openFragment(fragment: Fragment?) {
+        setupFragment(binding.fragmentFileViewer.id,fragment)
+    }
 
 }

@@ -126,12 +126,14 @@ open class BaseActivityWidget : AppCompatActivity() {
     }
 
 
-    protected fun setupWidgetWithFragment(id : Int, fragment : Fragment){
+    protected fun setupFragment(id : Int, fragment : Fragment?){
         try {
-            val fragmentManager = supportFragmentManager
-            val fragmentTransaction = fragmentManager.beginTransaction()
-            fragmentTransaction.replace(id, fragment)
-            fragmentTransaction.commit()
+            if(fragment!=null){
+                val fragmentManager = supportFragmentManager
+                val fragmentTransaction = fragmentManager.beginTransaction()
+                fragmentTransaction.replace(id, fragment)
+                fragmentTransaction.commit()
+            }
         }catch (e : Exception){
             setLog(e.message.toString())
         }
@@ -176,7 +178,6 @@ open class BaseActivityWidget : AppCompatActivity() {
         }
 
     }
-
 
     fun onDestroyUpdate() {
         try {
@@ -883,9 +884,9 @@ open class BaseActivityWidget : AppCompatActivity() {
         try {
             Toastic.toastic(
                 context = this,
-                message = message,
+                message = "$message.",
                 duration = Toastic.LENGTH_SHORT,
-                type = Toastic.SUCCESS,
+                type = Toastic.ERROR,
                 isIconAnimated = true
             ).show()
         }catch (e : Exception){
@@ -898,7 +899,7 @@ open class BaseActivityWidget : AppCompatActivity() {
         try {
             Toastic.toastic(
                 context = this,
-                message = message,
+                message = "$message.",
                 duration = Toastic.LENGTH_SHORT,
                 type = Toastic.WARNING,
                 isIconAnimated = true
@@ -912,7 +913,7 @@ open class BaseActivityWidget : AppCompatActivity() {
         try {
             Toastic.toastic(
                 context = this,
-                message = message,
+                message = "$message.",
                 duration = Toastic.LENGTH_SHORT,
                 type = Toastic.SUCCESS,
                 isIconAnimated = true
@@ -926,7 +927,7 @@ open class BaseActivityWidget : AppCompatActivity() {
         try {
             Toastic.toastic(
                 context = this,
-                message = message,
+                message = "$message.",
                 duration = Toastic.LENGTH_SHORT,
                 type = Toastic.INFO,
                 isIconAnimated = true

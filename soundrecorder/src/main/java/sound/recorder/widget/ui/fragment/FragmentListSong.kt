@@ -53,14 +53,14 @@ class FragmentListSong(private var showBtnStop: Boolean, private var listener: O
             sharedPreferences = DataSession(requireActivity()).getShared()
             sharedPreferences?.registerOnSharedPreferenceChangeListener(this)
             if(showBtnStop){
-                binding.btnStop.visibility = View.VISIBLE
+                binding.ivStop.visibility = View.VISIBLE
             }else{
-                binding.btnStop.visibility = View.GONE
+                binding.ivStop.visibility = View.GONE
             }
 
-            binding.btnStop.setOnClickListener {
+            binding.ivStop.setOnClickListener {
                 listener.onStopSong()
-                binding.btnStop.visibility = View.GONE
+                binding.ivStop.visibility = View.GONE
             }
 
             binding.btnCLose.setOnClickListener {
@@ -186,7 +186,7 @@ class FragmentListSong(private var showBtnStop: Boolean, private var listener: O
                     //dismiss()
                     //(dialog as? BottomSheetDialog)?.behavior?.state = STATE_HIDDEN
                     listener.onPlaySong(listLocationSong?.get(i).toString())
-                    binding.btnStop.visibility = View.VISIBLE
+                    binding.ivStop.visibility = View.VISIBLE
 
                 }
         }

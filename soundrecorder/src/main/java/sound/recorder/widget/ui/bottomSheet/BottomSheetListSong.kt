@@ -2,10 +2,15 @@ package sound.recorder.widget.ui.bottomSheet
 
 import android.annotation.SuppressLint
 import android.content.SharedPreferences
+import android.media.MediaPlayer
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Log
 import android.view.*
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
+import android.view.animation.LinearInterpolator
 import android.widget.*
 import androidx.core.view.WindowCompat
 import com.google.android.material.bottomsheet.BottomSheetBehavior.STATE_EXPANDED
@@ -19,20 +24,23 @@ import kotlinx.coroutines.withContext
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
+import sound.recorder.widget.R
 import sound.recorder.widget.RecordingSDK
 import sound.recorder.widget.databinding.BottomSheetSongBinding
+import sound.recorder.widget.listener.MusicListener
+import sound.recorder.widget.listener.MyMusicListener
 import sound.recorder.widget.model.Song
 import sound.recorder.widget.util.DataSession
 
 
-class BottomSheetListSong(private var showBtnStop: Boolean, private var listener: OnClickListener) : BottomSheetDialogFragment(),SharedPreferences.OnSharedPreferenceChangeListener {
+class BottomSheetListSong(private var showBtnStop: Boolean, private var listener: OnClickListener) : BottomSheetDialogFragment(),SharedPreferences.OnSharedPreferenceChangeListener{
 
 
     //Load Song
     private var listTitleSong: ArrayList<String>? = null
     private var listLocationSong: ArrayList<String>? = null
     private var adapter: ArrayAdapter<String>? = null
-
+    private var mPanAnim: Animation? = null
 
     // Step 1 - This interface defines the type of messages I want to communicate to my owner
     interface OnClickListener {
@@ -48,46 +56,60 @@ class BottomSheetListSong(private var showBtnStop: Boolean, private var listener
         binding = BottomSheetSongBinding.inflate(layoutInflater)
 
         if(activity!=null&&requireActivity()!=null){
-            (dialog as? BottomSheetDialog)?.behavior?.state = STATE_EXPANDED
-            (dialog as? BottomSheetDialog)?.behavior?.isDraggable = false
+            try {
+                (dialog as? BottomSheetDialog)?.behavior?.state = STATE_EXPANDED
+                (dialog as? BottomSheetDialog)?.behavior?.isDraggable = false
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                dialog?.window?.let { WindowCompat.setDecorFitsSystemWindows(it, false) }
-            } else {
-                @Suppress("DEPRECATION")
-                dialog?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                    dialog?.window?.let { WindowCompat.setDecorFitsSystemWindows(it, false) }
+                } else {
+                    @Suppress("DEPRECATION")
+                    dialog?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
+                }
+
+
+                sharedPreferences = DataSession(requireActivity()).getShared()
+                sharedPreferences?.registerOnSharedPreferenceChangeListener(this)
+
+                initAnim()
+
+
+                if(showBtnStop){
+                    binding.ivStop.visibility = View.VISIBLE
+                    startAnimation()
+
+                }else{
+                    binding.ivStop.visibility = View.GONE
+                }
+
+                binding.ivStop.setOnClickListener {
+                    listener.onStopSong()
+                    stopAnimation()
+                }
+
+                binding.btnCLose.setOnClickListener {
+                    dismiss()
+                }
+
+                listTitleSong = ArrayList()
+                listLocationSong = ArrayList()
+
+                try {
+                    if(!RecordingSDK.isHaveSong(requireActivity())){
+                        getSong(lisSong)
+                    }
+                }catch (e : Exception){
+                    setLog(e.message)
+                }
+            }catch (e : Exception){
+                setLog(e.message)
             }
 
-
-            sharedPreferences = DataSession(requireActivity()).getShared()
-            sharedPreferences?.registerOnSharedPreferenceChangeListener(this)
-            if(showBtnStop){
-                binding.btnStop.visibility = View.VISIBLE
-            }else{
-                binding.btnStop.visibility = View.GONE
-            }
-
-            binding.btnStop.setOnClickListener {
-                listener.onStopSong()
-                binding.btnStop.visibility = View.GONE
-            }
-
-            binding.btnCLose.setOnClickListener {
-                dismiss()
-            }
-
-            listTitleSong = ArrayList()
-            listLocationSong = ArrayList()
-
-            if(!RecordingSDK.isHaveSong(requireActivity())){
-                getSong(lisSong)
-            }
         }
 
         return binding.root
 
     }
-
 
     private fun getSong(list : ArrayList<Song>){
        /* if(Build.VERSION.SDK_INT>32){
@@ -192,7 +214,7 @@ class BottomSheetListSong(private var showBtnStop: Boolean, private var listener
         if(activity!=null){
             val listSong = listTitleSong!!.toTypedArray()
 
-            adapter = ArrayAdapter(requireActivity(), android.R.layout.simple_list_item_1, listSong)
+            adapter = ArrayAdapter(requireActivity(), R.layout.item_simple_song, listSong)
             binding.listView.adapter = adapter
             adapter?.notifyDataSetChanged()
             binding.listView.onItemClickListener =
@@ -200,11 +222,60 @@ class BottomSheetListSong(private var showBtnStop: Boolean, private var listener
                     //dismiss()
                     (dialog as? BottomSheetDialog)?.behavior?.state = STATE_HIDDEN
                     listener.onPlaySong(listLocationSong?.get(i).toString())
-                    binding.btnStop.visibility = View.VISIBLE
+                    binding.ivStop.visibility = View.VISIBLE
+                    startAnimation()
 
                 }
         }
 
+    }
+
+    fun setToast(message : String){
+        Toast.makeText(activity,message,Toast.LENGTH_SHORT).show()
+    }
+
+    private fun startAnimation() {
+        binding.ivStop.startAnimation(mPanAnim)
+    }
+
+    private fun stopAnimation(){
+        try {
+            binding.ivStop.clearAnimation()
+            binding.ivStop.visibility = View.GONE
+        }catch (e : Exception){
+           setLog(e.message)
+        }
+    }
+
+    private fun initAnim() {
+        try {
+            mPanAnim = AnimationUtils.loadAnimation(activity, R.anim.rotate)
+            val mPanLin = LinearInterpolator()
+            mPanAnim?.interpolator = mPanLin
+            mPanAnim?.startTime = 0
+            mPanAnim?.let { anim ->
+                anim.interpolator = mPanLin
+                anim.setAnimationListener(object : Animation.AnimationListener {
+                    override fun onAnimationStart(animation: Animation) {
+
+                    }
+
+                    override fun onAnimationEnd(animation: Animation) {
+                        binding.ivStop.visibility = View.GONE
+
+                    }
+
+                    override fun onAnimationRepeat(animation: Animation) {
+
+                    }
+                })
+            } ?: run {
+                // Handle the case where mPanAnim is null
+                println("Error: mPanAnim is null")
+            }
+        }catch (e : Exception){
+           setLog(e.message)
+        }
     }
 
 
@@ -236,4 +307,9 @@ class BottomSheetListSong(private var showBtnStop: Boolean, private var listener
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
 
     }
+
+    private fun setLog(message : String? =null){
+        Log.e("message",message.toString()+".")
+    }
+
 }

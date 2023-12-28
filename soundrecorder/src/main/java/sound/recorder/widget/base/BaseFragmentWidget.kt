@@ -6,6 +6,7 @@ import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.net.Uri
@@ -33,6 +34,11 @@ open class BaseFragmentWidget : Fragment(){
     private var dataSession : DataSession? =null
     var mInterstitialAd: InterstitialAd? = null
     private var isLoad = false
+
+    var fileName =  ""
+    var dirPath = ""
+    val LOG_TAG = "AudioRecordTest"
+    var sharedPreferences : SharedPreferences? =null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -63,10 +69,37 @@ open class BaseFragmentWidget : Fragment(){
         }
     }
 
+
+    fun showAllowPermission(){
+        try {
+            setToastInfo(activity,requireActivity().getString(R.string.allow_permission))
+        }catch (e : Exception){
+            setLog(e.message)
+        }
+
+    }
+
+    fun openFragment(view : Int, fragment : Fragment){
+        if(activity!=null){
+            try {
+                // some code
+                activity?.supportFragmentManager?.beginTransaction()
+                    ?.add(view, fragment)
+                    ?.commit()
+            } catch (e: Exception) {
+                setToastError(activity,e.message.toString())
+            }
+        }
+    }
+
+    fun setLog(message : String? =null){
+        Log.e("error", "$message.")
+    }
+
     fun setToastError(activity: Activity?,message : String){
         if(activity!=null){
             Toastic.toastic(activity,
-                message = message,
+                message = "$message.",
                 duration = Toastic.LENGTH_SHORT,
                 type = Toastic.SUCCESS,
                 isIconAnimated = true
@@ -77,7 +110,7 @@ open class BaseFragmentWidget : Fragment(){
     fun setToastWarning(activity: Activity?,message : String){
         if(activity!=null){
             Toastic.toastic(activity,
-                message = message,
+                message = "$message.",
                 duration = Toastic.LENGTH_SHORT,
                 type = Toastic.WARNING,
                 isIconAnimated = true
@@ -89,7 +122,7 @@ open class BaseFragmentWidget : Fragment(){
         if(activity!=null){
             Toastic.toastic(
                 activity,
-                message = message,
+                message = "$message.",
                 duration = Toastic.LENGTH_SHORT,
                 type = Toastic.SUCCESS,
                 isIconAnimated = true
@@ -100,7 +133,7 @@ open class BaseFragmentWidget : Fragment(){
     fun setToastInfo(activity: Activity?,message : String){
         if(activity!=null){
             Toastic.toastic(activity,
-                message = message,
+                message = "$message.",
                 duration = Toastic.LENGTH_SHORT,
                 type = Toastic.INFO,
                 isIconAnimated = true

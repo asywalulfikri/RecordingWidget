@@ -2,10 +2,8 @@ package sound.recorder.widget.ui.fragment
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.app.Dialog
 import android.content.Context
-import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.content.res.ColorStateList
@@ -13,8 +11,6 @@ import android.graphics.Color
 import android.media.MediaPlayer
 import android.media.MediaRecorder
 import android.media.ToneGenerator
-import android.net.ConnectivityManager
-import android.net.NetworkCapabilities
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -29,25 +25,25 @@ import android.widget.Button
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
-import androidx.fragment.app.Fragment
 import androidx.room.Room
-import com.google.android.gms.ads.AdError
 import com.google.android.gms.ads.AdRequest
-import com.google.android.gms.ads.FullScreenContentCallback
 import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 import com.google.android.gms.ads.rewardedinterstitial.RewardedInterstitialAd
-import com.google.android.gms.ads.rewardedinterstitial.RewardedInterstitialAdLoadCallback
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import sound.recorder.widget.R
+import sound.recorder.widget.base.BaseFragmentWidget
 import sound.recorder.widget.databinding.WidgetRecordVerticalBinding
 import sound.recorder.widget.db.AppDatabase
 import sound.recorder.widget.db.AudioRecord
+import sound.recorder.widget.listener.MyFragmentListener
+import sound.recorder.widget.listener.MyMusicListener
+import sound.recorder.widget.listener.MyPauseListener
+import sound.recorder.widget.listener.PauseListener
 import sound.recorder.widget.tools.Timer
-import sound.recorder.widget.ui.activity.ListMusicActivity
 import sound.recorder.widget.ui.bottomSheet.BottomSheet
 import sound.recorder.widget.ui.bottomSheet.BottomSheetListSong
 import sound.recorder.widget.ui.bottomSheet.BottomSheetNote
@@ -59,13 +55,10 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.math.ln
 
-private const val LOG_TAG = "AudioRecordTest"
 
-class VoiceRecordFragmentVertical : Fragment, BottomSheet.OnClickListener,
-    BottomSheetListSong.OnClickListener, Timer.OnTimerUpdateListener,SharedPreferences.OnSharedPreferenceChangeListener {
+class VoiceRecordFragmentVertical : BaseFragmentWidget, BottomSheet.OnClickListener,
+    BottomSheetListSong.OnClickListener, Timer.OnTimerUpdateListener,SharedPreferences.OnSharedPreferenceChangeListener,PauseListener {
 
-    private var fileName =  ""
-    private var dirPath = ""
     private var recorder: MediaRecorder? = null
     private var recordingAudio = false
     private var pauseRecordAudio = false
@@ -79,7 +72,6 @@ class VoiceRecordFragmentVertical : Fragment, BottomSheet.OnClickListener,
     private var mp :  MediaPlayer? =null
     private var showBtnStop = false
     private var songIsPlaying = false
-    var mInterstitialAd: InterstitialAd? = null
     private var isLoadInterstitial = false
     private var isLoadInterstitialReward = false
     private var rewardedInterstitialAd : RewardedInterstitialAd? =null
@@ -88,7 +80,7 @@ class VoiceRecordFragmentVertical : Fragment, BottomSheet.OnClickListener,
     private var screenRecorder: ScreenRecorder? =null
     private var recordingScreen = false
     private var pauseRecordScreen = false
-    private var sharedPreferences : SharedPreferences? =null
+
     private var volumes : Float? =null
     private var showNote : Boolean? =null
 
@@ -128,17 +120,15 @@ class VoiceRecordFragmentVertical : Fragment, BottomSheet.OnClickListener,
             sharedPreferences?.registerOnSharedPreferenceChangeListener(this)
             showNote = DataSession(requireActivity()).getShowNote()
 
+            MyPauseListener.setMyListener(this)
 
             val tintList = ColorStateList.valueOf(Color.parseColor(DataSession(requireActivity()).getBackgroundRecord()))
-
-            // Set the background tint list to the LinearLayout
             ViewCompat.setBackgroundTintList(binding.llRecordBackground, tintList)
 
             val progress = sharedPreferences?.getInt(Constant.keyShared.volume,100)
             volumes = (1 - ln((ToneGenerator.MAX_VOLUME - progress!!).toDouble()) / ln(
                 ToneGenerator.MAX_VOLUME.toDouble())).toFloat()
 
-            setupRewardInterstitial()
             setupInterstitial()
 
             if(showNote==true){
@@ -167,12 +157,8 @@ class VoiceRecordFragmentVertical : Fragment, BottomSheet.OnClickListener,
             }
 
             binding.listBtn.setOnClickListener {
-                if(!isInternetConnected()){
-                    setToastError(requireActivity(),requireActivity().getString(R.string.no_internet_connection))
-                }else{
-                    startActivity(Intent(activity, ListMusicActivity::class.java))
-                }
-
+               // startActivity(Intent(activity, ListMusicActivity::class.java))
+                MyFragmentListener.openFragment(ListRecordFragment())
             }
 
             binding.deleteBtn.setOnClickListener {
@@ -209,6 +195,7 @@ class VoiceRecordFragmentVertical : Fragment, BottomSheet.OnClickListener,
             }
         }
     }
+
 
     private fun showDialogRecord() {
         // custom dialog
@@ -248,9 +235,14 @@ class VoiceRecordFragmentVertical : Fragment, BottomSheet.OnClickListener,
 
 
     private fun showBottomSheetSong(){
-        if(activity!=null){
-            val bottomSheet = BottomSheetListSong(showBtnStop,this)
-            bottomSheet.show(requireActivity().supportFragmentManager, LOG_TAG)
+        try {
+            if(activity!=null){
+                val bottomSheet = BottomSheetListSong(showBtnStop,this)
+                bottomSheet.isCancelable = false
+                bottomSheet.show(requireActivity().supportFragmentManager, LOG_TAG)
+            }
+        }catch (e : Exception){
+            setLog(e.message)
         }
     }
 
@@ -320,10 +312,6 @@ class VoiceRecordFragmentVertical : Fragment, BottomSheet.OnClickListener,
         }
 
 
-    private fun showAllowPermission(){
-        setToastInfo(activity,requireActivity().getString(R.string.allow_permission))
-    }
-
 
     private fun startScreenRecorder(){
         screenRecorder?.start(this,requireActivity())
@@ -386,77 +374,48 @@ class VoiceRecordFragmentVertical : Fragment, BottomSheet.OnClickListener,
         binding.timerView.text = "00:00.00"
     }
 
-
-    private fun isInternetConnected(): Boolean {
-        val connectivityManager = requireActivity().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            val networkCapabilities = connectivityManager.activeNetwork ?: return false
-            val actNw = connectivityManager.getNetworkCapabilities(networkCapabilities) ?: return false
-
-            return when {
-                actNw.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
-                actNw.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
-                // for other device how are able to connect with Ethernet
-                actNw.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) -> true
-                // for check internet over Bluetooth
-                actNw.hasTransport(NetworkCapabilities.TRANSPORT_BLUETOOTH) -> true
-                else -> false
-            }
-        } else {
-            @Suppress("DEPRECATION")
-            val networkInfo = connectivityManager.activeNetworkInfo ?: return false
-            @Suppress("DEPRECATION")
-            return networkInfo.isConnected
-        }
-    }
-
     @SuppressLint("SimpleDateFormat")
     private fun startRecordingAudio(){
 
-        if(!isInternetConnected()){
-            setToastError(requireActivity(),requireActivity().getString(R.string.no_internet_connection))
-        }else{
-            showLayoutStartRecord()
+        showLayoutStartRecord()
 
-            recordingAudio = true
+        recordingAudio = true
 
-            // format file name with date
-            val pattern = "yyyy.MM.dd_hh.mm.ss"
-            val simpleDateFormat = SimpleDateFormat(pattern)
-            val date: String = simpleDateFormat.format(Date())
+        // format file name with date
+        val pattern = "yyyy.MM.dd_hh.mm.ss"
+        val simpleDateFormat = SimpleDateFormat(pattern)
+        val date: String = simpleDateFormat.format(Date())
 
-            dirPath = "${activity?.externalCacheDir?.absolutePath}/"
-            fileName = "record_${date}.mp3"
+        dirPath = "${activity?.externalCacheDir?.absolutePath}/"
+        fileName = "record_${date}.mp3"
 
-            try {
-                recorder = MediaRecorder()
-                recorder?.apply {
-                    setAudioSource(MediaRecorder.AudioSource.MIC)
-                    setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP)
-                    setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB)
-                    setOutputFile(dirPath + fileName)
-                    prepare()
-                    start()
-                    animatePlayerView()
-                    setToastInfo(activity,requireActivity().getString(R.string.record_started))
-                }
-            } catch (e: IllegalStateException) {
-                // Handle IllegalStateException (e.g., recording already started)
-                e.printStackTrace()
-                setToastError(activity,e.message.toString())
-                // Perform error handling or show appropriate message to the user
-            } catch (e: IOException) {
-                // Handle IOException (e.g., failed to prepare or write to file)
-                e.printStackTrace()
-                setToastError(activity,e.message.toString())
-                // Perform error handling or show appropriate message to the user
-            } catch (e: Exception) {
-                // Handle other exceptions
-                e.printStackTrace()
-                setToastError(activity,e.message.toString())
-                // Perform error handling or show appropriate message to the user
+        try {
+            recorder =  MediaRecorder()
+            recorder?.apply {
+                setAudioSource(MediaRecorder.AudioSource.MIC)
+                setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP)
+                setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB)
+                setOutputFile(dirPath + fileName)
+                prepare()
+                start()
+                animatePlayerView()
+                setToastInfo(activity,requireActivity().getString(R.string.record_started))
             }
+        } catch (e: IllegalStateException) {
+            // Handle IllegalStateException (e.g., recording already started)
+            e.printStackTrace()
+            setToastError(activity,e.message.toString())
+            // Perform error handling or show appropriate message to the user
+        } catch (e: IOException) {
+            // Handle IOException (e.g., failed to prepare or write to file)
+            e.printStackTrace()
+            setToastError(activity,e.message.toString())
+            // Perform error handling or show appropriate message to the user
+        } catch (e: Exception) {
+            // Handle other exceptions
+            e.printStackTrace()
+            setToastError(activity,e.message.toString())
+            // Perform error handling or show appropriate message to the user
         }
 
     }
@@ -652,6 +611,7 @@ class VoiceRecordFragmentVertical : Fragment, BottomSheet.OnClickListener,
                mp.apply {
                    mp?.release()
                    mp = null
+                   MyMusicListener.postAction(mp)
                }
             }
             val handler = Handler(Looper.getMainLooper())
@@ -663,6 +623,7 @@ class VoiceRecordFragmentVertical : Fragment, BottomSheet.OnClickListener,
                         volumes?.let { setVolume(it, volumes!!) }
                         setOnPreparedListener{
                             mp?.start()
+                            MyMusicListener.postAction(mp)
                         }
                         mp?.prepareAsync()
                         showBtnStop = true
@@ -688,6 +649,7 @@ class VoiceRecordFragmentVertical : Fragment, BottomSheet.OnClickListener,
         if (mp != null) {
             mp.apply {
                 mp?.release()
+                MyMusicListener.postAction(null)
                 showBtnStop = false
                 songIsPlaying = false
             }
@@ -711,6 +673,7 @@ class VoiceRecordFragmentVertical : Fragment, BottomSheet.OnClickListener,
                 release()
                 showBtnStop = false
                 songIsPlaying = false
+                MyMusicListener.postAction(mp)
             }
         }
         if(recorder!=null&&recordingAudio){
@@ -734,6 +697,7 @@ class VoiceRecordFragmentVertical : Fragment, BottomSheet.OnClickListener,
                     mp = null
                     songIsPlaying = false
                     showBtnStop = false
+                    MyMusicListener.postAction(mp)
                 }
             } catch (e: IOException) {
                 setToastError(activity,e.message.toString())
@@ -773,104 +737,27 @@ class VoiceRecordFragmentVertical : Fragment, BottomSheet.OnClickListener,
         }
     }
 
-
-    fun
-            setToastError(activity: Activity?,message : String){
-        if(activity!=null){
-            Toastic.toastic(activity,
-                message = message,
-                duration = Toastic.LENGTH_SHORT,
-                type = Toastic.ERROR,
-                isIconAnimated = true
-            ).show()
-        }
-    }
-
-    private fun setToastSuccess(activity: Activity?, message : String){
-        if(activity!=null){
-            Toastic.toastic(
-                activity,
-                message = message,
-                duration = Toastic.LENGTH_SHORT,
-                type = Toastic.SUCCESS,
-                isIconAnimated = true
-            ).show()
-        }
-    }
-
-    private fun setToastInfo(activity: Activity?, message : String){
-        if(activity!=null){
-            Toastic.toastic(activity,
-                message = message,
-                duration = Toastic.LENGTH_SHORT,
-                type = Toastic.INFO,
-                isIconAnimated = true
-            ).show()
-        }
-    }
-
     private fun setupInterstitial() {
         if(activity!=null){
-            val adRequestInterstitial = AdRequest.Builder().build()
-            InterstitialAd.load(requireActivity(),DataSession(requireActivity()).getInterstitialId(), adRequestInterstitial,
-                object : InterstitialAdLoadCallback() {
-                    override fun onAdLoaded(interstitialAd: InterstitialAd) {
-                        mInterstitialAd = interstitialAd
-                        isLoadInterstitial = true
-                    }
+            try {
+                val adRequestInterstitial = AdRequest.Builder().build()
+                InterstitialAd.load(requireActivity(),DataSession(requireActivity()).getInterstitialId(), adRequestInterstitial,
+                    object : InterstitialAdLoadCallback() {
+                        override fun onAdLoaded(interstitialAd: InterstitialAd) {
+                            mInterstitialAd = interstitialAd
+                            isLoadInterstitial = true
+                        }
 
-                    override fun onAdFailedToLoad(loadAdError: LoadAdError) {
-                        mInterstitialAd = null
-                    }
-                })
+                        override fun onAdFailedToLoad(loadAdError: LoadAdError) {
+                            mInterstitialAd = null
+                        }
+                    })
+            }catch (e : Exception){
+                setLog(e.message)
+
+            }
+
         }
-    }
-
-    private fun setupRewardInterstitial(){
-        RewardedInterstitialAd.load(requireActivity(), DataSession(requireActivity()).getRewardInterstitialId(),
-            AdRequest.Builder().build(), object : RewardedInterstitialAdLoadCallback() {
-                override fun onAdLoaded(ad: RewardedInterstitialAd) {
-                    //Log.d(TAG, "Ad was loaded.")
-                    rewardedInterstitialAd = ad
-                    isLoadInterstitialReward = true
-                    rewardedInterstitialAd?.fullScreenContentCallback = object: FullScreenContentCallback() {
-                        override fun onAdClicked() {
-                            // Called when a click is recorded for an ad.
-                            Log.d("response ads", "Ad was clicked.")
-                        }
-
-                        override fun onAdDismissedFullScreenContent() {
-                            // Called when ad is dismissed.
-                            // Set the ad reference to null so you don't show the ad a second time.
-                            Log.d("response ads", "Ad dismissed fullscreen content.")
-                            rewardedInterstitialAd = null
-                        }
-
-                        override fun onAdFailedToShowFullScreenContent(p0: AdError) {
-                            // Called when ad fails to show.
-                            Log.d("response ads", "Ad failed to show fullscreen content.")
-                            rewardedInterstitialAd = null
-                        }
-
-                        override fun onAdImpression() {
-                            // Called when an impression is recorded for an ad.
-                            Log.d("response ads", "Ad recorded an impression.")
-                        }
-
-                        override fun onAdShowedFullScreenContent() {
-                            // Called when ad is shown.
-                            Log.d("response ads","Ad showed fullscreen content.")
-                        }
-                    }
-                }
-
-                override fun onAdFailedToLoad(adError: LoadAdError) {
-                   // Log.d(TAG, adError?.toString())
-                    Log.d("response ads", adError.message)
-                    rewardedInterstitialAd = null
-                }
-            })
-
     }
 
     private fun showInterstitial(){
@@ -901,4 +788,11 @@ class VoiceRecordFragmentVertical : Fragment, BottomSheet.OnClickListener,
             Log.d("response ads", "null")
         }
     }
+
+    override fun onPause(pause: Boolean) {
+       if(pause){
+           showBtnStop = false
+       }
+    }
+
 }

@@ -24,7 +24,7 @@ import sound.recorder.widget.db.AudioRecord
 import java.io.File
 
 
-internal class ListMusicActivity : BaseActivityWidget(), AudioRecorderAdapter.OnItemClickListener {
+internal class ListRecordActivity : BaseActivityWidget(), AudioRecorderAdapter.OnItemClickListener {
     private lateinit var audioRecorderAdapter : AudioRecorderAdapter
     private lateinit var audioRecords : List<AudioRecord>
     private lateinit var db : AppDatabase

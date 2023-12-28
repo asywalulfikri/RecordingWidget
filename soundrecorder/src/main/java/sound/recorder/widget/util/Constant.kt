@@ -13,4 +13,15 @@ open class Constant {
         }
     }
 
+    interface typeFragment{
+        companion object{
+            const val listRecordFragment       = "listRecordFragment"
+            const val listMusicFragment        = "listMusicFragment"
+            const val listNoteFragment         = "listNoteFragment"
+            const val settingFragment          = "settingFragment"
+            const val videoFragment            = "videoFragment"
+            const val listNoteFirebaseFragment = "listNoteFirebaseFragment"
+        }
+    }
+
 }

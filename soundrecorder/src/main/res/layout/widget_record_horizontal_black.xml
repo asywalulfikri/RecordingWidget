@@ -85,11 +85,11 @@
                 tools:ignore="DuplicateSpeakableTextCheck,HardcodedText,SmallSp" />
 
             <TextView
-                android:gravity="center"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
                 android:fontFamily="@font/rimouski"
+                android:gravity="center"
                 android:text="@string/cover_song"
                 android:textColor="#FFFFFF"
                 android:textSize="8sp"
