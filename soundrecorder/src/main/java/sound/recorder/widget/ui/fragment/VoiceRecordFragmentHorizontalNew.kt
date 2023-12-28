@@ -673,7 +673,7 @@ class VoiceRecordFragmentHorizontalNew : BaseFragmentWidget, BottomSheet.OnClick
                 release()
                 showBtnStop = false
                 songIsPlaying = false
-                MyMusicListener.postAction(mp)
+                MyMusicListener.postAction(null)
             }
         }
         if(recorder!=null&&recordingAudio){
