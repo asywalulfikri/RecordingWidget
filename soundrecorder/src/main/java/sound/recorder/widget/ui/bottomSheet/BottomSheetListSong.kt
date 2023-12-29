@@ -27,13 +27,13 @@ import org.greenrobot.eventbus.ThreadMode
 import sound.recorder.widget.R
 import sound.recorder.widget.RecordingSDK
 import sound.recorder.widget.databinding.BottomSheetSongBinding
-import sound.recorder.widget.listener.MusicListener
-import sound.recorder.widget.listener.MyMusicListener
+import sound.recorder.widget.listener.MyStopSDKMusicListener
+import sound.recorder.widget.listener.StopSDKMusicListener
 import sound.recorder.widget.model.Song
 import sound.recorder.widget.util.DataSession
 
 
-class BottomSheetListSong(private var showBtnStop: Boolean, private var listener: OnClickListener) : BottomSheetDialogFragment(),SharedPreferences.OnSharedPreferenceChangeListener{
+class BottomSheetListSong(private var showBtnStop: Boolean, private var listener: OnClickListener) : BottomSheetDialogFragment(),SharedPreferences.OnSharedPreferenceChangeListener,StopSDKMusicListener{
 
 
     //Load Song
@@ -71,7 +71,11 @@ class BottomSheetListSong(private var showBtnStop: Boolean, private var listener
                 sharedPreferences = DataSession(requireActivity()).getShared()
                 sharedPreferences?.registerOnSharedPreferenceChangeListener(this)
 
+                MyStopSDKMusicListener.setMyListener(this)
+
                 initAnim()
+
+
 
 
                 if(showBtnStop){
@@ -222,9 +226,6 @@ class BottomSheetListSong(private var showBtnStop: Boolean, private var listener
                     //dismiss()
                     (dialog as? BottomSheetDialog)?.behavior?.state = STATE_HIDDEN
                     listener.onPlaySong(listLocationSong?.get(i).toString())
-                    binding.ivStop.visibility = View.VISIBLE
-                    startAnimation()
-
                 }
         }
 
@@ -235,6 +236,7 @@ class BottomSheetListSong(private var showBtnStop: Boolean, private var listener
     }
 
     private fun startAnimation() {
+        binding.ivStop.visibility = View.VISIBLE
         binding.ivStop.startAnimation(mPanAnim)
     }
 
@@ -310,6 +312,16 @@ class BottomSheetListSong(private var showBtnStop: Boolean, private var listener
 
     private fun setLog(message : String? =null){
         Log.e("message",message.toString()+".")
+    }
+
+    override fun onStop(stop: Boolean) {
+        if(stop){
+            stopAnimation()
+        }
+    }
+
+    override fun onStartAnimation() {
+        startAnimation()
     }
 
 }

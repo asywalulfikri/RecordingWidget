@@ -19,6 +19,8 @@ import sound.recorder.widget.listener.MusicListener
 import sound.recorder.widget.listener.MyFragmentListener
 import sound.recorder.widget.listener.MyMusicListener
 import sound.recorder.widget.listener.MyPauseListener
+import sound.recorder.widget.listener.MyStopMusicListener
+import sound.recorder.widget.listener.StopMusicListener
 import sound.recorder.widget.model.Song
 import sound.recorder.widget.ui.fragment.ListRecordFragment
 import sound.recorder.widget.ui.fragment.NoteFragmentFirebase
@@ -28,7 +30,7 @@ import sound.recorder.widget.util.DataSession
 import kotlin.system.exitProcess
 
 
-class MainActivityWidget : BaseActivityWidget(),SharedPreferences.OnSharedPreferenceChangeListener,MusicListener,FragmentListener{
+class MainActivityWidget : BaseActivityWidget(),SharedPreferences.OnSharedPreferenceChangeListener,MusicListener,FragmentListener,StopMusicListener{
 
 
     private var mInternetAvailabilityChecker: InternetAvailabilityChecker? = null
@@ -53,6 +55,7 @@ class MainActivityWidget : BaseActivityWidget(),SharedPreferences.OnSharedPrefer
 
         MyMusicListener.setMyListener(this)
         MyFragmentListener.setMyListener(this)
+        MyStopMusicListener.setMyListener(this)
 
 
         //showLoadingProgress(6000)
@@ -273,8 +276,17 @@ class MainActivityWidget : BaseActivityWidget(),SharedPreferences.OnSharedPrefer
 
     }
 
+    override fun onComplete() {
+        binding.ivStop.visibility = View.GONE
+
+    }
+
     override fun openFragment(fragment: Fragment?) {
         setupFragment(binding.fragmentFileViewer.id,fragment)
+    }
+
+    override fun onStop(stop: Boolean) {
+        binding.ivStop.visibility = View.GONE
     }
 
 }

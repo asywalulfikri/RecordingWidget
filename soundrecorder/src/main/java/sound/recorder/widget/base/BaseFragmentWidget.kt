@@ -99,9 +99,9 @@ open class BaseFragmentWidget : Fragment(){
     fun setToastError(activity: Activity?,message : String){
         if(activity!=null){
             Toastic.toastic(activity,
-                message = "$message.",
+                message = "Error : $message",
                 duration = Toastic.LENGTH_SHORT,
-                type = Toastic.SUCCESS,
+                type = Toastic.ERROR,
                 isIconAnimated = true
             ).show()
         }

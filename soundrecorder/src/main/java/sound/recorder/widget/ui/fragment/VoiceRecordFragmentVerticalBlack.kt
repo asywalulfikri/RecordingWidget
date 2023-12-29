@@ -42,6 +42,8 @@ import sound.recorder.widget.db.AudioRecord
 import sound.recorder.widget.listener.MyFragmentListener
 import sound.recorder.widget.listener.MyMusicListener
 import sound.recorder.widget.listener.MyPauseListener
+import sound.recorder.widget.listener.MyStopMusicListener
+import sound.recorder.widget.listener.MyStopSDKMusicListener
 import sound.recorder.widget.listener.PauseListener
 import sound.recorder.widget.tools.Timer
 import sound.recorder.widget.ui.bottomSheet.BottomSheet
@@ -624,6 +626,12 @@ class VoiceRecordFragmentVerticalBlack : BaseFragmentWidget, BottomSheet.OnClick
                         setOnPreparedListener{
                             mp?.start()
                             MyMusicListener.postAction(mp)
+                            MyStopSDKMusicListener.onStartAnimation()
+                        }
+                        setOnCompletionListener {
+                            MyStopSDKMusicListener.postAction(true)
+                            MyStopMusicListener.postAction(true)
+                            showBtnStop = false
                         }
                         mp?.prepareAsync()
                         showBtnStop = true
@@ -650,6 +658,8 @@ class VoiceRecordFragmentVerticalBlack : BaseFragmentWidget, BottomSheet.OnClick
             mp.apply {
                 mp?.release()
                 MyMusicListener.postAction(null)
+                MyStopSDKMusicListener.postAction(true)
+                MyStopMusicListener.postAction(true)
                 showBtnStop = false
                 songIsPlaying = false
             }
@@ -674,6 +684,8 @@ class VoiceRecordFragmentVerticalBlack : BaseFragmentWidget, BottomSheet.OnClick
                 showBtnStop = false
                 songIsPlaying = false
                 MyMusicListener.postAction(null)
+                MyStopSDKMusicListener.postAction(true)
+                MyStopMusicListener.postAction(true)
             }
         }
         if(recorder!=null&&recordingAudio){
