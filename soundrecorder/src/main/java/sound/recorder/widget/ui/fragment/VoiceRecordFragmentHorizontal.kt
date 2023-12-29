@@ -639,10 +639,9 @@ class VoiceRecordFragmentHorizontal : BaseFragmentWidget, BottomSheet.OnClickLis
 
                     }
                 } catch (e: IOException) {
-                    setToastError(activity,e.message.toString())
-                } catch (e: IllegalStateException) {
-                    setToastError(activity,e.message.toString())
-                }catch (e : Exception){
+                    MyStopSDKMusicListener.postAction(true)
+                    MyStopMusicListener.postAction(true)
+                    showBtnStop = false
                     setToastError(activity,e.message.toString())
                 }
             }, 100)
