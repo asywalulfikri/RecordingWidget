@@ -74,7 +74,7 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
     implementation 'com.google.android.gms:play-services-ads:22.6.0'
 
-    implementation 'com.google.android.material:material:1.10.0'
+    implementation 'com.google.android.material:material:1.11.0'
     implementation 'com.karumi:dexter:6.2.3'
     // implementation "org.koin:koin-android:2.1.6"
     //implementation "io.insert-koin:koin-core:3.0.1"
@@ -117,7 +117,7 @@ project.afterEvaluate {
                 from components.release
                 groupId = 'recording'
                 artifactId = 'recordingSDK'
-                version = '1.0.13'
+                version = '1.0.14'
             }
         }
     }

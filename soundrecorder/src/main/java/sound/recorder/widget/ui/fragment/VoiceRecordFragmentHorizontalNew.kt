@@ -613,7 +613,7 @@ class VoiceRecordFragmentHorizontalNew : BaseFragmentWidget, BottomSheet.OnClick
                mp.apply {
                    mp?.release()
                    mp = null
-                   MyMusicListener.postAction(mp)
+                   MyMusicListener.postAction(null)
                }
             }
             val handler = Handler(Looper.getMainLooper())
@@ -709,7 +709,7 @@ class VoiceRecordFragmentHorizontalNew : BaseFragmentWidget, BottomSheet.OnClick
                     mp = null
                     songIsPlaying = false
                     showBtnStop = false
-                    MyMusicListener.postAction(mp)
+                    MyMusicListener.postAction(null)
                 }
             } catch (e: IOException) {
                 setToastError(activity,e.message.toString())

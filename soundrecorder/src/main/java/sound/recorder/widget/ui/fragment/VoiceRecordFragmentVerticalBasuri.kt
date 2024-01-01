@@ -613,7 +613,7 @@ class VoiceRecordFragmentVerticalBasuri : BaseFragmentWidget, BottomSheet.OnClic
                mp.apply {
                    mp?.release()
                    mp = null
-                   MyMusicListener.postAction(mp)
+                   MyMusicListener.postAction(null)
                }
             }
             val handler = Handler(Looper.getMainLooper())
@@ -708,7 +708,7 @@ class VoiceRecordFragmentVerticalBasuri : BaseFragmentWidget, BottomSheet.OnClic
                     mp = null
                     songIsPlaying = false
                     showBtnStop = false
-                    MyMusicListener.postAction(mp)
+                    MyMusicListener.postAction(null)
                 }
             } catch (e: IOException) {
                 setToastError(activity,e.message.toString())
